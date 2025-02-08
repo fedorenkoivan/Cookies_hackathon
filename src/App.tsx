@@ -1,12 +1,12 @@
 import './App.scss'
+import { Navbar } from './components/Navbar'
+import HeroSection from './components/HeroSection'
 
 function App() {
-
   return (
     <>
-      <div>
-        <h2>Hello</h2>
-      </div>
+        <Navbar></Navbar>
+        <HeroSection></HeroSection>
     </>
   )
 }

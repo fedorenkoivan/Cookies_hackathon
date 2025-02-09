@@ -1,7 +1,7 @@
 import { FaSearch } from "react-icons/fa";
 import "../styles/HeroSection.scss";
 
-function HeroSection() {
+const HeroSection = () => {
   return (
     <>
       <section className="hero">

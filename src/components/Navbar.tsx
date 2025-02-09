@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import "../styles/Navbar.scss";
 
-export const Navbar = () => {
+const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar__left">
@@ -29,3 +29,5 @@ export const Navbar = () => {
     </nav>
   );
 };
+
+export default Navbar

@@ -1,6 +1,6 @@
 import "../styles/Profile.scss";
 
-function Profile() {
+const Profile = () => {
   return (
     <section className="profile">
       <h2 className="profile__text">My profile</h2>

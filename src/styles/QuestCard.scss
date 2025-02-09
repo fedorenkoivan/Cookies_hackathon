@@ -1,0 +1,123 @@
+.quests {
+  padding: 20px;
+
+  &__subtitle {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  &__card {
+    background: #efefef;
+    border: 2px solid #000;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 345px;
+    height: 375px;
+    text-align: center;
+    padding: 15px;
+  }
+
+  &__image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  &__info {
+    padding: 15px;
+  }
+
+  &__author-time {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: #000000;
+    margin-bottom: 8px;
+  }
+
+  &__author svg {
+    margin-right: 5px;
+  }
+
+  &__title {
+    font-size: 20px;
+    margin: 10px 0;
+  }
+
+  &__rating {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .star-wrapper {
+      position: relative;
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      margin-right: 3px;
+    }
+
+    .star-bg {
+      color: #e4e5e9;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .star-fill {
+      color: #ffc107;
+      position: absolute;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+    }
+
+    span {
+      margin-left: 8px;
+      font-size: 14px;
+      color: #777;
+    }
+  }
+
+  &__rating svg {
+    margin-right: 3px;
+  }
+
+  &__rating span {
+    margin-left: 8px;
+    font-size: 14px;
+    color: #000000;
+  }
+
+  &__description {
+    font-size: 14px;
+    color: #000000;
+    margin: 10px 0;
+  }
+
+  &__button {
+    background-color: #ccc;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+
+  &__button:hover {
+    background-color: #bbb;
+  }
+
+  &__cards {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+  }
+}

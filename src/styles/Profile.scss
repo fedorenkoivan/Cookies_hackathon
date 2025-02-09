@@ -1,40 +1,56 @@
 .profile {
-    &__text {
-      margin: 10px 15px;
-      font-size: 20px;
-      margin-bottom: 10px;
-    }
-  
-    &__block {
-      background-color: rgba(156, 156, 156, 1);
-      border-radius: 20px;
-      margin: 10px;
-      display: flex;
-      align-items: center;
-      padding: 10px;
-    }
-    
-    &__info {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-      }
-
-    &__photo {
-      width: 150px;
-      height: auto;
-      border-radius: 50%;
-      margin-right: 15px;
-    }
-  
-    &__rating_stars {
-      width: 100px;
-      height: auto;
-    }
-  
-    &__biography {
-      font-size: 15px;
-      margin: 30px 10px 5px 10px;
-    }
+  &__text {
+    margin: 10px 15px;
+    font-size: 20px;
+    margin-bottom: 10px;
   }
-  
+
+  &__block {
+    background-color: rgba(156, 156, 156, 1);
+    border-radius: 20px;
+    margin: 0 10px 10px 10px;
+    padding: 20px;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__top {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  &__photo {
+    width: 150px;
+    height: auto;
+    border-radius: 50%;
+    margin-right: 15px;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &__rating_stars {
+    width: 100px;
+    height: auto;
+    margin-bottom: 5px;
+  }
+
+  &__name {
+    font-size: 25px;
+    font-weight: bold;
+  }
+
+  &__biography {
+    font-size: 15px;
+    text-align: left;
+    max-width: 100%;
+    margin: 0 10px;
+  }
+}

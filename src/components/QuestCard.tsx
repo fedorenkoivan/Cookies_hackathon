@@ -1,6 +1,6 @@
 import "../styles/QuestCard.scss";
 import { FaUser } from "react-icons/fa";
-import { FaStar } from "react-icons/fa";
+import StarRating from "./StarRating";
 
 const QuestCard = () => {
 
@@ -15,8 +15,6 @@ const QuestCard = () => {
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5Vxi41gNCvVjNnZRBMd8COaKOVsdG6yCFDA&s",
   };
 
-  const INDEXES = [0, 1, 2, 3, 4];
-
   return (
     <div className="quests__card">
       <img src={DATA.image} alt="Quest" className="quests__image" />
@@ -27,24 +25,8 @@ const QuestCard = () => {
           </div>
           <div className="quests__time">{DATA.time}</div>
         </div>
-        <div className="quests__rating">
-          {INDEXES.map((index) => {
-            const fillPercentage =
-              Math.min(Math.max(DATA.rating - index, 0), 1) * 100;
-
-            return (
-              <div key={index} className="quests__rating star-wrapper">
-                <FaStar className="quests__rating star-bg" />
-                <FaStar
-                  className="quests__rating star-fill"
-                  style={{ clipPath: `inset(0 ${100 - fillPercentage}% 0 0)` }}
-                />
-              </div>
-            );
-          })}
-          <span>({DATA.reviews})</span>
-        </div>
-
+        <StarRating rating={DATA.rating} />
+        <span>({DATA.reviews})</span>
         <h3 className="quests__title">{DATA.title}</h3>
 
         <p className="quests__description">{DATA.description}</p>

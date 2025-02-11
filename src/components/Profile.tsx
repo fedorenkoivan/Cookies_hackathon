@@ -1,8 +1,13 @@
 import "../styles/Profile.scss";
-import QuestCard from "./QuestCard";
 import "../styles/QuestCard.scss";
+import QuestCard from "./QuestCard";
+import StarRating from "./StarRating";
+
 
 const Profile = () => {
+
+  const userRating = 4.5;
+
   return (
     <section className="profile">
       <h2 className="profile__text">My profile</h2>
@@ -14,11 +19,9 @@ const Profile = () => {
             alt="Profile"
           />
           <div className="profile__info">
-            <img
-              className="profile__rating_stars"
-              src="src/assets/profile_rating_stars.webp"
-              alt="Rating"
-            />
+            <div className="profile__rating_stars">
+              <StarRating rating={userRating} />
+            </div>
             <h3 className="profile__name">Name Surname</h3>
           </div>
         </div>
@@ -32,6 +35,17 @@ const Profile = () => {
       </div>
 
       <h2 className="profile__text">All Name's quests:</h2>
+      <div className="profile__block">
+        <div className="quests__cards">
+          <QuestCard />
+          <QuestCard />
+          <QuestCard />
+          <QuestCard />
+          <QuestCard />
+        </div>
+      </div>
+
+      <h2 className="profile__text">History of Name's quests:</h2>
       <div className="profile__block">
         <div className="quests__cards">
           <QuestCard />

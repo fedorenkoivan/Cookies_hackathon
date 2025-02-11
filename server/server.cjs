@@ -2,10 +2,26 @@ const express = require("express");
 const sqlite3 = require("sqlite3").verbose();
 const cors = require("cors");
 const app = express();
+const multer = require("multer");
+const path = require("path");
 const port = 5000;
 
 app.use(cors());
 app.use(express.json());
+app.use("/uploads", express.static("uploads"));
+
+const storage = multer.diskStorage({
+  destination: (req, file, callback) => {
+    callback(null, "uploads/");
+  },
+  filename: (req, file, callback) => {
+    callback(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({ storage: storage });
+
+//database logic
 
 const db = new sqlite3.Database("./database/database.db", (err) => {
   if (err) {
@@ -15,23 +31,75 @@ const db = new sqlite3.Database("./database/database.db", (err) => {
   }
 });
 
-db.run(`CREATE TABLE IF NOT EXISTS users (
+db.run(
+  `CREATE TABLE IF NOT EXISTS users (
   user_id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT,
   email TEXT,
   password TEXT
-)`, (err) => {
-  if (err) {
+)`,
+  (err) => {
+    if (err) {
       console.log("Table creation failed:", err);
-  } else {
+    } else {
       console.log("Table 'users' is ready.");
+    }
   }
-});
+);
 
-const insertQuery = `INSERT INTO users (name, email, password) VALUES (?, ?, ?)`;
+db.run(
+  `
+  CREATE TABLE IF NOT EXISTS quests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
+    description TEXT,
+    category TEXT,
+    time_limit INTEGER,
+    image_url TEXT
+  )
+`,
+  (err) => {
+    if (err) {
+      console.log("Table creation failed:", err);
+    } else {
+      console.log("Table 'quests' is ready.");
+    }
+  }
+);
+
+//http-requests
 
 app.get("/check-users", (req, res) => {
   db.all("SELECT * FROM users", [], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json(rows);
+  });
+});
+
+app.post("/quests", upload.single("image"), (req, res) => {
+  const { title, description, category, time_limit } = req.body;
+  const image_url = req.file ? `/uploads/${req.file.filename}` : null;
+
+  const insertQuery = `INSERT INTO quests (title, description, category, time_limit, image_url) VALUES (?, ?, ?, ?, ?)`;
+
+  db.run(
+    insertQuery,
+    [title, description, category, time_limit, image_url],
+    (err) => {
+      if (err) {
+        console.error(err.message);
+        return res.status(500).send("Database insertion error");
+      }
+      res.status(201).json({ image_url });
+    }
+  );
+});
+
+app.get("/quests", (req, res) => {
+  db.all("SELECT * FROM quests", [], (err, rows) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;

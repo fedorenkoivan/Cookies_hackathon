@@ -1,0 +1,17 @@
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 15vh;
+  
+    background: repeating-linear-gradient(
+      to right, 
+      #e91e63,
+      #e91e63 29.5px,
+      #de8ba6 29.5px,
+      #de8ba6 30px
+    );
+    text-align: center;
+    padding: 20px;
+  
+}

@@ -38,20 +38,12 @@ const Profile = () => {
       <div className="profile__block">
         <div className="quests__cards">
           <QuestCard />
-          <QuestCard />
-          <QuestCard />
-          <QuestCard />
-          <QuestCard />
         </div>
       </div>
 
       <h2 className="profile__text">History of Name's quests:</h2>
       <div className="profile__block">
         <div className="quests__cards">
-          <QuestCard />
-          <QuestCard />
-          <QuestCard />
-          <QuestCard />
           <QuestCard />
         </div>
       </div>

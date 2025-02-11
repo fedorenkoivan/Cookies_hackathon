@@ -1,11 +1,14 @@
 import "../styles/QuestForm.scss";
 import "../styles/HeroSection.scss";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const QuestForm = () => {
   const [toggled, setToggled] = useState(false);
   const [secondsVisibility, setSecondsVisibility] = useState(false);
   const [seconds, setSeconds] = useState(90);
+
+  const navigate = useNavigate();
 
   const onClick = () => {
     setToggled(!toggled);
@@ -20,6 +23,10 @@ const QuestForm = () => {
         </div>
       </section>
       <div className="quest-form">
+        <div className="quest-form__group">
+          <h3>Image</h3>
+          <input type="file" placeholder="Image for your quest" />
+        </div>
         <div className="quest-form__group">
           <h3>Title</h3>
           <input type="text" placeholder="Title of your quest" />
@@ -50,17 +57,18 @@ const QuestForm = () => {
               <b>Seconds</b>
             </div>
             <div className="controls">
-              <button onClick={() => setSeconds((prev) => Math.max(0, prev - 1))}>-</button>
+              <button
+                onClick={() => setSeconds((prev) => Math.max(0, prev - 1))}
+              >
+                -
+              </button>
               <p>{seconds}</p>
               <button onClick={() => setSeconds((prev) => prev + 1)}>+</button>
             </div>
           </div>
         )}
-        <button className="next-btn">Next</button>
+        <button className="next-btn" onClick={() => navigate('/quest-form/2')}>Next</button>
       </div>
-      <section className="hero">
-        <div className="hero__content"></div>
-      </section>
     </>
   );
 };

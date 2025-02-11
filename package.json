@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "axios": "^1.7.9",
     "cors": "^2.8.5",
     "express": "^4.21.2",
@@ -19,6 +21,7 @@
     "react-dom": "^19.0.0",
     "react-icons": "^5.4.0",
     "react-router-dom": "^7.1.5",
+    "react-toastify": "^11.0.3",
     "sass": "^1.84.0",
     "sqlite3": "^5.1.7"
   },
@@ -26,6 +29,7 @@
     "@eslint/js": "^9.19.0",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
+    "@types/react-toastify": "^4.0.2",
     "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^9.19.0",
     "eslint-plugin-react-hooks": "^5.0.0",

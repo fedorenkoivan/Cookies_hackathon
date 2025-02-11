@@ -5,6 +5,7 @@ import Profile from "./components/Profile";
 import QuestForm from "./components/QuestForm";
 import QuestionsForm from "./components/QuestionsForm";
 import Footer from "./components/Footer";
+import RatingForm from "./components/RatingForm";
 import { Routes, Route } from "react-router-dom";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/quest-form/1" element={<QuestForm />} />
         <Route path="/quest-form/2" element={<QuestionsForm />} />
+        <Route path="/rating-form" element={<RatingForm />} />
       </Routes>
       <Footer />
     </>

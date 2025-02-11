@@ -7,17 +7,16 @@ const HeroSection = () => {
       <section className="hero">
         <div className="hero__content">
           <h1 className="hero__title">
-            PITCH YOUR STARTUP, <br /> CONNECT WITH ENTREPRENEURS
+            CREATE & EXPLORE VIRTUAL QUESTS, <br /> and Interactive Challenges
           </h1>
           <p className="hero__subtitle">
-            Submit Ideas, Vote on Pitches, and Get Noticed in Virtual
-            Competitions.
+            Submit Quests, Solve Puzzles, and Compete in Virtual Experiences.
           </p>
 
           <div className="hero__search">
             <input
               type="text"
-              placeholder="Search Startups"
+              placeholder="Search Quests"
               className="hero__search-input"
             />
             <button className="hero__search-button">

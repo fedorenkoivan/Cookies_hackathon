@@ -3,7 +3,14 @@
   align-items: center;
   justify-content: center;
   height: 40vh;
-  background: #ff007a;
+
+  background: repeating-linear-gradient(
+    to right, 
+    #e91e63,  /* Рожевий фон */
+    #e91e63 29.5px,  /* Ширина рожевої смуги */
+    #de8ba6 29.5px,  /* Початок білої смуги */
+    #de8ba6 30px   /* Ширина білої смуги */
+  );
   text-align: center;
   padding: 20px;
 

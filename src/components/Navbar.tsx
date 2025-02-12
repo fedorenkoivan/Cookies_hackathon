@@ -1,10 +1,8 @@
 import { Link } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import "../styles/Navbar.scss";
 
 const Navbar = () => {
-  const navigate = useNavigate();
   return (
     <nav className="navbar">
       <div className="navbar__left">
@@ -23,13 +21,9 @@ const Navbar = () => {
       </div>
 
       <div className="navbar__buttons">
-        <button className="navbar__button"
-        onClick={() => navigate('/log-in')}>
-          Log in
-        </button>
-        <button className="navbar__button navbar__button--primary"
-        onClick={() => navigate('/sign-up')}>
-          Sign Up
+        <button className="navbar__button">Log in</button>
+        <button className="navbar__button navbar__button--primary">
+          Register
         </button>
       </div>
     </nav>

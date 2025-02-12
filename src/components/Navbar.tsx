@@ -81,10 +81,6 @@ const Navbar: React.FC = () => {
             </button>
           </>
         )}
-        <button className="navbar__button">Log in</button>
-        <button className="navbar__button navbar__button--primary">
-          Register
-        </button>
       </div>
     </nav>
   );

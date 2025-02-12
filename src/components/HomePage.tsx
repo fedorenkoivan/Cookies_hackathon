@@ -1,7 +1,6 @@
 import HeroSection from "./HeroSection";
 import QuestCard from "./QuestCard";
 import "../styles/QuestCard.scss";
-import Users from "./Users";
 
 const HomePage = () => {
     return (
@@ -12,7 +11,6 @@ const HomePage = () => {
             <div className="quests__cards">
                 <QuestCard />
             </div>
-            <Users />
             </section>
         </>
     );

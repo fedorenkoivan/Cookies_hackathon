@@ -10,9 +10,9 @@ interface UserData {
 
 const Navbar: React.FC = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const [userData, setUserData] = useState<UserData | null>(null);
-
+  const navigate = useNavigate();
+  
   useEffect(() => {
     const fetchData = () => {
       const storedData = sessionStorage.getItem("userData");
@@ -81,6 +81,10 @@ const Navbar: React.FC = () => {
             </button>
           </>
         )}
+        <button className="navbar__button">Log in</button>
+        <button className="navbar__button navbar__button--primary">
+          Register
+        </button>
       </div>
     </nav>
   );

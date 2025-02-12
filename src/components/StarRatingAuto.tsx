@@ -1,40 +1,29 @@
-import { useState } from "react";
 import { FaStar } from "react-icons/fa";
 
 interface StarRatingProps {
-    totalStars?: number;
-    onRate?: (rating: number) => void;
+  rating: number;
 }
 
-const StarRatingAuto = ({ totalStars = 5, onRate }: StarRatingProps) => {
-    const [hovered, setHovered] = useState<number | null>(null);
-    const [selected, setSelected] = useState<number>(0);
+const StarRatingAuto = ({ rating }: StarRatingProps) => {
+  const INDEXES = [0, 1, 2, 3, 4];
 
-    const handleMouseEnter = (index: number) => setHovered(index);
-    const handleMouseLeave = () => setHovered(null);
-    const handleClick = (index: number) => {
-        setSelected(index);
-        if (onRate) onRate(index);
-    };
+  return (
+    <div className="quests__rating">
+      {INDEXES.map((index) => {
+        const fillPercentage = Math.min(Math.max(rating - index, 0), 1) * 100;
 
-    return (
-        <div className="star-rating">
-            {[...Array(totalStars)].map((_, index) => {
-                const starIndex = index + 1;
-                return (
-                    <FaStar
-                        key={starIndex}
-                        className="star"
-                        size={30}
-                        color={starIndex <= (hovered ?? selected) ? "#ffc107" : "#e4e5e9"}
-                        onMouseEnter={() => handleMouseEnter(starIndex)}
-                        onMouseLeave={handleMouseLeave}
-                        onClick={() => handleClick(starIndex)}
-                    />
-                );
-            })}
-        </div>
-    );
+        return (
+          <div key={index} className="quests__rating star-wrapper">
+            <FaStar className="quests__rating star-bg" />
+            <FaStar
+              className="quests__rating star-fill"
+              style={{ clipPath: `inset(0 ${100 - fillPercentage}% 0 0)` }}
+            />
+          </div>
+        );
+      })}
+    </div>
+  );
 };
 
 export default StarRatingAuto;

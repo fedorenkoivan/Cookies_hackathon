@@ -28,6 +28,7 @@ The **Virtual Quest Platform** is an interactive web application that allows use
    ```
 3. Start the development server:
    ```sh
+   node ./server/server.cjs
    npm run dev
    ```
 

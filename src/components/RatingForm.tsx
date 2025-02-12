@@ -22,12 +22,12 @@ const RatingForm = () => {
     console.log("Rating:", rating);
 
     try {
-      const response = await axios.post("http://localhost:5000/submit", {
+      const response = await axios.post("http://localhost:5000/reviews", {
         comment,
         rating,
       });
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         console.log("Form submitted successfully");
         setComment("");
         setRating(null);

@@ -21,8 +21,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-//database logic
-
 const db = new sqlite3.Database("./database/database.db", (err) => {
   if (err) {
     console.log("Connection failed:", err);
@@ -44,7 +42,7 @@ db.run(
     } else {
       console.log("Table 'users' is ready.");
     }
-  }
+  },
 );
 
 db.run(
@@ -64,7 +62,7 @@ db.run(
     } else {
       console.log("Table 'quests' is ready.");
     }
-  }
+  },
 );
 
 //http-requests
@@ -94,12 +92,56 @@ app.post("/quests", upload.single("image"), (req, res) => {
         return res.status(500).send("Database insertion error");
       }
       res.status(201).json({ image_url });
-    }
+    },
   );
 });
 
 app.get("/quests", (req, res) => {
   db.all("SELECT * FROM quests", [], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json(rows);
+  });
+});
+
+//Тимчасова таблиця для відгуків, потім зробити по айді
+//щоб додавилися в кожен квест окремо
+
+db.run(
+  `
+  CREATE TABLE IF NOT EXISTS ratings (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  comment TEXT,
+  rating INTEGER
+  )
+`,
+  (err) => {
+    if (err) {
+      console.log("Table creation failed:", err);
+    } else {
+      console.log("Table 'ratings' is ready.");
+    }
+  },
+);
+
+app.post("/reviews", (req, res) => {
+  const { comment, rating } = req.body;
+
+  const insertQuery = `INSERT INTO ratings (comment, rating) VALUES (?, ?)`;
+
+  db.run(insertQuery, [comment, rating], (err) => {
+    if (err) {
+      console.error(err.message);
+      return res.status(500).send("Database insertion error");
+    }
+    res.status(201).json({ comment, rating });
+  });
+});
+
+app.get("/reviews", (req, res) => {
+  db.all("SELECT * FROM ratings", [], (err, rows) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;

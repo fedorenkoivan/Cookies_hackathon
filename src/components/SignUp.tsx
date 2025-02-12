@@ -137,13 +137,6 @@ const SignUp = () => {
       </form>
       <p style={{ textAlign: "center" }}>
         Already have an account?{" "}
-        {/* <Link
-          to="/login"
-          className="toggle-link"
-          style={{ color: "#007BFF", textDecoration: "underline" }}
-        >
-          Login
-        </Link> */}
         <span className="toggle-link"
          style={{ color: "#007BFF", textDecoration: "underline", cursor: "pointer" }}
         onClick={() => navigate('/log-in')}>

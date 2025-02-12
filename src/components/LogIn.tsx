@@ -49,6 +49,7 @@ const Login = () => {
         toast.success("Login successful!");
         const token = response.data.token;
         sessionStorage.setItem("authToken", token);
+        window.dispatchEvent(new Event("userLoggedIn"));
         navigate("/home-screen");
         fetchUserDetails();
       } else {

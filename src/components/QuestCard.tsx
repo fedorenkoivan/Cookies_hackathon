@@ -1,6 +1,6 @@
 import "../styles/QuestCard.scss";
 import { FaUser } from "react-icons/fa";
-import StarRating from "./StarRating";
+import StarRatingAuto from "./StarRatingAuto";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -47,7 +47,7 @@ const QuestCard = () => {
               </div>
               <div className="quests__time">{quest.time_limit}s</div>
             </div>
-            <StarRating rating={quest.rating} />
+            <StarRatingAuto rating={quest.rating} />
             <span>({quest.review})</span>
             <h3 className="quests__title">{quest.title}</h3>
             <p className="quests__description">{quest.description}</p>

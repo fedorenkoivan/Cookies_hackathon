@@ -1,7 +1,7 @@
 import "../styles/Profile.scss";
 import "../styles/QuestCard.scss";
 import QuestCard from "./QuestCard";
-import StarRating from "./StarRating";
+import StarRatingAuto from "./StarRatingAuto";
 
 
 const Profile = () => {
@@ -20,7 +20,7 @@ const Profile = () => {
           />
           <div className="profile__info">
             <div className="profile__rating_stars">
-              <StarRating rating={userRating} />
+              <StarRatingAuto rating={userRating} />
             </div>
             <h3 className="profile__name">Name Surname</h3>
           </div>

@@ -1,6 +1,6 @@
 import { FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import "../styles/HeroSection.scss";
+import "../../styles/HeroSection.scss";
 
 const HeroSection = () => {
   const navigate = useNavigate();

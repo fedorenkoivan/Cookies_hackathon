@@ -1,7 +1,7 @@
-import "../styles/Profile.scss";
-import "../styles/QuestCard.scss";
-import QuestCard from "./QuestCard";
-import StarRatingAuto from "./StarRatingAuto";
+import "../../styles/Profile.scss";
+import "../../styles/QuestCard.scss";
+import QuestCard from "../Quests/QuestCard";
+import StarRatingAuto from "../Rating/StarRatingAuto";
 
 
 const Profile = () => {

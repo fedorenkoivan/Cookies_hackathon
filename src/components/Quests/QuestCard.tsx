@@ -1,6 +1,6 @@
-import "../styles/QuestCard.scss";
+import "../../styles/QuestCard.scss";
 import { FaUser } from "react-icons/fa";
-import StarRatingAuto from "./StarRatingAuto";
+import StarRatingAuto from "../Rating/StarRatingAuto";
 import axios from "axios";
 import { useEffect, useState } from "react";
 

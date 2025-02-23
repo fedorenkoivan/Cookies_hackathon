@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
-import "../styles/Navbar.scss";
+import "../../styles/Navbar.scss";
 
 interface UserData {
   name: string;

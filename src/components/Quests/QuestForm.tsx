@@ -1,5 +1,5 @@
-import "../styles/QuestForm.scss";
-import "../styles/HeroSection.scss";
+import "../../styles/QuestForm.scss";
+import "../../styles/HeroSection.scss";
 import { useState, ChangeEvent, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";

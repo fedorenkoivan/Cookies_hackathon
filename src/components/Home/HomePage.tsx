@@ -1,6 +1,6 @@
 import HeroSection from "./HeroSection";
-import QuestCard from "./QuestCard";
-import "../styles/QuestCard.scss";
+import QuestCard from "../Quests/QuestCard";
+import "../../styles/QuestCard.scss";
 
 const HomePage = () => {
     return (

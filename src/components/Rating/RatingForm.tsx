@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import "../styles/RatingForm.scss";
-import "../styles/HeroSection.scss";
+import "../../styles/RatingForm.scss"
+import "../../styles/HeroSection.scss";
 import StarRatingManual from "./StarRatingManual";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";

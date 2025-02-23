@@ -45,37 +45,37 @@ db.run(
   },
 );
 
-db.run(
-  `
-  CREATE TABLE IF NOT EXISTS quests (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT,
-    description TEXT,
-    category TEXT,
-    time_limit INTEGER,
-    image_url TEXT
-  )
-`,
-  (err) => {
-    if (err) {
-      console.log("Table creation failed:", err);
-    } else {
-      console.log("Table 'quests' is ready.");
-    }
-  },
-);
+// db.run(
+//   `
+//   CREATE TABLE IF NOT EXISTS quests (
+//     id INTEGER PRIMARY KEY AUTOINCREMENT,
+//     title TEXT,
+//     description TEXT,
+//     category TEXT,
+//     time_limit INTEGER,
+//     image_url TEXT
+//   )
+// `,
+//   (err) => {
+//     if (err) {
+//       console.log("Table creation failed:", err);
+//     } else {
+//       console.log("Table 'quests' is ready.");
+//     }
+//   },
+// );
 
 //http-requests
 
-app.get("/check-users", (req, res) => {
-  db.all("SELECT * FROM users", [], (err, rows) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-      return;
-    }
-    res.json(rows);
-  });
-});
+// app.get("/check-users", (req, res) => {
+//   db.all("SELECT * FROM users", [], (err, rows) => {
+//     if (err) {
+//       res.status(500).json({ error: err.message });
+//       return;
+//     }
+//     res.json(rows);
+//   });
+// });
 
 app.post("/quests", upload.single("image"), (req, res) => {
   const { title, description, category, time_limit } = req.body;

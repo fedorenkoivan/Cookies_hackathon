@@ -29,43 +29,43 @@ const db = new sqlite3.Database("./database/database.db", (err) => {
   }
 });
 
-db.run(
-  `CREATE TABLE IF NOT EXISTS users (
-  user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT,
-  email TEXT,
-  password TEXT
-)`,
-  (err) => {
-    if (err) {
-      console.log("Table creation failed:", err);
-    } else {
-      console.log("Table 'users' is ready.");
-    }
-  },
-);
-
 // db.run(
-//   `
-//   CREATE TABLE IF NOT EXISTS quests (
-//     id INTEGER PRIMARY KEY AUTOINCREMENT,
-//     title TEXT,
-//     description TEXT,
-//     category TEXT,
-//     time_limit INTEGER,
-//     image_url TEXT
-//   )
-// `,
+//   `CREATE TABLE IF NOT EXISTS users (
+//   user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+//   name TEXT,
+//   email TEXT,
+//   password TEXT
+// )`,
 //   (err) => {
 //     if (err) {
 //       console.log("Table creation failed:", err);
 //     } else {
-//       console.log("Table 'quests' is ready.");
+//       console.log("Table 'users' is ready.");
 //     }
 //   },
 // );
 
-//http-requests
+db.run(
+  `
+  CREATE TABLE IF NOT EXISTS quests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
+    description TEXT,
+    category TEXT,
+    time_limit INTEGER,
+    image_url TEXT
+  )
+`,
+  (err) => {
+    if (err) {
+      console.log("Table creation failed:", err);
+    } else {
+      console.log("Table 'quests' is ready.");
+    }
+  },
+);
+
+// http-requests
 
 // app.get("/check-users", (req, res) => {
 //   db.all("SELECT * FROM users", [], (err, rows) => {

@@ -124,13 +124,13 @@ const QuestForm = () => {
               <b>Seconds</b>
             </div>
             <div className="controls">
-              <button
+              <button type="button"
                 onClick={() => setTimeLimit((prev) => Math.max(0, prev - 1))}
               >
                 -
               </button>
               <p>{timeLimit}</p>
-              <button onClick={() => setTimeLimit((prev) => prev + 1)}>+</button>
+              <button type="button" onClick={() => setTimeLimit((prev) => prev + 1)}>+</button>
               <input
                 type="number"
                 value={timeLimit}

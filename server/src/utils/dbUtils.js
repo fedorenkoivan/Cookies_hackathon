@@ -12,13 +12,24 @@ CREATE TABLE IF NOT EXISTS users (
 );
 `;
 
-// const questTableQuery = `CREATE TABLE IF NOT EXISTS quests (
-//     id INT AUTO_INCREMENT PRIMARY KEY,
-//     user_id INT NOT NULL,
-//     title VARCHAR(255) NOT NULL,
-//     content TEXT NOT NULL,
-//     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-// );`;
+const questTableQuery = `
+  CREATE TABLE IF NOT EXISTS quests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
+    description TEXT,
+    category TEXT,
+    time_limit INTEGER,
+    image_url TEXT
+  );
+`;
+
+const ratingTableQuery = `
+  CREATE TABLE IF NOT EXISTS ratings (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  comment TEXT,
+  rating INTEGER
+);
+`;
 
 const createTable = async (tableName, query) => {
   try {
@@ -26,7 +37,7 @@ const createTable = async (tableName, query) => {
       db.run(query, (err) => {
         err ? reject(err) : resolve();
       });
-    }) 
+    });
     console.log(`${tableName} table created or already exists`);
   } catch (error) {
     console.log(`Error creating ${tableName}`, error);
@@ -36,7 +47,8 @@ const createTable = async (tableName, query) => {
 export const createAllTable = async () => {
   try {
     await createTable("users", userTableQuery);
-    // await createTable("quests", questTableQuery);
+    await createTable("quests", questTableQuery);
+    await createTable("ratings", ratingTableQuery);
     console.log("All tables created successfully!");
   } catch (error) {
     console.log("Error creating tables", error);

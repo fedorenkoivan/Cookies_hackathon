@@ -22,7 +22,7 @@ const QuestCard = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await axios.get("http://localhost:5000/quests");
+        const response = await axios.get("http://localhost:3000/quests");
         setQuests(response.data);
         console.log(response, response.data);
       } catch (err) {
@@ -36,7 +36,7 @@ const QuestCard = () => {
       {quests.map((quest) => (
         <div className="quests__card" key={quest.id}>
           <img
-            src={`http://localhost:5000${quest.image_url}`}
+            src={`http://localhost:3000${quest.image_url}`}
             alt="Quest"
             className="quests__image"
           />

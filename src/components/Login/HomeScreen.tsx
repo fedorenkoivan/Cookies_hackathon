@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 const UserHomeScreen = () => {
-  const [userData, setUserData] = useState<{ name?: string; email?: string } | null>(null);
+  const [userData, setUserData] = useState<{ username?: string; email?: string } | null>(null);
 
   const fetchUserDetails = async () => {
     try {
@@ -44,7 +44,7 @@ const UserHomeScreen = () => {
       <h2 style={{ textAlign: "center" }}>Welcome to User Home Screen</h2>
       <div style={{ textAlign: "center" }}>
         <h2> 
-          Name: {userData?.name || "Loading..."} <br /> 
+          Name: {userData?.username || "Loading..."} <br /> 
           Email: {userData?.email || "Loading..."} 
         </h2>
       </div>

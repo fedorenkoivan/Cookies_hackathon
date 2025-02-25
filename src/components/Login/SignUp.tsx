@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState, ChangeEvent, FormEvent } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import UserModel from "../../../server/src/models/userModel";
+import UserModel from "../../model/userModel";
 import "../../styles/RegistrationForm.scss"
 
 const SignUp = () => {

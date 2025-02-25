@@ -1,9 +1,10 @@
-const express = require("express");
-const sqlite3 = require("sqlite3").verbose();
-const cors = require("cors");
+import express from "express";
+import cors from "cors";
+import multer from "multer";
+import path from "path";
+import { db } from "./src/config/db.js";
+
 const app = express();
-const multer = require("multer");
-const path = require("path");
 const port = 5000;
 
 app.use(cors());
@@ -20,14 +21,6 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-
-const db = new sqlite3.Database("./database/database.db", (err) => {
-  if (err) {
-    console.log("Connection failed:", err);
-  } else {
-    console.log("Successfully connected to the database");
-  }
-});
 
 // db.run(
 //   `CREATE TABLE IF NOT EXISTS users (
@@ -62,7 +55,7 @@ db.run(
     } else {
       console.log("Table 'quests' is ready.");
     }
-  },
+  }
 );
 
 // http-requests
@@ -92,7 +85,7 @@ app.post("/quests", upload.single("image"), (req, res) => {
         return res.status(500).send("Database insertion error");
       }
       res.status(201).json({ image_url });
-    },
+    }
   );
 });
 
@@ -123,7 +116,7 @@ db.run(
     } else {
       console.log("Table 'ratings' is ready.");
     }
-  },
+  }
 );
 
 app.post("/reviews", (req, res) => {

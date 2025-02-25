@@ -25,7 +25,6 @@ function App() {
         <Route path="/rating-form" element={<RatingForm />} />
         <Route path="/sign-up" element={<SignUp/>} />
         <Route path="/log-in" element={<LogIn/>} />
-        <Route path="/log-in" element={<LogIn />} />
         <Route path="/home-screen" element={<UserHomeScreen/>} />
         <Route path="/sign-up" element={<SignUp />} />
       </Routes>

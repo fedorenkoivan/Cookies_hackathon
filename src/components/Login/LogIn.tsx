@@ -50,7 +50,7 @@ const Login = () => {
         const token = response.data.token;
         sessionStorage.setItem("authToken", token);
         window.dispatchEvent(new Event("userLoggedIn"));
-        navigate("/home-screen");
+        navigate("/profile");
         fetchUserDetails();
       } else {
         toast.error(response.data.message || "Login failed");

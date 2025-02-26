@@ -67,6 +67,7 @@ const SignUp = () => {
           password: "",
         });
         setFormErrors({});
+        navigate("/log-in");
       } else {
         toast.error(response.data.message || "Registration failed!");
       }

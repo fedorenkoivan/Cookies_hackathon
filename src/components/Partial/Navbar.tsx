@@ -63,8 +63,8 @@ const Navbar: React.FC = () => {
       <div className="navbar__buttons">
         {userData ? (
           <>
-            <Link to="/home-screen" className="navbar__profile">
-              <img src="../assets/img1.png" alt="Profile" className="profile-photo-circle" />
+            <Link to="/profile" className="navbar__profile">
+              <img src="src/assets/img1.png" alt="Profile" className="profile-photo-circle" />
               <span className="username">{userData.name}</span>
             </Link>
             <button className="navbar__button" onClick={logout}>

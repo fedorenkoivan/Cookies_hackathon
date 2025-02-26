@@ -6,7 +6,6 @@ import QuestForm from "./components/Quests/QuestForm";
 import QuestionsForm from "./components/Quests/QuestionsForm";
 import SignUp from "./components/Login/SignUp";
 import LogIn from "./components/Login/LogIn";
-import UserHomeScreen from "./components/Login/HomeScreen";
 import Footer from "./components/Partial/Footer";
 import RatingForm from "./components/Rating/RatingForm";
 import { Routes, Route } from "react-router-dom";
@@ -25,7 +24,6 @@ function App() {
         <Route path="/rating-form" element={<RatingForm />} />
         <Route path="/sign-up" element={<SignUp/>} />
         <Route path="/log-in" element={<LogIn/>} />
-        <Route path="/home-screen" element={<UserHomeScreen/>} />
         <Route path="/sign-up" element={<SignUp />} />
       </Routes>
       <Footer />

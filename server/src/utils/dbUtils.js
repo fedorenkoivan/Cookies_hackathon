@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS users (
     email TEXT NOT NULL UNIQUE,
     mobile TEXT,
     password TEXT NOT NULL,
-    userType TEXT CHECK(userType IN ('user', 'admin')) DEFAULT 'user',
+    userType TEXT DEFAULT 'user' CHECK(userType IN ('user', 'admin')),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 `;

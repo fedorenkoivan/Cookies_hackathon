@@ -29,7 +29,7 @@ export const registerUser = async (user) => {
     }
 
     const hashedPassword = await bcrypt.hash(user.password, 10);
-    const query = `INSERT INTO users (username, email, mobile, password, userType) VALUES (?, ?, ?, ?, ?)`;
+    const query = `INSERT INTO users (username, email, mobile, password, userType) VALUES (?, ?, ?, ?, COALESCE(?, 'user'))`;
     const values = [
       user.username,
       user.email,

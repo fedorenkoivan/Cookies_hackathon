@@ -14,7 +14,7 @@ const Navbar: React.FC = () => {
   const navigate = useNavigate();
   
   useEffect(() => {
-    const fetchData = () => {
+    const fetchData = async () => {
       const storedData = sessionStorage.getItem("userData");
       if (storedData) {
         const parsedData = JSON.parse(storedData);
@@ -28,9 +28,10 @@ const Navbar: React.FC = () => {
       }
     };
   
+    const handleUserAuthChange = () => fetchData();
+
     fetchData();
   
-    const handleUserAuthChange = () => fetchData();
     window.addEventListener("userLoggedIn", handleUserAuthChange);
     window.addEventListener("userLoggedOut", handleUserAuthChange);
   

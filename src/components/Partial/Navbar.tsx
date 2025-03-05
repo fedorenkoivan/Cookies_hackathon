@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import "../../styles/Navbar.scss";
 
@@ -9,45 +9,9 @@ interface UserData {
 }
 
 const Navbar: React.FC = () => {
-  const location = useLocation();
   const [userData, setUserData] = useState<UserData | null>(null);
   const navigate = useNavigate();
   
-  useEffect(() => {
-    const fetchData = async () => {
-      const storedData = sessionStorage.getItem("userData");
-      if (storedData) {
-        const parsedData = JSON.parse(storedData);
-        if (parsedData.isLoggedIn) {
-          setUserData(parsedData.userData);
-        } else {
-          setUserData(null);
-        }
-      } else {
-        setUserData(null);
-      }
-    };
-  
-    const handleUserAuthChange = () => fetchData();
-
-    fetchData();
-  
-    window.addEventListener("userLoggedIn", handleUserAuthChange);
-    window.addEventListener("userLoggedOut", handleUserAuthChange);
-  
-    return () => {
-      window.removeEventListener("userLoggedIn", handleUserAuthChange);
-      window.removeEventListener("userLoggedOut", handleUserAuthChange);
-    };
-  }, [location]);
-  
-  const logout = () => {
-    sessionStorage.clear();
-    setUserData(null);
-    window.dispatchEvent(new Event("userLoggedOut"));
-    navigate("/");
-  };
-
   return (
     <nav className="navbar">
       <div className="navbar__left">
@@ -68,7 +32,7 @@ const Navbar: React.FC = () => {
               <img src="src/assets/img1.png" alt="Profile" className="profile-photo-circle" />
               <span className="username">{userData.name}</span>
             </Link>
-            <button className="navbar__button" onClick={logout}>
+            <button className="navbar__button">
               Log out
             </button>
           </>

@@ -24,12 +24,12 @@ The **Virtual Quest Platform** is an interactive web application that allows use
    ```
 2. Install dependencies:
    ```sh
-   npm install
+    install
    ```
 3. Start the development server:
    ```sh
    cd server
-   node server.cjs
+   node server.js
    npm run dev
    ```
 

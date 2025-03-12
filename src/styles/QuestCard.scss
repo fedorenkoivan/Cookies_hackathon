@@ -1,123 +1,272 @@
-.quests {
-  padding: 20px;
+$lightgray: #e5e5e5;
+$darker-gray: #c5c5c5;
+$white: #ffffff;
+$black: #000000;
 
-  &__subtitle {
-    font-size: 18px;
-    margin-bottom: 10px;
-  }
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  &__card {
-    background: #efefef;
-    border: 2px solid #000;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    width: 345px;
-    height: 375px;
-    text-align: center;
-    padding: 15px;
-  }
+@mixin button-style {
+  cursor: pointer;
+  border: solid $black 2px;
+  border-radius: 5px;
+  padding: 5px 15px;
+  display: flex;
+  gap: 5px;
+}
 
-  &__image {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 8px;
-  }
+.quest-section {
+  padding: 0 5vw;
+  .quests {
+    padding: 20px;
 
-  &__info {
-    padding: 15px;
-  }
-
-  &__author-time {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 14px;
-    color: #000000;
-    margin-bottom: 8px;
-  }
-
-  &__author svg {
-    margin-right: 5px;
-  }
-
-  &__title {
-    font-size: 20px;
-    margin: 10px 0;
-  }
-
-  &__rating {
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    .star-wrapper {
-      position: relative;
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      margin-right: 3px;
+    &__header {
+      text-align: center;
+      img {
+        width: 70px;
+      }
     }
 
-    .star-bg {
-      color: #e4e5e9;
-      position: absolute;
-      top: 0;
-      left: 0;
+    &__slider {
+      @include flex-center;
+      height: 40vh;
+      margin: 20px;
+
+      &-wrapper {
+        width: 80%;
+        height: 100%;
+        background-color: $lightgray;
+        display: flex;
+        align-items: center;
+        border-radius: 15px;
+
+        .image-container {
+          height: 40vh;
+          width: 60%;
+          .image {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 15px 0 0 15px;
+          }
+        }
+
+        .info-container {
+          height: 40vh;
+          width: 40%;
+          padding: 20px;
+          font-size: 18px;
+
+          .top {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 20px 30px;
+            .clock,
+            .author {
+              display: flex;
+            }
+            .icon {
+              margin-right: 15px;
+            }
+          }
+
+          .middle {
+            p {
+              margin-bottom: 5vh;
+            }
+            .title {
+              font-weight: bold;
+              text-transform: uppercase;
+            }
+          }
+
+          .rating {
+            display: flex;
+            margin-top: 7vh;
+            .reviews {
+              margin-left: 10px;
+            }
+          }
+
+          .start {
+            margin-top: 5vh;
+            @include flex-center;
+            .button {
+              @include button-style;
+            }
+          }
+        }
+      }
+
+      &-slide {
+        @include flex-center;
+      }
     }
 
-    .star-fill {
-      color: #ffc107;
-      position: absolute;
-      top: 0;
-      left: 0;
-      overflow: hidden;
+    &__cards {
+      background-color: $lightgray;
+      margin-bottom: 5vh;
+      border-radius: 15px;
+      padding: 20px;
+
+      &-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      &-button {
+        @include button-style;
+      }
+
+      &-icon {
+        display: flex;
+        align-items: center;
+      }
+
+      &-tabs {
+        .button,
+        .button-active {
+          background-color: inherit;
+          border: none;
+          cursor: pointer;
+          transition: 0.3s;
+          margin-right: 25px;
+          padding: 5px;
+          border-radius: 5px;
+        }
+        .button-active,
+        .button:hover {
+          background-color: $darker-gray;
+        }
+      }
+
+      &-search {
+        display: flex;
+        align-items: center;
+        background-color: #f0f0f0;
+        border-radius: 20px;
+        padding: 10px;
+        margin: 10px 0;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+
+        button {
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 5px;
+          display: flex;
+          align-items: center;
+        }
+      }
+
+      &-input {
+        width: 100%;
+        height: 30px;
+        border: none;
+        background: transparent;
+        outline: none;
+        flex: 1;
+        padding: 5px;
+        font-size: 16px;
+      }
     }
 
-    span {
-      margin-left: 8px;
-      font-size: 14px;
-      color: #777;
+    &__divider {
+      width: 100%;
+      height: 2px;
+      background-color: $black;
+      margin: 10px 0;
+      border: none;
     }
-  }
 
-  &__rating svg {
-    margin-right: 3px;
-  }
+    &__card {
+      @include flex-center;
+      gap: 30px;
+      flex-wrap: wrap;
 
-  &__rating span {
-    margin-left: 8px;
-    font-size: 14px;
-    color: #000000;
-  }
+      &-container {
+        width: 300px;
+        height: 290px;
+        background-color: $white;
+        border-radius: 15px;
+      }
 
-  &__description {
-    font-size: 14px;
-    color: #000000;
-    margin: 10px 0;
-  }
+      &-image {
+        @include flex-center;
+        img {
+          height: 150px;
+          width: 100%;
+          object-fit: cover;
+          border-radius: 15px 15px 0 0;
+        }
+      }
 
-  &__button {
-    background-color: #ccc;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-  }
+      &-info {
+        padding: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 10px;
+      }
 
-  &__button:hover {
-    background-color: #bbb;
-  }
+      &-title,
+      &-author,
+      &-start {
+        width: 280px;
+        height: 30px;
+        display: flex;
+        justify-content: space-between;
 
-  &__container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 30px;
+        .title {
+          font-weight: bold;
+          text-transform: uppercase;
+        }
+
+        .author,
+        .clock {
+          display: flex;
+          width: 100px;
+        }
+
+        .icon {
+          margin-right: 15px;
+        }
+
+        .rating {
+          display: flex;
+          .reviews {
+            margin-left: 10px;
+          }
+        }
+
+        .button {
+          @include button-style;
+        }
+      }
+    }
+
+    &__rating {
+      display: flex;
+      gap: 5px;
+
+      .star-wrapper {
+        position: relative;
+      }
+
+      .star-bg {
+        color: gray;
+      }
+
+      .star-fill {
+        color: gold;
+        position: absolute;
+        clip-path: inset(0 100% 0 0);
+      }
+    }
   }
 }

@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaSearch } from "react-icons/fa";
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 import "../../styles/Navbar.scss";
 
 interface UserData {
@@ -8,7 +9,7 @@ interface UserData {
   email: string;
 }
 
-const Navbar: React.FC = () => {
+const Navbar = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const navigate = useNavigate();
   
@@ -20,11 +21,6 @@ const Navbar: React.FC = () => {
         </Link>
       </div>
 
-      <div className="navbar__search">
-        <FaSearch className="navbar__search-icon" />
-        <input type="text" placeholder="Search" className="navbar__search-input" />
-      </div>
-
       <div className="navbar__buttons">
         {userData ? (
           <>
@@ -32,18 +28,20 @@ const Navbar: React.FC = () => {
               <img src="src/assets/img1.png" alt="Profile" className="profile-photo-circle" />
               <span className="username">{userData.name}</span>
             </Link>
-            <button className="navbar__button">
-              Log out
-            </button>
+            <Stack direction="row">
+                <Button className="my-button">Log Out</Button>
+          </Stack>
           </>
         ) : (
           <>
-            <button className="navbar__button" onClick={() => navigate("/log-in")}>
-              Log in
-            </button>
-            <button className="navbar__button navbar__button--primary" onClick={() => navigate("/sign-up")}>
-              Sign Up
-            </button>
+          <Stack spacing={1} direction="row">
+          <Button 
+          className="my-button"
+          onClick={() => navigate('log-in')}
+          >
+            Log In
+            </Button>
+          </Stack>
           </>
         )}
       </div>

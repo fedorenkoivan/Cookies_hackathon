@@ -98,4 +98,26 @@
     border-radius: 15px;
     background-color: #dfdede;
   }
+
+}
+
+.quests {
+  &__rating {
+    display: flex;
+    gap: 5px;
+
+    .star-wrapper {
+      position: relative;
+    }
+
+    .star-bg {
+      color: gray;
+    }
+
+    .star-fill {
+      color: gold;
+      position: absolute;
+      clip-path: inset(0 100% 0 0);
+    }
+  }
 }

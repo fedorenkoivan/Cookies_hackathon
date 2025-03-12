@@ -1,6 +1,6 @@
 import "./App.scss";
 import Navbar from "./components/Partial/Navbar";
-import HomePage from "./components/Home/HomePage";
+import Home from "./components/Home/Home";
 import Profile from "./components/Profile/Profile";
 import QuestForm from "./components/Quests/QuestForm";
 import QuestionsForm from "./components/Quests/QuestionsForm";
@@ -17,7 +17,7 @@ function App() {
     <>
       <Navbar />
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<Home/>} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/quest-form/1" element={<QuestForm />} />
         <Route path="/quest-form/2" element={<QuestionsForm />} />

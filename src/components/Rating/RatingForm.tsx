@@ -4,13 +4,12 @@ import StarRatingManual from "./StarRatingManual";
 const RatingForm = () => {
   return (
     <>
-      <section className="hero">
-        <div className="hero__content">
-          <h1 className="hero__title">
-            Rate this quest! <br /> Leave a review!
-          </h1>
+      <section className="rating-form__header">
+        <div className="rating-form__content">
+          <h1 className="rating-form__title">Rate this quest! <br /> Leave a review!</h1>
         </div>
       </section>
+
       <div className="rating-form__container">
         <div className="rating-form__result-info">
           <h1 className="rating-form__title">Congratulations! Your result:</h1>
@@ -33,6 +32,7 @@ const RatingForm = () => {
           <div className="rating-form__group">
             <h3>Leave a comment:</h3>
             <textarea
+              maxLength={600}
               placeholder="What do you think about this quest?"
             />
           </div>

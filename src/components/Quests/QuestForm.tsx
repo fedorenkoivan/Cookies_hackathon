@@ -2,7 +2,6 @@ import { useState } from "react";
 
 import "../../styles/QuestForm.scss";
 import "../../styles/HeroSection.scss";
-
 import { Dropdown } from "./Dropdown";
 
 const QuestForm = () => {

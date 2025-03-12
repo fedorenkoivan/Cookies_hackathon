@@ -5,11 +5,38 @@
     padding: 12px 24px;
     background-color: white;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(222deg, #ccc, #9e9e9e);
 
     img {
       border-radius: 50%;
       width: 50px;
     }
+    .my-button {
+      background-color: #1976d2;
+      color: white;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 5px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    
+      &:hover {
+        background-color: #1565c0;
+      }
+    
+      &:active {
+        background-color: #0d47a1;
+        transform: scale(0.98);
+      }
+    
+      &:disabled {
+        background-color: #bdbdbd;
+        cursor: not-allowed;
+      }
+    }
+    
   
     &__left {
       display: flex;
@@ -64,16 +91,6 @@
       gap: 15px;
       justify-content: center;
       align-items: center;
-    }
-  
-    &__button {
-      padding: 8px 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background-color: #e0e0e0;
-      height: 35px;
-
     }
   }
   

@@ -1,89 +1,64 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import "../../styles/RegistrationForm.scss";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useNavigate } from "react-router-dom";
+import * as Yup from "yup";
+import { Button } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
+import "../../styles/LogIn.scss";
 
-interface LoginErrors {
-  email?: string;
-  password?: string;
-}
+const validationSchema = Yup.object({
+  companyEmail: Yup.string()
+    .email("Invalid email format")
+    .required("Please complete this required field."),
+  password: Yup.string()
+    .min(8, "Password is too short - should be 8 chars minimum.")
+    .matches(/[a-zA-Z]/, "Password can only contain Latin letters.")
+    .required("Please complete this required field."),
+});
 
-const Login = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [errors, setErrors] = useState<LoginErrors>({});
-
-  const validateForm = (): LoginErrors => {
-    const errors: LoginErrors = {};
-
-    if (!email) {
-      errors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      errors.email = "Please enter a valid email address";
-    }
-
-    if (!password) {
-      errors.password = "Password is required";
-    }
-
-    return errors;
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-  };
+const LogIn = () => {
+  const navigate = useNavigate();
   return (
-    <div className="login-container">
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          {errors.email && (
-            <span className="error-message">{errors.email}</span>
-          )}
-        </div>
-        <div className="form-group">
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          {errors.password && (
-            <span className="error-message">{errors.password}</span>
-          )}
-        </div>
-        <button type="submit" className="login-btn">
-          Login
-        </button>
-      </form>
+    <div className="card">
+      <div className="banner">
+        <p className="logo">🍪 Cookies</p>
+        <h2 className="title">Welcome back!</h2>
+        <p className="subtitle">Fill out the form to log in</p>
+      </div>
 
-      <p style={{ textAlign: "center" }}>
-        Don't have an account?{" "}
-        <Link
-          to="/sign-up"
-          className="toggle-link"
-          style={{ color: "#007BFF", textDecoration: "underline" }}
-        >
-          Sign Up
-        </Link>
-      </p>
+      <Formik
+        initialValues={{ companyEmail: "", password: "" }}
+        validationSchema={validationSchema}
+        onSubmit={(values) => {
+          console.log(values);
+          navigate("/profile");
+        }}
+      >
+        {({ handleSubmit }) => (
+          <Form onSubmit={handleSubmit} className="form">
+            {[
+              { name: "companyEmail", label: "1. Company email" },
+              { name: "password", label: "2. Your password" },
+            ].map(({ name, label }) => (
+              <div key={name} className="form-group">
+                <label htmlFor={name}>{label} *</label>
+                <Field type="text" id={name} name={name} className="input" />
+                <ErrorMessage name={name} component="div" className="error" />
+              </div>
+            ))}
+
+            <div className="btn-container">
+              <Button type="submit" variant="contained" endIcon={<SendIcon />}>
+                Send
+              </Button>
+            </div>
+            <a className="account"
+            onClick={() => navigate('/sign-up')}
+            >Already have an account?</a>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 };
 
-export default Login;
+export default LogIn;

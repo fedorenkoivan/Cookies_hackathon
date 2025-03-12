@@ -1,60 +1,53 @@
-import "../../styles/Profile.scss";
-import "../../styles/QuestCard.scss";
-import QuestCard from "../Quests/QuestCard";
+import "@/styles/Profile.scss";
 import StarRatingAuto from "../Rating/StarRatingAuto";
+import QuestCard from "../Quests/QuestCard";
 import { useState } from "react";
 
-interface userInterface {
-  username: string;
-}
-
 const Profile = () => {
-  const userRating = 4.5;
+  const [activeNavItem, setActiveNavItem] = useState<string | null>(null);
 
-  const [userData, setUserData] = useState<userInterface>({ username: "" });
-
+  const handleNavItemClick = (item: string) => {
+    setActiveNavItem(item);
+  };
   return (
-    <section className="profile">
-      <h2 className="profile__text">My profile</h2>
-      <div className="profile__block">
-        <div className="profile__top">
-          <img
-            className="profile__photo"
-            src="src/assets/profile_photo_default.png"
-            alt="Profile"
-          />
-          <div className="profile__info">
-            <div className="profile__rating_stars">
-              <StarRatingAuto rating={userRating} />
-            </div>
-            <h3 className="profile__name">{userData.username}</h3>
+    <div className="profile__container">
+      <div className="profile__header">
+        <div className="profile__avatar">
+          <img src="./src/assets/default_avatar.svg" alt="Avatar"></img>
+        </div>
+        <div className="profile__user-info">
+          <h2>USERNAME</h2>
+          <div className="profile__rating">
+            <StarRatingAuto rating={3.5} />
           </div>
         </div>
-        <p className="profile__biography">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
-          ligula odio, ultricies eget vestibulum et, euismod a enim. Vestibulum
-          efficitur nibh leo, at auctor nisi dictum quis. Morbi aliquet feugiat
-          arcu sed ultricies. Quisque eleifend vitae ligula sit amet rutrum.
-          Vivamus magna ante, dapibus quis mollis sit amet, interdum non nisi.
-        </p>
-      </div>
-
-      <h2 className="profile__text">All {userData.username}'s quests:</h2>
-      <div className="profile__block">
-        <div className="quests__cards">
-          <QuestCard />
+        <div className="profile__actions">
+          <button className="profile__edit-btn">
+            <img src="./src/assets/edit-3-svgrepo-com.svg" alt="Edit"></img>
+          </button>
+          <button className="profile__share-btn">
+            <img src="./src/assets/share-svgrepo-com.svg" alt="Share"></img>
+          </button>
         </div>
       </div>
-
-      <h2 className="profile__text">
-        History of {userData.username}'s quests:
-      </h2>
-      <div className="profile__block">
-        <div className="quests__cards">
-          <QuestCard />
-        </div>
+      <div className="profile__nav">
+        {["Saved", "Quests", "History"].map((item) => (
+          <span
+            key={item}
+            className={`profile__nav-item ${activeNavItem === item ? "active" : ""}`}
+            onClick={() => handleNavItemClick(item)}
+          >
+            {item}
+          </span>
+        ))}
       </div>
-    </section>
+      <div className="profile__quests">
+        <QuestCard />
+        <QuestCard />
+        <QuestCard />
+        <QuestCard />
+      </div>
+    </div>
   );
 };
 

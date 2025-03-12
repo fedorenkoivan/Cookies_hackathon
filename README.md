@@ -24,7 +24,7 @@ The **Virtual Quest Platform** is an interactive web application that allows use
    ```
 2. Install dependencies:
    ```sh
-    install
+   npm install
    ```
 3. Start the development server:
    ```sh
@@ -44,7 +44,7 @@ The **Virtual Quest Platform** is an interactive web application that allows use
 
 - **Frontend**: React, SCSS
 - **Backend**: Node.js, Express.js
-- **Database**: SQLite
+- **Database**: MongoDB
 
 
 

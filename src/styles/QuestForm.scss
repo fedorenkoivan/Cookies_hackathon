@@ -1,8 +1,32 @@
+$primary-color: #c8c7c7;
+$secondary-color: #7b7b7b;
+
 .quest-form {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+
+  .hero-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background: radial-gradient(circle, #ffffff 0%, #7b7b7b 130%);
+    box-shadow: 0px 6px 3.5px -6px rgba(85, 85, 85, 1);
+    min-width: min(800px, 80%);
+    max-width: 80%;
+    min-height: 20vh;
+    padding: 40px;
+    border-radius: 40px;
+
+    h1 {
+      text-align: center;
+      max-width: 70%;
+      min-width: 200px;
+    }
+  }
 
   &__group {
     display: flex;
@@ -10,13 +34,13 @@
     justify-content: flex-start;
 
     margin: 45px 15px 0px 15px;
-    min-width: 800px;
+    min-width: min(800px, 80%);
 
     h3 {
       margin-bottom: 10px;
-      font-weight: bold;
-      font-size: 14px;
-      text-transform: uppercase;
+      font-weight: 550;
+      font-size: 16px;
+      text-transform: none;
     }
 
     input,
@@ -24,20 +48,22 @@
       width: 100%;
       padding: 12px 15px;
       font-size: 16px;
-      border: 2px solid black;
-      border-radius: 25px;
-      background-color: white;
+      font-weight: 500;
+      border: none;
+      border-radius: 10px;
+      background-color: $primary-color;
       outline: none;
       transition: 0.3s ease-in-out;
+      box-shadow: 0px 6px 3.5px -6px rgba(85, 85, 85, 1);
 
       &::placeholder {
-        color: gray;
-        font-weight: 500;
+        color: $secondary-color;
+        font-size: medium;
+        font-weight: lighter;
       }
 
       &:focus {
-        border-color: black;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+        box-shadow: 0px 7px 5px -6px rgb(77, 77, 77, 0.64);
       }
     }
 
@@ -52,7 +78,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    min-width: 800px;
+    min-width: min(800px, 80%);
     margin: 45px 15px 0px 15px;
     color: #000000;
   }
@@ -83,7 +109,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    gap: 20px;
+    gap: 3px;
 
     input {
       display: flex;
@@ -91,36 +117,45 @@
       align-items: center;
       width: 50px;
       height: 40px;
-      border: 2px solid #a02a4a;
+      border: none;
       border-radius: 8px;
       text-align: center;
       font-size: 16px;
       font-weight: bold;
+
+      &:focus {
+        box-shadow: 0px 7px 5px -6px rgb(77, 77, 77, 0.64);
+      }
     }
 
     button {
       width: 35px;
       height: 35px;
       border-radius: 50%;
-      background: #d63964;
+      background: $primary-color;
       border: none;
       color: white;
       font-size: 20px;
       font-weight: bold;
       cursor: pointer;
       transition: 0.2s;
+
+      &:hover {
+        background: $secondary-color;
+      }
     }
   }
 
   .toggle-button {
-    background-color: #d8d8d8;
-    border: 1px solid #b5b5b5;
+    background-color: $primary-color;
+    border: none;
     border-radius: 14px;
     width: 50px;
     height: 28px;
     transition: background-color 0.1s ease, border-color 0.2s ease;
     cursor: pointer;
     position: relative;
+    box-shadow: 0px 4px 3.5px -2.5px rgba(85, 85, 85, 0.64);
 
     .thumb {
       background-color: #ffffff;
@@ -130,14 +165,18 @@
       transform: translateX(0);
       transition: left 0.2s ease;
       position: absolute;
-      left: 3px;
-      top:50%;
+      left: 4.5px;
+      top: 50%;
       transform: translateY(-50%);
     }
 
+    &:hover {
+      background-color: $secondary-color;
+    }
+
     &.toggled {
-      background-color: #d63964;
-      border-color: #a02a4a;
+      background-color: $secondary-color;
+      border-color: $secondary-color;
 
       .thumb {
         left: 25px;
@@ -146,8 +185,8 @@
   }
 
   .next-btn {
-    background-color: #d63964;
-    color: white;
+    background-color: $primary-color;
+    color: $secondary-color;
     border: none;
     border-radius: 25px;
     padding: 10px 20px;
@@ -157,9 +196,11 @@
     transition: 0.2s;
     margin: 20px;
     margin-bottom: 40px;
+    box-shadow: 0px 4px 3.5px -2.5px rgba(85, 85, 85, 0.64);
 
     &:hover {
-      background-color: #a02a4a;
+      color: white;
+      background-color: $secondary-color;
     }
   }
 }

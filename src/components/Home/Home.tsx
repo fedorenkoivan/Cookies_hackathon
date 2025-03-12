@@ -1,4 +1,4 @@
-import "../../styles/QuestCard.scss";
+import "../../styles/Home.scss";
 import { FaPlus, FaSearch, FaTimes, FaUser, FaClock } from "react-icons/fa";
 import StarRatingAuto from "../Rating/StarRatingAuto";
 import { useState } from "react";
@@ -124,7 +124,7 @@ const Slider = () => {
   );
 };
 
-const QuestCard = () => {
+const Home = () => {
   const [active, setActive] = useState("All");
   const [searchText, setSearchText] = useState("");
 
@@ -149,7 +149,7 @@ const QuestCard = () => {
   return (
     <section className="quest-section">
       <div className="quests__header">
-        <img alt="stars" src="src/icons/stars.png"></img>
+        <img alt="stars" src="src/assets/stars.png"></img>
         <h2>BEST QUESTS OF THE DAY</h2>
       </div>
 
@@ -236,4 +236,4 @@ const QuestCard = () => {
   );
 };
 
-export default QuestCard;
+export default Home;

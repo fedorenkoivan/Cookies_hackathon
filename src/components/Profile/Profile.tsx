@@ -1,6 +1,5 @@
 import "@/styles/Profile.scss";
 import StarRatingAuto from "../Rating/StarRatingAuto";
-import QuestCard from "../Quests/QuestCard";
 import { useState } from "react";
 
 const Profile = () => {
@@ -42,10 +41,6 @@ const Profile = () => {
         ))}
       </div>
       <div className="profile__quests">
-        <QuestCard />
-        <QuestCard />
-        <QuestCard />
-        <QuestCard />
       </div>
     </div>
   );

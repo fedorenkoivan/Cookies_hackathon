@@ -1,5 +1,4 @@
 import "../../styles/RatingForm.scss"
-import "../../styles/HeroSection.scss";
 import StarRatingManual from "./StarRatingManual";
 
 const RatingForm = () => {
@@ -35,8 +34,6 @@ const RatingForm = () => {
             <h3>Leave a comment:</h3>
             <textarea
               placeholder="What do you think about this quest?"
-              value={comment}
-              onChange={handleCommentChange}
             />
           </div>
           <div className="parent-container">

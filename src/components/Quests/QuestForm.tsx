@@ -1,5 +1,4 @@
 import "../../styles/QuestForm.scss";
-import "../../styles/HeroSection.scss";
 import { useState } from "react";
 
 const QuestForm = () => {

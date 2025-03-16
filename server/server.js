@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import { questModel } from "./models/questModel.js";
 import { logInModel } from "./models/LogIn.js";
 import userRouter from "./routes/userRoutes.js";
+import questRouter from "./routes/questRoute.js";
 
 dotenv.config({ path: "../.env" });
 const app = express();
@@ -26,7 +27,8 @@ await mongoose
 //   rating: 3.8,
 // }).then((doc) => console.log(doc)).catch((err) => console.log(err));
 
-app.use('/api/v1/users', userRouter);
+app.use('/users', userRouter);
+app.use('/quests', questRouter);
 // const newLogIn = await logInModel.create({
 //   email: 'himaria@gmail.com',
 // }).then((doc) => console.log(doc)).catch((err) => console.log(err));

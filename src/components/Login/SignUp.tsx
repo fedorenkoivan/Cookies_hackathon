@@ -3,12 +3,10 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import "../../styles/SignUp.scss";
+import './SignUp.scss';
 
 const validationSchema = Yup.object({
-  firstName: Yup.string()
-    .required("Please complete this required field."),
-  lastName: Yup.string()
+  username: Yup.string()
     .required("Please complete this required field."),
   email: Yup.string()
     .email("Invalid email format")
@@ -20,10 +18,6 @@ const validationSchema = Yup.object({
   confirmPassword: Yup.string()
      .oneOf([Yup.ref('password')], 'Passwords must match')
      .required("Please complete this required field."),
-  role: Yup.string()
-      .required("Please complete this required field."),
-  company: Yup.string()
-      .required("Please complete this required field."),
 });
 
 const LogIn = () => {
@@ -38,13 +32,10 @@ const LogIn = () => {
 
       <Formik
         initialValues={{ 
-          firstName: "",
-          lastName: "",
+          username: "",
           email: "",
           password: "",
           confirmPassword: "",
-          role: "",
-          company: "",
         }}
         validationSchema={validationSchema}
         onSubmit={(values) => {
@@ -55,13 +46,10 @@ const LogIn = () => {
         {({ handleSubmit }) => (
           <Form onSubmit={handleSubmit} className="form">
             {[
-              { name: "firstName", label: "1. First name" },
-              { name: "lastName", label: "2. Last name" },
-              { name: "email", label: "3. Your email" },
-              { name: "password", label: "4. Your password" },
-              { name: "confirmPassword", label: "5. Confirm your password" },
-              { name: "role", label: "6. Role" },
-              { name: "company", label: "7. Your company" },
+              { name: "username", label: "1. Username" },
+              { name: "email", label: "2. Your email" },
+              { name: "password", label: "3. Your password" },
+              { name: "confirmPassword", label: "4. Confirm your password" },
             ].map(({ name, label }) => (
               <div key={name} className="form-group">
                 <label htmlFor={name}>{label} *</label>

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import "../../styles/Navbar.scss";
+import './Navbar.scss';
 
 interface UserData {
   name: string;

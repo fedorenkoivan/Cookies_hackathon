@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import { questModel } from "./models/questModel.js";
 import { logInModel } from "./models/LogIn.js";
 import userRouter from "./routes/userRoutes.js";
-import questRouter from "./routes/questRoute.js";
+import questRouter from "./routes/questRoutes.js";
 
 dotenv.config({ path: "../.env" });
 const app = express();

@@ -1,7 +1,6 @@
 import { useState } from "react";
-
-import "../../styles/QuestForm.scss";
 import { Dropdown } from "./Dropdown";
+import './QuestForm.scss';
 
 const QuestForm = () => {
   const [title, setTitle] = useState<string>("");

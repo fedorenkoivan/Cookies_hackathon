@@ -1,5 +1,5 @@
-import "../../styles/RatingForm.scss"
 import StarRatingManual from "./StarRatingManual";
+import './RatingForm.scss';
 
 const RatingForm = () => {
   return (

@@ -1,9 +1,8 @@
 import React from "react";
 import { useState } from "react";
-
 import { FaChevronDown } from "react-icons/fa";
 import { FaChevronUp } from "react-icons/fa";
-import "../../styles/Dropdown.scss";
+import './Dropdown.scss';
 
 interface DropdownProps {
   buttonText: string;

@@ -1,10 +1,10 @@
-import "../../styles/Home.scss";
 import { FaPlus, FaSearch, FaTimes, FaUser, FaClock } from "react-icons/fa";
 import StarRatingAuto from "../Rating/StarRatingAuto";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
+import './Home.scss';
 
 interface Quest {
   author: string;

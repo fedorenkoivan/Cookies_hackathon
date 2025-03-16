@@ -1,6 +1,6 @@
-import "@/styles/Profile.scss";
 import StarRatingAuto from "../Rating/StarRatingAuto";
 import { useState } from "react";
+import './Profile.scss';
 
 const Profile = () => {
   const [activeNavItem, setActiveNavItem] = useState<string | null>(null);

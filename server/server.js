@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import { questModel } from "./models/questModel.js";
+import { logInModel } from "./models/LogIn.js";
 import userRouter from "./routes/userRoutes.js";
 
 dotenv.config({ path: "../.env" });
@@ -26,6 +27,9 @@ await mongoose
 // }).then((doc) => console.log(doc)).catch((err) => console.log(err));
 
 app.use('/api/v1/users', userRouter);
+// const newLogIn = await logInModel.create({
+//   email: 'himaria@gmail.com',
+// }).then((doc) => console.log(doc)).catch((err) => console.log(err));
 
 app.listen(PORT, () => {
   console.log(`Server runs on port ${PORT}`);

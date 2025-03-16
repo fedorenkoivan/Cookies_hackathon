@@ -1,7 +1,7 @@
 import "../../styles/Home.scss";
 import { FaPlus, FaSearch, FaTimes, FaUser, FaClock } from "react-icons/fa";
 import StarRatingAuto from "../Rating/StarRatingAuto";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
@@ -15,79 +15,32 @@ interface Quest {
   time: number;
   image: string;
   rating: number;
-  review: number;
+  reviews: number;
 }
-
-const QUESTS: Quest[] = [
-  {
-    id: 1,
-    author: "Alice",
-    title: "Lost Treasure Hunt",
-    description:
-      "Find the hidden treasure in the ancient ruins before time runs out!",
-    category: "Adventure",
-    time: 300,
-    image: "logo.jpg",
-    rating: 3.8,
-    review: 120,
-  },
-  {
-    id: 2,
-    author: "Bob",
-    title: "Escape the Haunted Mansion",
-    description:
-      "Solve puzzles and escape the haunted mansion before the ghosts get you!",
-    category: "Mystery",
-    time: 600,
-    image: "logo.jpg",
-    rating: 4.5,
-    review: 98,
-  },
-  {
-    id: 3,
-    author: "Charlie",
-    title: "Cyber Hacker Challenge",
-    description:
-      "Crack the security codes and hack into the secret server before time runs out!",
-    category: "Tech",
-    time: 450,
-    image: "logo.jpg",
-    rating: 4.7,
-    review: 85,
-  },
-  {
-    id: 4,
-    author: "Dana",
-    title: "Survival in the Jungle",
-    description:
-      "Gather resources and survive the wild jungle for as long as you can!",
-    category: "Survival",
-    time: 900,
-    image: "logo.jpg",
-    rating: 4.6,
-    review: 110,
-  },
-  {
-    id: 5,
-    author: "Eve",
-    title: "Time Traveler's Dilemma",
-    description:
-      "Fix the broken time machine and prevent a paradox from destroying the timeline!",
-    category: "Sci-Fi",
-    time: 500,
-    image: "logo.jpg",
-    rating: 4.9,
-    review: 150,
-  },
-];
 
 const TABS = ["All", "Sports", "Gaming", "Education", "Other"];
 
+const URL = "http://localhost:5000/quests";
+
 const Slider = () => {
+  const [bestQuests, setBestQuests] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(`${URL}/top-5`);
+        const data = await res.json();
+        setBestQuests(data.data);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, []);
+
   return (
     <div className="quests__slider">
       <Swiper spaceBetween={20} slidesPerView={1} loop={true}>
-        {QUESTS.map((quest) => (
+        {bestQuests.map((quest: Quest) => (
           <SwiperSlide key={quest.id} className="quests__slider-slide">
             <div className="quests__slider-wrapper">
               <div className="image-container">
@@ -99,10 +52,14 @@ const Slider = () => {
                     <FaUser className="icon" />
                     <p>{quest.author}</p>
                   </div>
-                  <div className="clock">
-                    <FaClock className="icon" />
-                    <p>{quest.time}s</p>
-                  </div>
+                  {quest.time === -1 ? (
+                    <div>no time limit</div>
+                  ) : (
+                    <div className="clock">
+                      <FaClock className="icon" />
+                      <p>{quest.time}s</p>
+                    </div>
+                  )}
                 </div>
                 <div className="middle">
                   <p className="title">{quest.title}</p>
@@ -110,7 +67,7 @@ const Slider = () => {
                 </div>
                 <div className="rating">
                   <StarRatingAuto rating={quest.rating} />
-                  <p className="reviews">({quest.review})</p>
+                  <p className="reviews">({quest.reviews})</p>
                 </div>
                 <div className="start">
                   <button className="button">Start quest</button>
@@ -127,6 +84,7 @@ const Slider = () => {
 const Home = () => {
   const [active, setActive] = useState("All");
   const [searchText, setSearchText] = useState("");
+  const [quests, setQuests] = useState([]);
 
   const handleTabClick = (tab: string) => {
     setActive(tab);
@@ -145,6 +103,18 @@ const Home = () => {
   const truncateText = (text: string, limit: number) => {
     return text.length > limit ? text.slice(0, limit) + "..." : text;
   };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(URL);
+        const data = await res.json();
+        setQuests(data.data);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, []);
 
   return (
     <section className="quest-section">
@@ -200,7 +170,7 @@ const Home = () => {
 
         <hr className="quests__divider" />
         <div className="quests__card">
-          {QUESTS.map((quest) => (
+          {quests.map((quest: Quest) => (
             <div className="quests__card-container" key={quest.id}>
               <div className="quests__card-image">
                 <img src="src/assets/logo.jpg" />
@@ -217,14 +187,18 @@ const Home = () => {
                   </div>
                   <div className="rating">
                     <StarRatingAuto rating={quest.rating} />
-                    <p className="reviews">({quest.review})</p>
+                    <p className="reviews">({quest.reviews})</p>
                   </div>
                 </div>
                 <div className="quests__card-start">
-                  <div className="clock">
-                    <FaClock className="icon" />
-                    <p>{quest.time}s</p>
-                  </div>
+                  {quest.time === -1 ? (
+                    <div>no time limit</div>
+                  ) : (
+                    <div className="clock">
+                      <FaClock className="icon" />
+                      <p>{quest.time}s</p>
+                    </div>
+                  )}
                   <button className="button">Start quest</button>
                 </div>
               </div>

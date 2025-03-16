@@ -50,5 +50,4 @@ const login = catchAsync(async (req, res, next) => {
   });
 });
 
-export { signup };
-export { login };
+export { signup, login };

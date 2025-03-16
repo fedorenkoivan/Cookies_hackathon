@@ -9,9 +9,9 @@ const signUpSchema = new mongoose.Schema({
         type: String,
         required: [true, 'You must have a lastname.']
     },
-    companyEmail: {
+    email: {
         type: String,
-        required: [true, 'Your company email is required.']
+        required: [true, 'Your email is required.']
     },
     password: {
         type: String,
@@ -23,11 +23,8 @@ const signUpSchema = new mongoose.Schema({
     },
     company: {
         type: String,
-        required: [true, 'Company is required.']
-    },
-    companyType: {
-        type: String,
-        required: [true, 'Role is required.']
+        required: [true, 'Company is required.'],
+        default: 'KPI'
     },
 })
 

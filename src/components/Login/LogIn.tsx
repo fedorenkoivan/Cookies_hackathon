@@ -53,7 +53,7 @@ const LogIn = () => {
             </div>
             <a className="account"
             onClick={() => navigate('/sign-up')}
-            >Already have an account?</a>
+            >Don't have an account?</a>
           </Form>
         )}
       </Formik>

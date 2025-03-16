@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import { questModel } from "./models/questModel.js";
+import { logInModel } from "./models/LogIn.js";
 
 dotenv.config({ path: "../.env" });
 const app = express();
@@ -22,6 +23,10 @@ await mongoose
 //     "Find the hidden treasure in the ancient ruins before time runs out!",
 //   category: "Adventure",
 //   rating: 3.8,
+// }).then((doc) => console.log(doc)).catch((err) => console.log(err));
+
+// const newLogIn = await logInModel.create({
+//   email: 'himaria@gmail.com',
 // }).then((doc) => console.log(doc)).catch((err) => console.log(err));
 
 app.listen(PORT, () => {

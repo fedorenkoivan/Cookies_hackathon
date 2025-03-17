@@ -1,0 +1,29 @@
+$primary-color: #c8c7c7;
+$secondary-color: #7b7b7b;
+
+.question-form {
+    border-top: 2px solid $secondary-color;
+}
+
+.question-group {
+    hr {
+    border-style: outset;
+    border-color: black;
+    border-width: 0.5px;
+    }
+}
+
+.add-btn {
+    background-color: #fff;
+    border: none;
+    border-radius: 5px;
+    color: #112000;
+    font-size: 16px;
+    font-weight: 700;
+    justify-content: flex-start;
+    letter-spacing: 0;
+    line-height: 1;
+    min-width: auto;
+    padding-left: 0;
+    width: auto;
+}

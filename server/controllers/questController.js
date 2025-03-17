@@ -39,4 +39,17 @@ const getAllQuests = async (req, res) => {
   }
 };
 
-export { getBestQuests, getAllQuests };
+const createQuest = async (req, res) => {
+  try {
+    const newQuest = await questModel.create(req.body);
+    res.status(200).json({ status: "success", data: newQuest });
+  } catch (err) {
+    res
+      .status(500)
+      .json({
+        status: "failed",
+        msg: "an error occurred while creating a new quest"
+      });
+  }
+}
+export { getBestQuests, getAllQuests, createQuest };

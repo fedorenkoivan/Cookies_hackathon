@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./QuestForm.scss";
 import { Dropdown } from "./Dropdown";
 import QuestionForm from "./QuestionForm";
@@ -12,6 +12,7 @@ const QuestForm = () => {
   const [time, setTime] = useState<number>(90);
   const [toggled, setToggled] = useState<boolean>(false);
   const [secondsVisibility, setSecondsVisibility] = useState<boolean>(false);
+  const [questions, setQuestions] = useState<{ id: number, value: string }[]>([{ id: 0, value: ""}]);
 
   const URL = "http://localhost:5000/quests";
 
@@ -37,13 +38,13 @@ const QuestForm = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-        title,
+          title,
           author: "John Doe",
           description,
           category,
           time,
           image,
-        })
+        }),
       });
     } catch (err) {
       console.error("Error submitting the quest:", err);
@@ -58,6 +59,22 @@ const QuestForm = () => {
     "Team Challenges",
     "Mystery & Investigation",
   ];
+
+  useEffect(() => {
+    setQuestions((prev) => prev.map((q, index) => ({ ...q, id: index })));
+  }, [questions.length]);
+
+  const addQuestion = () => {
+    setQuestions((prev) => [...prev, { id: prev.length, value: "" }]);
+    console.log({ questions });
+  };
+
+  const removeQuestion = (id: number) => {
+    if (questions.length > 1) {
+      setQuestions((prev) => prev.filter((q) => q.id !== id));
+      console.log({ questions });
+    }
+  };
 
   return (
     <>
@@ -156,8 +173,17 @@ const QuestForm = () => {
 
         <div className="quest-form__group">
           <h3>Questions</h3>
-          <QuestionForm />
-          <button className="add-btn" type="button">
+          <div className="question-header" />
+          {questions.map((question) => (
+            <QuestionForm
+              key={question.id}
+              questionNumber={questions.indexOf(question) + 1}
+              onDelete={() => removeQuestion(question.id)}
+              onChange={(q) => question.value = q}
+              newValue={question.value}
+            />
+          ))}
+          <button className="add-btn" type="button" onClick={addQuestion}>
             <span className="icon">
               <FaPlus />
             </span>

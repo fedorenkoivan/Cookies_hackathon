@@ -2,28 +2,86 @@ $primary-color: #c8c7c7;
 $secondary-color: #7b7b7b;
 
 .question-form {
-    border-top: 2px solid $secondary-color;
-}
+  border-bottom: 2px solid $secondary-color;
 
-.question-group {
-    hr {
-    border-style: outset;
-    border-color: black;
-    border-width: 0.5px;
+  input {
+    background-color: white;
+    border: none;
+    border-radius: 0px;
+    min-height: 100%;
+    box-shadow: 0px 6px 28px -90px rgba(85, 85, 85, 1);
+    &:focus {
+      box-shadow: 0px 7px 5px -60px rgb(77, 77, 77, 0.64);
     }
+
+    &:hover {
+      box-shadow: 3px 6px 3.5px -40px rgba(85, 85, 85, 1);
+    }
+
+    &:active {
+      box-shadow: 3px 6px 3.5px -40px rgba(85, 85, 85, 1);
+    }
+  }
+
+  .question-number {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    background-color: $primary-color;
+    border-radius: 50%;
+    border-color: $secondary-color;
+    border: 2px;
+  }
+
+  .icons-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 20vw;
+    height: auto;
+  }
+
+  .icon {
+    width: 40px;
+    height: 40px;
+    padding: 9px;
+    border-radius: 20%;
+    background-color: white;
+    color: $secondary-color;
+
+    &:hover {
+        color: white;
+        background-color: $secondary-color;
+    }
+  }
+  // .question-group {
+
+  // }
+
+  .question-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
 }
 
 .add-btn {
-    background-color: #fff;
-    border: none;
-    border-radius: 5px;
-    color: #112000;
-    font-size: 16px;
-    font-weight: 700;
-    justify-content: flex-start;
-    letter-spacing: 0;
-    line-height: 1;
-    min-width: auto;
-    padding-left: 0;
-    width: auto;
+  background-color: #fff;
+  border: none;
+  border-radius: 5px;
+  color: #112000;
+  font-size: 16px;
+  font-weight: 700;
+  justify-content: flex-start;
+  letter-spacing: 0;
+  line-height: 1;
+  min-width: auto;
+  padding-left: 0;
+  width: auto;
 }

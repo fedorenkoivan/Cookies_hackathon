@@ -1,0 +1,67 @@
+$primary-color: #c8c7c7;
+$secondary-color: #7b7b7b;
+
+.answer-group {
+  width: 100%;
+  margin: 10px 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  
+  input {
+    min-height: 100%;
+    background-color: white;
+    border: none;
+    border-bottom: 1px solid $secondary-color;
+    transition: 0s ease-in-out;
+
+    &:focus {
+      border: 1px $secondary-color solid;
+      border-radius: 5px;
+    }
+  }
+
+  .check-box {
+    width: fit-content;
+    height: fit-content;
+    margin: 10px 15px 10px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10%;
+    color: white;
+    cursor: pointer;
+    
+    .icon {
+      width: 25px;
+      height: 25px;
+      padding: 0px;
+      color: white;
+      background-color: $primary-color;
+    }
+
+    .correct {
+      color: $secondary-color;
+      background-color: white;
+    }
+
+    &:hover {
+      color: $primary-color;
+
+      .icon {
+        color: $primary-color;
+        background-color: white;
+      }
+    }
+  }
+
+  .cancel-icon {
+    margin-left: 10px;
+    border-radius: 50%;
+    color: $primary-color;
+    cursor: pointer;
+
+    &:hover { color: $secondary-color; }
+  }
+}

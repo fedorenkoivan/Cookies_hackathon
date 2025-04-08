@@ -2,28 +2,106 @@ $primary-color: #c8c7c7;
 $secondary-color: #7b7b7b;
 
 .question-form {
-    border-top: 2px solid $secondary-color;
-}
+  width: 100%;
+  border-bottom: 2px solid $secondary-color;
 
-.question-group {
-    hr {
-    border-style: outset;
-    border-color: black;
-    border-width: 0.5px;
+  input {
+    min-height: 100%;
+    background-color: white;
+    border-radius: 0px;
+    box-shadow: 0px 6px 28px -90px rgba(85, 85, 85, 1);
+    
+    &:focus { box-shadow: 0px 7px 5px -60px rgba(77, 77, 77, 0.64); }
+    &:hover, &:active { box-shadow: 3px 6px 3.5px -40px rgba(85, 85, 85, 1); }
+  }
+
+  .question-number {
+    min-width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $primary-color;
+    border-radius: 50%;
+    border: 2px;
+    border-color: $secondary-color;
+  }
+
+  .icons-wrapper {
+    width: 20vw;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+
+  .icon {
+    width: 40px;
+    height: 40px;
+    padding: 9px;
+    background-color: white;
+    border-radius: 20%;
+    color: $secondary-color;
+
+    &:hover {
+      color: white;
+      background-color: $secondary-color;
     }
+  }
+
+  .question-wrapper {
+    margin: 5px 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .answer-wrapper {
+    margin: 15px 0 5px min(5vw);
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+  }
 }
 
-.add-btn {
-    background-color: #fff;
-    border: none;
-    border-radius: 5px;
-    color: #112000;
-    font-size: 16px;
-    font-weight: 700;
-    justify-content: flex-start;
-    letter-spacing: 0;
-    line-height: 1;
-    min-width: auto;
-    padding-left: 0;
-    width: auto;
+.add-answer-btn {
+  width: auto;
+  min-width: auto;
+  max-width: fit-content;
+  margin-top: 10px;
+  padding-right: 15px;
+  background-color: #fff;
+  border: none;
+  border-radius: 10px;
+  font: 700 14px/1 sans-serif;
+  letter-spacing: 0;
+  color: #112000;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+
+  .icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 7px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    color: $secondary-color;
+    
+    .icon {
+      background-color: $secondary-color;
+      color: white;
+    }
+  }
 }

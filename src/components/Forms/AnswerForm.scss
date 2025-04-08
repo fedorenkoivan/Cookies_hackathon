@@ -1,0 +1,67 @@
+$primary-color: #c8c7c7;
+$secondary-color: #7b7b7b;
+
+.answer-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  width: 100%;
+  margin: 10px 0px 10px 0px;
+  input {
+    background-color: white;
+    border: none;
+    min-height: 100%;
+    border-bottom: 1px solid $secondary-color;
+    transition: 0s ease-in-out;
+
+    &:focus {
+      border: 1px $secondary-color solid;
+      border-radius: 5px;
+    }
+  }
+
+  .check-box {
+    margin: 10px 15px 10px 0px;
+    height: fit-content;
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    border-radius: 10%;
+    cursor: pointer;
+    .icon {
+        padding: 0px;
+      width: 25px;
+      height: 25px;
+      color: white;
+      background-color: $primary-color;
+    }
+
+    .correct {
+        color: $secondary-color;
+        background-color: white;
+    }
+
+    &:hover {
+      color: $primary-color;
+
+      .icon {
+        color: $primary-color;
+        background-color: white;
+      }
+    }
+  }
+
+  .cancel-icon {
+    border-radius: 50%;
+    color: $primary-color;
+    margin: 0px 0px 0px 10px;
+    cursor: pointer;
+
+    &:hover {
+      color: $secondary-color;
+    }
+  }
+}

@@ -42,13 +42,11 @@ $secondary-color: #7b7b7b;
       font-weight: bold;
       font-size: 16px;
       text-transform: none;
-      
     }
-    .question-header{
+    .question-header {
       min-height: 2px;
       border-bottom: 2px solid $secondary-color;
     }
-    
     input,
     textarea {
       width: 100%;
@@ -59,7 +57,7 @@ $secondary-color: #7b7b7b;
       border-radius: 10px;
       background-color: $primary-color;
       outline: none;
-      transition: 0.3s ease-in-out;
+      transition: 0.2s ease-in-out;
       box-shadow: 0px 6px 3.5px -6px rgba(85, 85, 85, 1);
 
       &::placeholder {
@@ -155,7 +153,7 @@ $secondary-color: #7b7b7b;
       cursor: pointer;
       box-shadow: 0px 6px 3.5px -6px rgba(85, 85, 85, 1);
       transition: 0.3s ease-in-out;
-    
+
       &:hover {
         background: $secondary-color;
       }
@@ -200,7 +198,19 @@ $secondary-color: #7b7b7b;
     }
   }
 
-  .add-btn {
+  .add-question-btn {
+    background-color: #fff;
+    border: none;
+    color: #112000;
+    font-size: 16px;
+    font-weight: 700;
+    justify-content: flex-start;
+    letter-spacing: 0;
+    line-height: 1;
+    min-width: auto;
+    padding-left: 0;
+    width: auto;
+
     margin-top: 10px;
     padding-right: 15px;
     max-width: fit-content;

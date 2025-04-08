@@ -162,7 +162,6 @@ const QuestForm = () => {
                 type="button"
                 onClick={() => {
                   setTime((prev) => prev + 1);
-                  console.log(time);
                 }}
               >
                 +
@@ -180,10 +179,10 @@ const QuestForm = () => {
               questionNumber={questions.indexOf(question) + 1}
               onDelete={() => removeQuestion(question.id)}
               onChange={(q) => question.value = q}
-              newValue={question.value}
+              updateValue={question.value}
             />
           ))}
-          <button className="add-btn" type="button" onClick={addQuestion}>
+          <button className="add-question-btn" type="button" onClick={addQuestion}>
             <span className="icon">
               <FaPlus />
             </span>

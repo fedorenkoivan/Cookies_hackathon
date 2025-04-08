@@ -6,7 +6,6 @@ $secondary-color: #7b7b7b;
 
   input {
     background-color: white;
-    border: none;
     border-radius: 0px;
     min-height: 100%;
     box-shadow: 0px 6px 28px -90px rgba(85, 85, 85, 1);
@@ -69,19 +68,55 @@ $secondary-color: #7b7b7b;
     margin-top: 5px;
     margin-bottom: 5px;
   }
+
+  .answer-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    margin-left: min(5vw);
+  }
 }
 
-.add-btn {
+.add-answer-btn {
   background-color: #fff;
   border: none;
-  border-radius: 5px;
   color: #112000;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   justify-content: flex-start;
   letter-spacing: 0;
   line-height: 1;
   min-width: auto;
-  padding-left: 0;
   width: auto;
+
+  margin-top: 10px;
+  padding-right: 15px;
+  max-width: fit-content;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 7px;
+    border-radius: 50%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    color: $secondary-color;
+    .icon {
+      background-color: $secondary-color;
+      color: white;
+    }
+  }
 }

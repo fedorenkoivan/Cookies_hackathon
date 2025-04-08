@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
-import './Home.scss';
+import "./Home.scss";
 
 interface Quest {
   author: string;
@@ -28,7 +28,16 @@ const Slider = () => {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(`${URL}/top-5`);
+        const getToday = () => {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          return today.toISOString();
+        };
+        const res = await fetch(
+          `${URL}?limit=5&sort=rating:desc&createdAt.gte=${getToday()}`
+        );
+
+        console.log(`${URL}?limit=5&sort=rating:desc&createdAt.gte=${getToday()}`);
         const data = await res.json();
         setBestQuests(data.data);
       } catch (err) {

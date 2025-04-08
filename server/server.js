@@ -2,8 +2,6 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-import { questModel } from "./models/questModel.js";
-import { logInModel } from "./models/LogIn.js";
 import userRouter from "./routes/userRoutes.js";
 import questRouter from "./routes/questRoutes.js";
 

@@ -1,19 +1,53 @@
 import { useState } from "react";
+import "./QuestForm.scss";
 import { Dropdown } from "./Dropdown";
-import './QuestForm.scss';
+import QuestionForm from "./QuestionForm";
+import { FaPlus } from "react-icons/fa";
 
 const QuestForm = () => {
+  const [image, setImage] = useState<string>("");
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  // const [category, setCategory] = useState<string>("");
-  const [timeLimit, setTimeLimit] = useState<number>(90);
+  const [category, setCategory] = useState<string>("");
+  const [time, setTime] = useState<number>(90);
   const [toggled, setToggled] = useState<boolean>(false);
   const [secondsVisibility, setSecondsVisibility] = useState<boolean>(false);
+
+  const URL = "http://localhost:5000/quests";
 
   const handleToggle = () => {
     setToggled((prev) => !prev);
     setSecondsVisibility((prev) => !prev);
-    if (!toggled) setTimeLimit(0);
+    if (!toggled) setTime(0);
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImage(file.name);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await fetch(`${URL}/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+        title,
+          author: "John Doe",
+          description,
+          category,
+          time,
+          image,
+        })
+      });
+    } catch (err) {
+      console.error("Error submitting the quest:", err);
+    }
   };
 
   const questCategories: string[] = [
@@ -27,14 +61,14 @@ const QuestForm = () => {
 
   return (
     <>
-      <form className="quest-form">
+      <form className="quest-form" onSubmit={handleSubmit}>
         <div className="hero-section">
-          <h1>Ready to lounch your own quest?</h1>
+          <h1>Ready to launch your own quest?</h1>
         </div>
 
         <div className="quest-form__group">
           <h3>Image</h3>
-          <input type="file" accept="image/*" />
+          <input type="file" accept="image/*" onChange={handleImageChange} />
         </div>
 
         <div className="quest-form__group">
@@ -61,18 +95,22 @@ const QuestForm = () => {
         <div className="quest-form__group">
           <h3>Category</h3>
           <Dropdown
-            buttonText="Category of your quest"
+            buttonText="Select a category"
             content={questCategories}
+            onSelect={(category) => {
+              setCategory(category);
+            }}
           />
         </div>
 
         <div className="container">
           <div className="text-section">
             <h2>Time</h2>
-            <p>Set the maximum time to finish the game.</p>
+            <p>Set the maximum time to finish the quest.</p>
           </div>
           <button
             className={`toggle-button ${toggled ? "toggled" : ""}`}
+            type="button"
             onClick={handleToggle}
           >
             <div className="thumb"></div>
@@ -88,17 +126,17 @@ const QuestForm = () => {
               <button
                 type="button"
                 onClick={() => {
-                  setTimeLimit((prev) => Math.max(0, prev - 1));
-                  console.log(timeLimit);
+                  setTime((prev) => Math.max(0, prev - 1));
+                  console.log(time);
                 }}
               >
                 -
               </button>
               <input
                 type="text"
-                value={timeLimit}
+                value={time}
                 onChange={(e) => {
-                  setTimeLimit(
+                  setTime(
                     Math.min(Math.max(0, parseInt(e.target.value) || 0), 999)
                   );
                 }}
@@ -106,8 +144,8 @@ const QuestForm = () => {
               <button
                 type="button"
                 onClick={() => {
-                  setTimeLimit((prev) => prev + 1);
-                  console.log(timeLimit);
+                  setTime((prev) => prev + 1);
+                  console.log(time);
                 }}
               >
                 +
@@ -115,6 +153,17 @@ const QuestForm = () => {
             </div>
           </div>
         )}
+
+        <div className="quest-form__group">
+          <h3>Questions</h3>
+          <QuestionForm />
+          <button className="add-btn" type="button">
+            <span className="icon">
+              <FaPlus />
+            </span>
+            Add Question
+          </button>
+        </div>
 
         <button className="next-btn" type="submit">
           Submit Quest

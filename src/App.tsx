@@ -3,7 +3,7 @@ import Navbar from "./components/Partial/Navbar";
 import Home from "./components/Home/Home";
 import Profile from "./components/Profile/Profile";
 import QuestForm from "./components/Forms/QuestForm";
-import QuestionsForm from "./components/Forms/QuestionsForm";
+import QuestionsForm from "./components/Forms/QuestionForm";
 import SignUp from "./components/Login/SignUp";
 import LogIn from "./components/Login/LogIn";
 import Footer from "./components/Partial/Footer";

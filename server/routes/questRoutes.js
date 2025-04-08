@@ -1,9 +1,8 @@
 import express from "express";
-import { getBestQuests, getAllQuests } from "../controllers/questController.js"; 
+import { getQuests } from "../controllers/questController.js"; 
 
 const router = express.Router();
 
-router.get('/', getAllQuests);
-router.get('/top-5', getBestQuests);
+router.get('/', getQuests);
 
 export default router;

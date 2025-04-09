@@ -1,15 +1,16 @@
-import React from "react";
 import { useState } from "react";
+
 import { FaChevronDown } from "react-icons/fa";
 import { FaChevronUp } from "react-icons/fa";
-import './Dropdown.scss';
+import "./Dropdown.scss";
 
 interface DropdownProps {
   buttonText: string;
   content: string[];
+  onSelect: (el: string) => void;
 }
 
-export const Dropdown: React.FC<DropdownProps> = ({ buttonText, content }) => {
+export const Dropdown: React.FC<DropdownProps> = ({ buttonText, content, onSelect }) => {
   const [open, setOpen] = useState<boolean>(false);
   const [selectedContent, setContent] = useState<string>(buttonText);
   const [isSelected, setSelected] = useState<boolean>(false);
@@ -18,6 +19,7 @@ export const Dropdown: React.FC<DropdownProps> = ({ buttonText, content }) => {
     setContent(el);
     setOpen(false);
     setSelected(true);
+    onSelect(el);
   };
 
   const handleToggle = () => {

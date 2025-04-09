@@ -5,29 +5,28 @@ import bcrypt from "bcryptjs";
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, 'Please tell us your name!']
+        required: true
     },
     email: {
         type: String,
-        required: [true, 'Please provide your email'],
+        required: true,
         unique: true,
         lowercase: true,
-        validate: [validator.isEmail, 'Please provide a valid email']
+        validate: validator.isEmail
     },
     password: {
         type: String,
-        required: [true, 'Please provide a password'],
+        required: true,
         minlength: 8,
         select: false
     },
     passwordConfirm: {
         type: String,
-        required: [true, 'Please confirm your password'],
+        required: true,
         validate: {
             validator: function (el) {
                 return el === this.password;
-            },
-            message: 'Passwords are not the same!'
+            }
         }
     }
 });

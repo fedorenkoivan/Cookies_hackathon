@@ -1,4 +1,5 @@
 import "./App.scss";
+
 import Navbar from "@components/Partial/Navbar";
 import Home from "@components/Home/Home";
 import Profile from "@components/Profile/Profile";
@@ -8,6 +9,7 @@ import SignUp from "@components/Login/SignUp";
 import LogIn from "@components/Login/LogIn";
 import Footer from "@components/Partial/Footer";
 import RatingForm from "@components/Rating/RatingForm";
+
 import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

@@ -2,39 +2,35 @@ $primary-color: #c8c7c7;
 $secondary-color: #7b7b7b;
 
 .dropdown-btn {
+  width: 100%;
+  padding: 12px 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
-  padding: 12px 15px;
   background-color: $primary-color;
   border-radius: 10px;
-  cursor: pointer;
   box-shadow: 0px 6px 3.5px -6px rgba(85, 85, 85, 1);
   color: $secondary-color;
+  transition: 0.3s ease-in-out;
+  cursor: pointer;
+
+  &:hover { box-shadow: 3px 6px 3.5px -4px rgba(85, 85, 85, 1); }
+  
+  .icon { margin-top: 4px; }
 }
 
-.open {
-  border-radius: 10px 10px 0px 0px;
-}
-
-.selected {
-  color: black;
-}
-
-.icon {
-  margin-top: 4px;
-}
+.open { border-radius: 10px 10px 0px 0px; }
+.selected { color: black; }
 
 .dropdown-content {
+  width: 100%;
+  max-height: 23vh;
   display: flex;
   flex-direction: column;
   background-color: $primary-color;
   border-radius: 0px 0px 10px 10px;
   box-shadow: 0px 6px 3.5px -6px rgba(85, 85, 85, 1);
-  width: 100%;
   z-index: 1;
-  max-height: 20vh;
   overflow-y: scroll;
   scrollbar-width: thin;
   scrollbar-color: $secondary-color;
@@ -42,9 +38,9 @@ $secondary-color: #7b7b7b;
 
 .dropdown-element {
   padding: 10px;
-  cursor: pointer;
-  transition: 0.3s ease-in-out;
   color: $secondary-color;
+  transition: 0.1s ease-in-out;
+  cursor: pointer;
 
   &:hover {
     background-color: rgb(218, 218, 218);

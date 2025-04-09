@@ -3,20 +3,20 @@ import mongoose from "mongoose";
 const questSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: [true, "a quest must have a title"],
-    unique: [true, "a title must be unique"],
+    required: true,
+    unique: true,
   },
   author: {
     type: String,
-    required: [true, "a quest must have an author"],
+    required: true,
   },
   description: {
     type: String,
-    required: [true, "a quest must have a description"],
+    required: true,
   },
   category: {
     type: String,
-    required: [true, "a quest must have a category"],
+    required: true,
   },
   time: {
     type: Number,
@@ -28,8 +28,8 @@ const questSchema = new mongoose.Schema({
   },
   rating: {
     type: Number,
-    min: [1, "Rating must be above 1"],
-    max: [5, "Rating must be below 5"],
+    min: 1,
+    max: 5,
   },
   reviews: {
     type: Number,

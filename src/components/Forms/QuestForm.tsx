@@ -10,16 +10,22 @@ const QuestForm = () => {
   const [description, setDescription] = useState<string>("");
   const [category, setCategory] = useState<string>("");
   const [time, setTime] = useState<number>(90);
-  const [toggled, setToggled] = useState<boolean>(false);
-  const [secondsVisibility, setSecondsVisibility] = useState<boolean>(false);
-  const [questions, setQuestions] = useState<{ id: number, value: string }[]>([{ id: 0, value: ""}]);
+  const [showTimeControls, setShowTimeControls] = useState<boolean>(false);
+  const [questions, setQuestions] = useState<
+    {
+      id: number;
+      value: string;
+      answers: { id: number; value: string; isCorrect: boolean }[];
+    }[]
+  >([{ id: 0, value: "", answers: [{ id: 0, value: "", isCorrect: false }] }]);
 
   const URL = "http://localhost:5000/quests";
 
   const handleToggle = () => {
-    setToggled((prev) => !prev);
-    setSecondsVisibility((prev) => !prev);
-    if (!toggled) setTime(0);
+    const newState = !showTimeControls;
+    setShowTimeControls(newState);
+    if (!newState) setTime(90); // Reset to default when disabling
+    else setTime(0); // Initialize to 0 when enabling
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,6 +50,7 @@ const QuestForm = () => {
           category,
           time,
           image,
+          questions, // Include questions data in the submission
         }),
       });
     } catch (err) {
@@ -65,15 +72,33 @@ const QuestForm = () => {
   }, [questions.length]);
 
   const addQuestion = () => {
-    setQuestions((prev) => [...prev, { id: prev.length, value: "" }]);
-    console.log({ questions });
+    setQuestions((prev) => [
+      ...prev, 
+      { 
+        id: prev.length, 
+        value: "", 
+        answers: [{ id: 0, value: "", isCorrect: false }] 
+      }
+    ]);
   };
 
   const removeQuestion = (id: number) => {
     if (questions.length > 1) {
-      setQuestions((prev) => prev.filter((q) => q.id !== id));
-      console.log({ questions });
+      setQuestions((prev) => {
+        const filtered = prev.filter((q) => q.id !== id);
+        // Re-index questions
+        return filtered.map((q, index) => ({
+          ...q,
+          id: index
+        }));
+      });
     }
+  };
+
+  const updateQuestion = (id: number, value: string, answers: { id: number; value: string; isCorrect: boolean }[]) => {
+    setQuestions(prev => 
+      prev.map(q => q.id === id ? { ...q, value, answers } : q)
+    );
   };
 
   return (
@@ -126,7 +151,7 @@ const QuestForm = () => {
             <p>Set the maximum time to finish the quest.</p>
           </div>
           <button
-            className={`toggle-button ${toggled ? "toggled" : ""}`}
+            className={`toggle-button ${showTimeControls ? "toggled" : ""}`}
             type="button"
             onClick={handleToggle}
           >
@@ -134,7 +159,7 @@ const QuestForm = () => {
           </button>
         </div>
 
-        {secondsVisibility && (
+        {showTimeControls && (
           <div className="container">
             <div className="text-section">
               <b>Seconds</b>
@@ -142,10 +167,7 @@ const QuestForm = () => {
             <div className="controls">
               <button
                 type="button"
-                onClick={() => {
-                  setTime((prev) => Math.max(0, prev - 1));
-                  console.log(time);
-                }}
+                onClick={() => setTime(prev => Math.max(0, prev - 1))}
               >
                 -
               </button>
@@ -160,9 +182,7 @@ const QuestForm = () => {
               />
               <button
                 type="button"
-                onClick={() => {
-                  setTime((prev) => prev + 1);
-                }}
+                onClick={() => setTime(prev => Math.min(999, prev + 1))}
               >
                 +
               </button>
@@ -176,13 +196,18 @@ const QuestForm = () => {
           {questions.map((question) => (
             <QuestionForm
               key={question.id}
-              questionNumber={questions.indexOf(question) + 1}
+              questionNumber={question.id + 1}
               onDelete={() => removeQuestion(question.id)}
-              onChange={(q) => question.value = q}
+              onChange={(q, a) => updateQuestion(question.id, q, a)}
               updateValue={question.value}
+              updateAnswers={question.answers}
             />
           ))}
-          <button className="add-question-btn" type="button" onClick={addQuestion}>
+          <button
+            className="add-question-btn"
+            type="button"
+            onClick={addQuestion}
+          >
             <span className="icon">
               <FaPlus />
             </span>

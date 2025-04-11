@@ -50,7 +50,7 @@ const QuestForm = () => {
           category,
           time,
           image,
-          questions, // Include questions data in the submission
+          // questions, // Include questions data in the submission
         }),
       });
     } catch (err) {

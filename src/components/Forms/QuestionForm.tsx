@@ -8,24 +8,44 @@ import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 interface QuestionProps {
   questionNumber: number;
   onDelete: () => void;
-  onChange: (q: string) => void;
+  onChange: (q: string, a: { id: number; value: string; isCorrect: boolean }[]) => void;
   updateValue: string;
+  updateAnswers: { id: number; value: string; isCorrect: boolean }[];
 }
 
-const QuestionsForm: React.FC<QuestionProps> = ({ questionNumber, onDelete, onChange, updateValue: updateValue }) => {
-  const [question, setQuestion] = useState("");
-  const [answers, setAnswers] = useState<{ id: number; value: string; isCorrect: boolean }[]>([
-    { id: 0, value: "", isCorrect: false },
-  ]);
+const QuestionsForm: React.FC<QuestionProps> = ({ questionNumber, onDelete, onChange, updateValue, updateAnswers }) => {
+  const [question, setQuestion] = useState(updateValue);
+  const [answers, setAnswers] = useState<{ id: number; value: string; isCorrect: boolean }[]>(updateAnswers);
   const [isEditing, setIsEditing] = useState(false);
 
   const onEdit = () => {
     setIsEditing((prev) => !prev);
   };
 
+  // Update answers from props, but only when external props change
   useEffect(() => {
-    setAnswers((prev) => prev.map((q, index) => ({ ...q, id: index })));
-  }, [answers.length]);
+    if (JSON.stringify(updateAnswers) !== JSON.stringify(answers)) {
+      setAnswers(updateAnswers);
+    }
+  }, [updateAnswers]);
+
+  // Update question from props, but only when external props change
+  useEffect(() => {
+    if (updateValue !== question) {
+      setQuestion(updateValue);
+    }
+  }, [updateValue]);
+
+  // Report changes to parent component
+  useEffect(() => {
+    
+    // Use a debounce to prevent excessive updates
+    const timer = setTimeout(() => {
+      onChange(question, answers);
+    }, 300);
+    
+    return () => clearTimeout(timer);
+  }, [question, answers, onChange]);
 
   const addAnswer = () => {
     setAnswers((prev) => [...prev, { id: prev.length, value: "", isCorrect: false }]);
@@ -33,13 +53,13 @@ const QuestionsForm: React.FC<QuestionProps> = ({ questionNumber, onDelete, onCh
 
   const removeAnswer = (id: number) => {
     if (answers.length > 1) {
-      setAnswers((prev) => prev.filter((q) => q.id !== id));
+      setAnswers((prev) => {
+        const filtered = prev.filter((q) => q.id !== id);
+        // Re-index the answers
+        return filtered.map((ans, index) => ({ ...ans, id: index }));
+      });
     }
   };
-
-  useEffect(() => {
-    setQuestion(updateValue);
-  }, [questionNumber, updateValue]);
 
   return (
     <>
@@ -50,13 +70,7 @@ const QuestionsForm: React.FC<QuestionProps> = ({ questionNumber, onDelete, onCh
             type="text"
             placeholder="Question"
             value={question}
-            onChange={(e) => {
-              setQuestion(e.target.value);
-              onChange(e.target.value);
-              console.log(e.target.value);
-
-              console.log("Current question state:", question);
-            }}
+            onChange={(e) => setQuestion(e.target.value)}
           ></input>
           <div className="icons-wrapper">
             <FaTrash className="icon" onClick={onDelete} />

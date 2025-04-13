@@ -1,9 +1,11 @@
-import express from 'express';
-import { signup, login } from './../controllers/authController.js';
+import { signup, login } from '../controllers/authController.js';
 
-const router = express.Router();
-
-router.post('/signup', signup);
-router.post('/login', login);
-
-export default router;
+export default async function userRoutes(fastify) {
+  fastify.post('/signup', async (request, reply) => {
+    return signup(request, reply);
+  });
+  
+  fastify.post('/login', async (request, reply) => {
+    return login(request, reply);
+  });
+}

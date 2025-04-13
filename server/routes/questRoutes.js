@@ -1,9 +1,11 @@
-import express from "express";
-import { getQuests, createQuest } from "../controllers/questController.js"; 
+import { getQuests, createQuest } from '../controllers/questController.js';
 
-const router = express.Router();
-
-router.get('/', getQuests);
-router.post('/create', createQuest);
-
-export default router;
+export default async function questRoutes(fastify) {
+  fastify.get('/', async (request, reply) => {
+    return getQuests(request, reply);
+  });
+  
+  fastify.post('/create', async (request, reply) => {
+    return createQuest(request, reply);
+  });
+}

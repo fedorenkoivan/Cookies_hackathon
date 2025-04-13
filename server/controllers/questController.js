@@ -56,35 +56,39 @@ const checkSort = (sort) => {
 
 const checkLimit = (limit) => limit ? parseInt(limit) : 20;
 
-const getQuests = async (req, res) => {
+export const getQuests = async (request, reply) => {
   try {
-    const query = checkFilters(req.query);
+    const query = checkFilters(request.query);
     let questQuery = questModel.find(query);
-    questQuery = questQuery.sort(checkSort(req.query.sort));
-    const limitValue = checkLimit(req.query.limit);
+    questQuery = questQuery.sort(checkSort(request.query.sort));
+    const limitValue = checkLimit(request.query.limit);
     questQuery = questQuery.limit(limitValue);
     const quests = await questQuery;
-    res.status(200).json({ status: "success", data: quests });
+    
+    return {
+      status: "success",
+      data: quests
+    };
   } catch (err) {
-    res.status(500).json({
+    return reply.code(500).send({
       status: "failed",
-      msg: "an error occurred while getting quests",
+      msg: "an error occurred while getting quests"
     });
   }
 };
 
-const createQuest = async (req, res) => {
+export const createQuest = async (request, reply) => {
   try {
-    const newQuest = await questModel.create(req.body);
-    res.status(200).json({ status: "success", data: newQuest });
+    const newQuest = await questModel.create(request.body);
+    
+    return reply.code(201).send({
+      status: "success",
+      data: newQuest
+    });
   } catch (err) {
-    res
-      .status(500)
-      .json({
-        status: "failed",
-        msg: "an error occurred while creating a new quest"
-      });
+    return reply.code(500).send({
+      status: "failed",
+      msg: "an error occurred while creating a new quest"
+    });
   }
-}
-
-export { getQuests, createQuest };
+};

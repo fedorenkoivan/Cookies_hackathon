@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import validator from "validator";
-import bcrypt from "bcryptjs";
+import bcrypt from 'bcryptjs';
+import { hashUserPassword } from '../middleware/hashPasswordMiddleware.js';
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -31,20 +32,10 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-userSchema.pre('save', async function(next) {
-    if (!this.isModified('password')) return next();
-    
-    const salt_rounds = 12;
-    const salt = await bcrypt.genSalt(salt_rounds);
+userSchema.pre('save', hashUserPassword);
 
-    this.password = await bcrypt.hash(this.password, salt);
-    this.passwordConfirm = undefined;
-    next();
-  });
-  
 userSchema.methods.correctPassword = async (candidatePassword, userPassword) => {
     return await bcrypt.compare(candidatePassword, userPassword);
 }
-
 const User = mongoose.model("User", userSchema);
 export default User;

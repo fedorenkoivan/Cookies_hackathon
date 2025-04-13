@@ -1,35 +1,24 @@
 import User from '../models/userModel.js';
-import jwt from 'jsonwebtoken';
+import { createToken } from '../utils/createToken.js';
 
-const signToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { 
-    expiresIn: process.env.JWT_EXPIRES_IN 
-  });
-};
+// ok or not?
+const isValidUser = async (user, password) => user && await user.correctPassword(password, user.password);
 
 export const signup = async (request, reply) => {
   try {
-    const newUser = await User.create({
-      name: request.body.name,
-      email: request.body.email,
-      password: request.body.password,
-      passwordConfirm: request.body.passwordConfirm
-    });
-    
-    const token = signToken(newUser._id);
-      
-    return reply.code(201).send({
+    const { name, email, password, passwordConfirm } = request.body;
+
+    const newUser = await User.create({ name, email, password, passwordConfirm });
+
+    const token = createToken(request.server, newUser._id);
+
+    reply.code(201).send({
       status: 'success',
       token,
-      data: {
-        user: newUser,
-      },
+      data: { user: { id: newUser._id, name: newUser.name, email: newUser.email } },
     });
   } catch (err) {
-    return reply.code(400).send({
-      status: 'error',
-      message: err.message
-    });
+    reply.code(400).send({ status: 'error', message: err.message });
   }
 };
 
@@ -37,33 +26,25 @@ export const login = async (request, reply) => {
   try {
     const { email, password } = request.body;
 
-    // FIXME: figure out the error handler and why it doesn't work without next
     if (!email || !password) {
-      return reply.code(400).send({
-        status: 'error',
-        message: 'Please provide email and password!'
-      });
+      return reply.code(400).send({ status: 'error', message: 'Please provide email and password!' });
     }
 
-    const user = await User.findOne({ email }).select("+password");
-  // TODO: refactor if statement
+    const user = await User.findOne({ email }).select('+password');
 
-    if (!user || !(await user.correctPassword(password, user.password))) {
+    if (!isValidUser(user, password)) {
       return reply.code(401).send({
         status: 'error',
-        message: 'Incorrect email or password'
+        message: 'Incorrect email or password',
       });
     }
 
-    const token = signToken(user._id);
-    return {
-      status: 'success',
-      token,
-    };
+    const token = createToken(request.server, user._id);
+
+    reply.send({ status: 'success', token });
   } catch (err) {
-    return reply.code(500).send({
-      status: 'error',
-      message: err.message
-    });
+    reply.code(500).send({ status: 'error', message: err.message });
   }
 };
+
+//TODO: Implement logout functionality

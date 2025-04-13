@@ -1,24 +1,32 @@
-import express from "express";
-import mongoose from "mongoose";
-import cors from "cors";
-import dotenv from "dotenv";
-import userRouter from "./routes/userRoutes.js";
-import questRouter from "./routes/questRoutes.js";
+import Fastify from 'fastify';
+import fastifyCors from '@fastify/cors';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import userRoutes from './routes/userRoutes.js';
+import questRoutes from './routes/questRoutes.js';
 
 dotenv.config({ path: "../.env" });
-const app = express();
-const PORT = 5000;
-
-app.use(cors());
-app.use(express.json());
 
 await mongoose
   .connect(process.env.MONGO_CONNECTION)
-  .then(() => console.log("Successfully connected to a database"));
+  .then(() => console.log("Successfully connected to database"))
 
-app.use('/users', userRouter);
-app.use('/quests', questRouter);
-
-app.listen(PORT, () => {
-  console.log(`Server runs on port ${PORT}`);
+const fastify = Fastify({
+  logger: true
 });
+const PORT = 5000;
+
+await fastify.register(fastifyCors, { 
+  origin: true
+});
+
+fastify.register(userRoutes, { prefix: '/users' });
+fastify.register(questRoutes, { prefix: '/quests' });
+
+try {
+    fastify.listen({ port: PORT, host: '0.0.0.0' });
+    console.log(`Server running on port ${PORT}`);
+} catch (err) {
+    fastify.log.error(err);
+    process.exit(1);
+}

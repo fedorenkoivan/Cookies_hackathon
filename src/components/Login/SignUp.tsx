@@ -20,7 +20,7 @@ const validationSchema = Yup.object({
      .required("Please complete this required field."),
 });
 
-const LogIn = () => {
+const SignUp = () => {
   const navigate = useNavigate();
   return (
     <div className="card">
@@ -38,29 +38,63 @@ const LogIn = () => {
           confirmPassword: "",
         }}
         validationSchema={validationSchema}
-        onSubmit={(values) => {
-          console.log(values);
-          navigate("/profile");
+        onSubmit={async (values, { setSubmitting, setStatus }) => {
+          try {
+            const response = await fetch('http://localhost:5000/users/signup', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ 
+                name: values.username,
+                email: values.email, 
+                password: values.password,
+                passwordConfirm: values.confirmPassword
+              }),
+            });
+            
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+              // Зберігаємо токен у localStorage
+              localStorage.setItem('token', data.token);
+              navigate("/profile");
+            } else {
+              setStatus(data.message || 'Помилка реєстрації');
+            }
+          } catch (error) {
+            console.error('Error during signup:', error);
+            setStatus('Помилка з\'єднання з сервером');
+          } finally {
+            setSubmitting(false);
+          }
         }}
       >
-        {({ handleSubmit }) => (
+        {({ handleSubmit, status, isSubmitting }) => (
           <Form onSubmit={handleSubmit} className="form">
             {[
               { name: "username", label: "1. Username" },
               { name: "email", label: "2. Your email" },
-              { name: "password", label: "3. Your password" },
-              { name: "confirmPassword", label: "4. Confirm your password" },
-            ].map(({ name, label }) => (
+              { name: "password", label: "3. Your password", type: "password" },
+              { name: "confirmPassword", label: "4. Confirm your password", type: "password" },
+            ].map(({ name, label, type = "text" }) => (
               <div key={name} className="form-group">
                 <label htmlFor={name}>{label} *</label>
-                <Field type="text" id={name} name={name} className="input" />
+                <Field type={type} id={name} name={name} className="input" />
                 <ErrorMessage name={name} component="div" className="error" />
               </div>
             ))}
 
+            {status && <div className="error">{status}</div>}
+
             <div className="btn-container">
-              <Button type="submit" variant="contained" endIcon={<SendIcon />}>
-                Send
+              <Button 
+                type="submit" 
+                variant="contained" 
+                endIcon={<SendIcon />}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Sending...' : 'Send'}
               </Button>
             </div>
             <a className="account"
@@ -73,4 +107,4 @@ const LogIn = () => {
   );
 };
 
-export default LogIn;
+export default SignUp;

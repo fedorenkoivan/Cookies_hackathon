@@ -28,27 +28,59 @@ const LogIn = () => {
       <Formik
         initialValues={{ companyEmail: "", password: "" }}
         validationSchema={validationSchema}
-        onSubmit={(values) => {
-          console.log(values);
-          navigate("/profile");
+        onSubmit={async (values, { setSubmitting, setStatus }) => {
+          try {
+            const response = await fetch('http://localhost:5000/users/login', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ 
+                email: values.companyEmail, 
+                password: values.password 
+              }),
+            });
+            
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+              // Зберігаємо токен у localStorage
+              localStorage.setItem('token', data.token);
+              navigate("/profile");
+            } else {
+              setStatus(data.message || 'Помилка авторизації');
+            }
+          } catch (error) {
+            console.error('Error during login:', error);
+            setStatus('Помилка конекту з сервером');
+          } finally {
+            setSubmitting(false);
+          }
         }}
       >
-        {({ handleSubmit }) => (
+        {({ handleSubmit, status, isSubmitting }) => (
           <Form onSubmit={handleSubmit} className="form">
             {[
               { name: "companyEmail", label: "1. Company email" },
-              { name: "password", label: "2. Your password" },
-            ].map(({ name, label }) => (
+              { name: "password", label: "2. Your password", type: "password" },
+            ].map(({ name, label, type = "text" }) => (
               <div key={name} className="form-group">
                 <label htmlFor={name}>{label} *</label>
-                <Field type="text" id={name} name={name} className="input" />
+                <Field type={type} id={name} name={name} className="input" />
                 <ErrorMessage name={name} component="div" className="error" />
               </div>
             ))}
 
+            {status && <div className="error">{status}</div>}
+
             <div className="btn-container">
-              <Button type="submit" variant="contained" endIcon={<SendIcon />}>
-                Send
+              <Button 
+                type="submit" 
+                variant="contained" 
+                endIcon={<SendIcon />}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Sending...' : 'Send'}
               </Button>
             </div>
             <a className="account"

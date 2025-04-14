@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
+import { userLoginEvent } from "../Partial/Navbar";
 import './LogIn.scss';
 
 const validationSchema = Yup.object({
@@ -43,9 +44,10 @@ const LogIn = () => {
             
             const data = await response.json();
             
-            if (data.status === 'success') {
-              // Зберігаємо токен у localStorage
+            if (data.status === 'success' && data.token) {
               localStorage.setItem('token', data.token);
+              window.dispatchEvent(new Event(userLoginEvent))
+
               navigate("/profile");
             } else {
               setStatus(data.message || 'Помилка авторизації');

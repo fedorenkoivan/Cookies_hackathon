@@ -1,7 +1,9 @@
 import Fastify from 'fastify';
 import fastifyCors from '@fastify/cors';
+import fastifyJwt from '@fastify/jwt';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+
 import userRoutes from './routes/userRoutes.js';
 import questRoutes from './routes/questRoutes.js';
 
@@ -18,6 +20,10 @@ const PORT = 5000;
 
 await fastify.register(fastifyCors, { 
   origin: true
+});
+
+await fastify.register(fastifyJwt, {
+  secret: process.env.JWT_SECRET
 });
 
 fastify.register(userRoutes, { prefix: '/users' });

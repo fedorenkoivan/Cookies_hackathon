@@ -43,7 +43,7 @@ The **Virtual Quest Platform** is an interactive web application that allows use
 ## 🛠 Tech Stack
 
 - **Frontend**: React, SCSS
-- **Backend**: Node.js, Express.js
+- **Backend**: Node.js, Fastify
 - **Database**: MongoDB
 
 

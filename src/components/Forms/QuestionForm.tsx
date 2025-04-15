@@ -96,7 +96,7 @@ const QuestionsForm: React.FC<QuestionProps> = ({ questionNumber, onDelete, onCh
               <span className="icon">
                 <FaPlus />
               </span>
-              Add Answer
+              <p>Add Answer</p>
             </button>
           </div>
         )}

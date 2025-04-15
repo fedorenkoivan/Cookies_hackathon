@@ -29,7 +29,7 @@ const Navbar = () => {
               <span className="username">{userData.name}</span>
             </Link>
             <Stack direction="row">
-                <Button className="my-button">Log Out</Button>
+                <Button className="my-button"><p>Log Out</p></Button>
           </Stack>
           </>
         ) : (
@@ -39,7 +39,7 @@ const Navbar = () => {
           className="my-button"
           onClick={() => navigate('log-in')}
           >
-            Log In
+            <p>Log In</p>
             </Button>
           </Stack>
           </>

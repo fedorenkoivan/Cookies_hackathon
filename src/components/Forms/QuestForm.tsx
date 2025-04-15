@@ -214,7 +214,7 @@ const QuestForm = () => {
             <span className="icon">
               <FaPlus />
             </span>
-            Add Question
+            <p>Add Question</p>
           </button>
         </div>
 

@@ -1,4 +1,5 @@
 import "./App.scss";
+import "@/index.scss"
 
 import Navbar from "@components/Partial/Navbar";
 import Home from "@components/Home/Home";

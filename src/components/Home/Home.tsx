@@ -37,7 +37,9 @@ const Slider = () => {
           `${URL}?limit=5&sort=rating:desc&createdAt.gte=${getToday()}`
         );
 
-        console.log(`${URL}?limit=5&sort=rating:desc&createdAt.gte=${getToday()}`);
+        console.log(
+          `${URL}?limit=5&sort=rating:desc&createdAt.gte=${getToday()}`
+        );
         const data = await res.json();
         setBestQuests(data.data);
       } catch (err) {
@@ -79,7 +81,7 @@ const Slider = () => {
                   <p className="reviews">({quest.reviews})</p>
                 </div>
                 <div className="start">
-                  <button className="button">Start quest</button>
+                  <button className="button"><p>Start quest</p></button>
                 </div>
               </div>
             </div>
@@ -139,10 +141,12 @@ const Home = () => {
           <p className="quests__cards-title">All quests:</p>
           <button
             className="quests__cards-button"
-            onClick={() => navigate("/quest-form/1")}
+            onClick={() => navigate("/quest-form")}
           >
-            <FaPlus className="quests__cards-icon" />
-            <span className="quests__cards-title">Create quest</span>
+            <div className="quests__cards-container">
+              <FaPlus className="quests__cards-icon" />
+              <span className="quests__cards-title">Create quest</span>
+            </div>
           </button>
         </div>
         <hr className="quests__divider" />
@@ -191,7 +195,9 @@ const Home = () => {
                 </div>
                 <div className="quests__card-author">
                   <div className="author">
-                    <FaUser className="icon" />
+                    <div className="icon">
+                      <FaUser className="" />
+                    </div>
                     <p>{quest.author}</p>
                   </div>
                   <div className="rating">
@@ -201,10 +207,14 @@ const Home = () => {
                 </div>
                 <div className="quests__card-start">
                   {quest.time === -1 ? (
-                    <div>no time limit</div>
+                    <div>
+                      <p>No time limit</p>
+                    </div>
                   ) : (
                     <div className="clock">
-                      <FaClock className="icon" />
+                      <div className="icon">
+                        <FaClock className="" />
+                      </div>
                       <p>{quest.time}s</p>
                     </div>
                   )}

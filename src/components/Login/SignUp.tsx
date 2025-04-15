@@ -60,7 +60,7 @@ const LogIn = () => {
 
             <div className="btn-container">
               <Button type="submit" variant="contained" endIcon={<SendIcon />}>
-                Send
+                <p>Send</p>
               </Button>
             </div>
             <a className="account"

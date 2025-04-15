@@ -54,7 +54,7 @@ const checkSort = (sort) => {
   return sortOptions;
 };
 
-const checkLimit = (limit) => limit ? parseInt(limit) : 20;
+const checkLimit = (limit) => (limit ? parseInt(limit) : 20);
 
 export const getQuests = async (request, reply) => {
   try {
@@ -64,15 +64,15 @@ export const getQuests = async (request, reply) => {
     const limitValue = checkLimit(request.query.limit);
     questQuery = questQuery.limit(limitValue);
     const quests = await questQuery;
-    
+
     return {
       status: "success",
-      data: quests
+      data: quests,
     };
   } catch (err) {
     return reply.code(500).send({
       status: "failed",
-      msg: "an error occurred while getting quests"
+      msg: "an error occurred while getting quests",
     });
   }
 };
@@ -80,15 +80,18 @@ export const getQuests = async (request, reply) => {
 export const createQuest = async (request, reply) => {
   try {
     const newQuest = await questModel.create(request.body);
-    
+
+    console.log("New quest created:", newQuest);
+
+    console.log("Request body:", request.body);
     return reply.code(201).send({
       status: "success",
-      data: newQuest
+      data: newQuest,
     });
   } catch (err) {
     return reply.code(500).send({
       status: "failed",
-      msg: "an error occurred while creating a new quest"
+      msg: "an error occurred while creating a new quest",
     });
   }
 };

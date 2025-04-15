@@ -3,6 +3,7 @@ import "./QuestForm.scss";
 import { Dropdown } from "./Dropdown";
 import QuestionForm from "./QuestionForm";
 import { FaPlus } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const QuestForm = () => {
   const [image, setImage] = useState<string>("");
@@ -20,6 +21,7 @@ const QuestForm = () => {
   >([{ id: 0, value: "", answers: [{ id: 0, value: "", isCorrect: false }] }]);
 
   const URL = "http://localhost:5000/quests";
+  const navigate = useNavigate();
 
   const handleToggle = () => {
     const newState = !showTimeControls;
@@ -45,17 +47,18 @@ const QuestForm = () => {
         },
         body: JSON.stringify({
           title,
-          author: "John Doe",
+          author: "Maksym",
           description,
           category,
           time,
+          questions,
           image,
-          questions, // Include questions data in the submission
         }),
       });
     } catch (err) {
       console.error("Error submitting the quest:", err);
     }
+    navigate("/");
   };
 
   const questCategories: string[] = [

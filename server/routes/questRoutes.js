@@ -6,6 +6,7 @@ export default async function questRoutes(fastify) {
   });
   
   fastify.post('/create', async (request, reply) => {
+    console.log(request.body);
     return createQuest(request, reply);
   });
 }

@@ -1,4 +1,5 @@
 import { getQuests, createQuest } from '../controllers/questController.js';
+import { questModel } from '../models/questModel.js';
 
 export default async function questRoutes(fastify) {
   fastify.get('/', async (request, reply) => {

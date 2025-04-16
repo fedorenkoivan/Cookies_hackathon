@@ -18,7 +18,16 @@ interface Quest {
   reviews: number;
 }
 
-const TABS = ["All", "Sports", "Gaming", "Education", "Other"];
+const TABS: string[] = [
+  "All",
+  "Adventure",
+  "Puzzle",
+  "Educational",
+  "Gaming",
+  "Team challenges",
+  "Mystery",
+  "Other",
+];
 
 const URL = "http://localhost:5000/quests";
 
@@ -34,10 +43,6 @@ const Slider = () => {
           return today.toISOString();
         };
         const res = await fetch(
-          `${URL}?limit=5&sort=rating:desc&createdAt.gte=${getToday()}`
-        );
-
-        console.log(
           `${URL}?limit=5&sort=rating:desc&createdAt.gte=${getToday()}`
         );
         const data = await res.json();
@@ -81,7 +86,9 @@ const Slider = () => {
                   <p className="reviews">({quest.reviews})</p>
                 </div>
                 <div className="start">
-                  <button className="button"><p>Start quest</p></button>
+                  <button className="button">
+                    <p>Start quest</p>
+                  </button>
                 </div>
               </div>
             </div>
@@ -118,14 +125,22 @@ const Home = () => {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(URL);
+        let filterQuery = `?category=${active}`;
+        if (active === "All") filterQuery = "?";
+        let searchQuery = "";
+        const search = searchText.toLowerCase().trim();
+        if (search !== "") {
+          const safeSearch = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          searchQuery += `&title.re=^${safeSearch}`;
+        }
+        const res = await fetch(URL + `${filterQuery}${searchQuery}`);
         const data = await res.json();
         setQuests(data.data);
       } catch (err) {
         console.log(err);
       }
     })();
-  }, []);
+  }, [active, searchText]);
 
   return (
     <section className="quest-section">

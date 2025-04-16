@@ -23,7 +23,6 @@
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "^16.4.7",
-    "express": "^4.21.2",
     "formik": "^2.4.6",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.12.1",

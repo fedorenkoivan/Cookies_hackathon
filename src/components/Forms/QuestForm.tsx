@@ -62,12 +62,13 @@ const QuestForm = () => {
   };
 
   const questCategories: string[] = [
-    "Adventure & Exploration",
-    "Puzzle & Logic",
-    "Educational & Learning",
-    "Creative & Artistic",
-    "Team Challenges",
-    "Mystery & Investigation",
+    "Adventure",
+    "Puzzle",
+    "Educational",
+    "Gaming",
+    "Team challenges",
+    "Mystery",
+    "Other",
   ];
 
   useEffect(() => {

@@ -17,9 +17,14 @@ const checkFilters = (params) => {
           gt: "$gt",
           gte: "$gte",
           ne: "$ne",
+          re: "$regex"
         };
 
-        if (operatorMap[operator]) {
+        if (operator === "regex") {
+          query[field] = {
+            $regex: params[key]
+          }
+        } else if (operatorMap[operator]) {
           query[field][operatorMap[operator]] = params[key];
         }
       } else {

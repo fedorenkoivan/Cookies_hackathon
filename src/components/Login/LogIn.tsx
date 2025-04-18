@@ -44,17 +44,21 @@ const LogIn = () => {
             
             const data = await response.json();
             
+            if (!response.ok) {
+              setStatus(data.message || `Error: ${response.statusText}`);
+              return;
+            }
+            
             if (data.status === 'success' && data.token) {
               localStorage.setItem('token', data.token);
               window.dispatchEvent(new Event(userLoginEvent))
-
               navigate("/profile");
             } else {
-              setStatus(data.message || 'Помилка авторизації');
+              setStatus('Authentication error: Invalid server response');
             }
           } catch (error) {
             console.error('Error during login:', error);
-            setStatus('Помилка конекту з сервером');
+            setStatus('Connection error: Could not reach the server');
           } finally {
             setSubmitting(false);
           }

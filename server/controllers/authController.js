@@ -1,7 +1,7 @@
 import User from '../models/userModel.js';
 import { createToken } from '../utils/createToken.js';
+import { createError } from '../utils/errorUtils.js';
 
-// ok or not?
 const isValidUser = async (user, password) => user && await user.correctPassword(password, user.password);
 
 export const signup = async (request, reply) => {
@@ -27,12 +27,23 @@ export const login = async (request, reply) => {
     const { email, password } = request.body;
 
     if (!email || !password) {
-      return reply.code(400).send({ status: 'error', message: 'Please provide email and password!' });
+      return reply.code(400).send({ 
+        status: 'error', 
+        message: 'Please provide email and password!' 
+      });
     }
 
     const user = await User.findOne({ email }).select('+password');
 
-    if (!isValidUser(user, password)) {
+    if (!user) {
+      return reply.code(401).send({ 
+        status: 'error', 
+        message: 'Incorrect email or password' 
+      });
+    }
+    
+    const isValidPassword = await user.correctPassword(password, user.password);
+    if (!isValidPassword) {
       return reply.code(401).send({
         status: 'error',
         message: 'Incorrect email or password',

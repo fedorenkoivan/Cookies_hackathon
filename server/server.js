@@ -18,6 +18,37 @@ const fastify = Fastify({
 });
 const PORT = 5000;
 
+fastify.setErrorHandler((error, request, reply) => {
+  if (error.name === 'DocumentNotFoundError' || error.message === 'User not found') {
+    return reply.code(404).send({
+      status: 'error',
+      message: 'User not found'
+    });
+  }
+  
+  if (error.name === 'CastError' && error.kind === 'ObjectId') {
+    return reply.code(400).send({
+      status: 'error',
+      message: 'Invalid ID format'
+    });
+  }
+  
+  if (error.name === 'MongoError' || error.name === 'ValidationError') {
+    return reply.code(400).send({
+      status: 'error',
+      message: error.message
+    });
+  }
+  
+  const statusCode = error.statusCode || 500;
+  
+  fastify.log.error(error);
+  return reply.code(statusCode).send({
+    status: 'error',
+    message: error.message || 'Internal Server Error'
+  });
+});
+
 await fastify.register(fastifyCors, { 
   origin: true
 });

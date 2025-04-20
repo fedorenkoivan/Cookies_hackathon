@@ -10,6 +10,7 @@ import Footer from "@components/Partial/Footer";
 import RatingForm from "@components/Rating/RatingForm";
 import ForgotPassword from "@components/Login/ForgotPassword";
 import NewPassword from "@components/Login/NewPassword";
+import ResetPassword from "@components/Login/ResetPassword";
 
 import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -28,6 +29,7 @@ function App() {
         <Route path="/log-in" element={<LogIn/>} />
         <Route path="/forgot-password" element={<ForgotPassword/>} />
         <Route path="/new-password" element={<NewPassword/>} />
+        <Route path="/reset-password/:token" element={<ResetPassword/>} />
       </Routes>
       <Footer />
 

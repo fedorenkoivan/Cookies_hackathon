@@ -3,17 +3,18 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import { userLoginEvent } from "../Partial/Navbar";
+import { toast } from "react-toastify";
 import './LogIn.scss';
 
 const validationSchema = Yup.object({
-  companyEmail: Yup.string()
+  email: Yup.string()
     .email("Invalid email format")
     .required("Please complete this required field."),
 });
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
+  
   return (
     <div className="card">
       <div className="banner">
@@ -23,17 +24,17 @@ const ForgotPassword = () => {
       </div>
 
       <Formik
-        initialValues={{ companyEmail: "" }}
+        initialValues={{ email: "" }}
         validationSchema={validationSchema}
-        onSubmit={async (values, { setSubmitting, setStatus }) => {
+        onSubmit={async (values, { setSubmitting, setStatus, resetForm }) => {
           try {
-            const response = await fetch('http://localhost:5000/users/login', {
+            const response = await fetch('http://localhost:5000/users/forgot-password', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({ 
-                email: values.companyEmail, 
+                email: values.email
               }),
             });
             
@@ -44,15 +45,15 @@ const ForgotPassword = () => {
               return;
             }
             
-            if (data.status === 'success' && data.token) {
-              localStorage.setItem('token', data.token);
-              window.dispatchEvent(new Event(userLoginEvent))
-              navigate("/new-password");
-            } else {
-              setStatus('Authentication error: Invalid server response');
-            }
+            toast.success("Password reset link sent to your email!");
+            resetForm();
+            
+            setTimeout(() => {
+              navigate("/log-in");
+            }, 3000);
+            
           } catch (error) {
-            console.error('Error during login:', error);
+            console.error('Error during password reset request:', error);
             setStatus('Connection error: Could not reach the server');
           } finally {
             setSubmitting(false);
@@ -61,15 +62,17 @@ const ForgotPassword = () => {
       >
         {({ handleSubmit, status, isSubmitting }) => (
           <Form onSubmit={handleSubmit} className="form">
-            {[
-              { name: "companyEmail", label: "1. Company email" },
-            ].map(({ name, label, type = "text" }) => (
-              <div key={name} className="form-group">
-                <label htmlFor={name}>{label} *</label>
-                <Field type={type} id={name} name={name} className="input" />
-                <ErrorMessage name={name} component="div" className="error" />
-              </div>
-            ))}
+            <div className="form-group">
+              <label htmlFor="email">Your email *</label>
+              <Field 
+                type="email" 
+                id="email" 
+                name="email" 
+                className="input"
+                placeholder="Enter the email you used to register" 
+              />
+              <ErrorMessage name="email" component="div" className="error" />
+            </div>
 
             {status && <div className="error">{status}</div>}
 
@@ -80,12 +83,18 @@ const ForgotPassword = () => {
                 endIcon={<SendIcon />}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Sending...' : 'Send'}
+                {isSubmitting ? 'Sending...' : 'Send Reset Link'}
               </Button>
             </div>
-            <a className="account"
-            onClick={() => navigate('/sign-up')}
-            >Don't have an account?</a>
+            <div className="links">
+              <a className="account" onClick={() => navigate('/log-in')}>
+                Remember your password? Log In
+              </a>
+              <br />
+              <a className="account" onClick={() => navigate('/sign-up')}>
+                Don't have an account? Sign up
+              </a>
+            </div>
           </Form>
         )}
       </Formik>

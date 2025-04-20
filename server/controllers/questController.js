@@ -1,38 +1,5 @@
 import { questModel } from "../models/questModel.js";
 
-// const checkFilters = (params) => {
-//   let query = {};
-//   const reservedParams = ["limit", "sort"];
-//   const operatorMap = {
-//     eq: "$eq",
-//     lt: "$lt",
-//     lte: "$lte",
-//     gt: "$gt",
-//     gte: "$gte",
-//     ne: "$ne",
-//     re: "$regex",
-//   };
-
-//   Object.keys(params).forEach((key) => {
-//     if (!reservedParams.includes(key)) {
-//       if (key.includes(".")) {
-//         const [field, operator] = key.split(".");
-//         if (!query[field]) query[field] = {};
-
-//         if (operator === "regex") {
-//           query[field] = {
-//             $regex: params[key],
-//           };
-//         } else if (operatorMap[operator]) {
-//           query[field][operatorMap[operator]] = params[key];
-//         }
-//       } else {
-//         query[key] = params[key];
-//       }
-//     }
-//   });
-//   return query;
-// };
 const RESERVED_PARAMS = ["limit", "sort"];
 const OPERATOR_MAP = {
   eq: "$eq",
@@ -56,25 +23,6 @@ const checkFilters = (params) => {
   });
   return query;
 };
-
-// const checkSort = (sort) => {
-//   if (!sort) return { createdAt: -1 };
-//   let sortOptions = {};
-//   sort.split(",").forEach((field) => {
-//     if (!field.includes(":")) {
-//       sortOptions[field] = 1;
-//     }
-//     const [name, direction] = field.split(":");
-//     if (direction.toLowerCase() === "desc") {
-//       sortOptions[name] = -1;
-//     } else if (direction.toLowerCase() === "asc") {
-//       sortOptions[name] = 1;
-//     } else {
-//       throw new Error("Invalid sort direction. Use 'asc' or 'desc'");
-//     }
-//   });
-//   return sortOptions;
-// };
 
 const SORT_DIRECTION_TO_VALUE = { desc: -1, asc: 1 };
 

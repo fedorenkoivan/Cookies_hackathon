@@ -7,13 +7,13 @@ import { userLoginEvent } from "../Partial/Navbar";
 import './LogIn.scss';
 
 const validationSchema = Yup.object({
-  companyEmail: Yup.string()
-    .email("Invalid email format")
-    .required("Please complete this required field."),
   password: Yup.string()
     .min(8, "Password is too short - should be 8 chars minimum.")
     .matches(/[a-zA-Z]/, "Password can only contain Latin letters.")
     .required("Please complete this required field."),
+  confirmPassword: Yup.string()
+     .oneOf([Yup.ref('password')], 'Passwords must match')
+     .required("Please complete this required field."),
 });
 
 const LogIn = () => {
@@ -22,8 +22,8 @@ const LogIn = () => {
     <div className="card">
       <div className="banner">
         <p className="logo">🍪 Cookies</p>
-        <h2 className="title">Welcome back!</h2>
-        <p className="subtitle">Fill out the form to log in</p>
+        <h2 className="title">Reset password</h2>
+        <p className="subtitle">Enter your new cool password</p>
       </div>
 
       <Formik
@@ -37,7 +37,6 @@ const LogIn = () => {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({ 
-                email: values.companyEmail, 
                 password: values.password 
               }),
             });
@@ -67,7 +66,6 @@ const LogIn = () => {
         {({ handleSubmit, status, isSubmitting }) => (
           <Form onSubmit={handleSubmit} className="form">
             {[
-              { name: "companyEmail", label: "1. Company email" },
               { name: "password", label: "2. Your password", type: "password" },
             ].map(({ name, label, type = "text" }) => (
               <div key={name} className="form-group">
@@ -92,9 +90,6 @@ const LogIn = () => {
             <a className="account"
             onClick={() => navigate('/sign-up')}
             >Don't have an account?</a>
-            <a className="account"
-            onClick={() => navigate('/forgot-password')}
-            >Forgot password?</a>
           </Form>
         )}
       </Formik>

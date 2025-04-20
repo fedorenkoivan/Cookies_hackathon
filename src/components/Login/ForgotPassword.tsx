@@ -10,24 +10,20 @@ const validationSchema = Yup.object({
   companyEmail: Yup.string()
     .email("Invalid email format")
     .required("Please complete this required field."),
-  password: Yup.string()
-    .min(8, "Password is too short - should be 8 chars minimum.")
-    .matches(/[a-zA-Z]/, "Password can only contain Latin letters.")
-    .required("Please complete this required field."),
 });
 
-const LogIn = () => {
+const ForgotPassword = () => {
   const navigate = useNavigate();
   return (
     <div className="card">
       <div className="banner">
         <p className="logo">🍪 Cookies</p>
-        <h2 className="title">Welcome back!</h2>
-        <p className="subtitle">Fill out the form to log in</p>
+        <h2 className="title">Forgot password?</h2>
+        <p className="subtitle">Don't worry, we'll settle that up in a minute!</p>
       </div>
 
       <Formik
-        initialValues={{ companyEmail: "", password: "" }}
+        initialValues={{ companyEmail: "" }}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting, setStatus }) => {
           try {
@@ -38,7 +34,6 @@ const LogIn = () => {
               },
               body: JSON.stringify({ 
                 email: values.companyEmail, 
-                password: values.password 
               }),
             });
             
@@ -52,7 +47,7 @@ const LogIn = () => {
             if (data.status === 'success' && data.token) {
               localStorage.setItem('token', data.token);
               window.dispatchEvent(new Event(userLoginEvent))
-              navigate("/profile");
+              navigate("/new-password");
             } else {
               setStatus('Authentication error: Invalid server response');
             }
@@ -68,7 +63,6 @@ const LogIn = () => {
           <Form onSubmit={handleSubmit} className="form">
             {[
               { name: "companyEmail", label: "1. Company email" },
-              { name: "password", label: "2. Your password", type: "password" },
             ].map(({ name, label, type = "text" }) => (
               <div key={name} className="form-group">
                 <label htmlFor={name}>{label} *</label>
@@ -92,9 +86,6 @@ const LogIn = () => {
             <a className="account"
             onClick={() => navigate('/sign-up')}
             >Don't have an account?</a>
-            <a className="account"
-            onClick={() => navigate('/forgot-password')}
-            >Forgot password?</a>
           </Form>
         )}
       </Formik>
@@ -102,4 +93,4 @@ const LogIn = () => {
   );
 };
 
-export default LogIn;
+export default ForgotPassword;

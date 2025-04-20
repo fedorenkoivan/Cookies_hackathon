@@ -102,18 +102,24 @@ const Slider = () => {
 const Home = () => {
   const [active, setActive] = useState("All");
   const [searchText, setSearchText] = useState("");
+  const [inputValue, setInputValue] = useState("");
   const [quests, setQuests] = useState([]);
 
   const handleTabClick = (tab: string) => {
     setActive(tab);
+    setSearchText("");
   };
 
   const handleSearchClick = () => {
-    console.log(searchText);
+    if (inputValue.trim()) {
+      setSearchText(inputValue);
+      setInputValue("");
+    }
   };
 
   const handleClearClick = () => {
     setSearchText("");
+    setInputValue("");
   };
 
   const navigate = useNavigate();
@@ -130,7 +136,7 @@ const Home = () => {
         let searchQuery = "";
         const search = searchText.toLowerCase().trim();
         if (search !== "") {
-          const safeSearch = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          const safeSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
           searchQuery += `&title.re=^${safeSearch}`;
         }
         const res = await fetch(URL + `${filterQuery}${searchQuery}`);
@@ -186,10 +192,10 @@ const Home = () => {
             type="text"
             placeholder="Search..."
             className="quests__cards-input"
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
           />
-          {searchText && (
+          {inputValue && (
             <button className="quests__cards-button" onClick={handleClearClick}>
               <FaTimes />
             </button>

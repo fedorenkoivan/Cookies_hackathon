@@ -19,6 +19,7 @@ const fastify = Fastify({
 const PORT = 5000;
 
 fastify.setErrorHandler((error, request, reply) => {
+  // викликати хттп
   if (error.name === 'DocumentNotFoundError' || error.message === 'User not found') {
     return reply.code(404).send({
       status: 'error',

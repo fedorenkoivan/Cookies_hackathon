@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import validator from "validator";
-import bcrypt from 'bcryptjs';
+import argon2 from "argon2";
 import { hashUserPassword } from '../middleware/hashPasswordMiddleware.js';
 
 const userSchema = new mongoose.Schema({
@@ -34,8 +34,8 @@ const userSchema = new mongoose.Schema({
 
 userSchema.pre('save', hashUserPassword);
 
-userSchema.methods.correctPassword = async (candidatePassword, userPassword) => {
-    return await bcrypt.compare(candidatePassword, userPassword);
+userSchema.methods.correctPassword = async function(candidatePassword, userPassword) {
+    return await argon2.verify(userPassword, candidatePassword);
 }
 const User = mongoose.model("User", userSchema);
 export default User;

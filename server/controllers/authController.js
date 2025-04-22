@@ -1,10 +1,8 @@
 import User from '../models/userModel.js';
 import { createToken } from '../utils/createToken.js';
-import { createError } from '../utils/errorUtils.js';
 import { sendEmail } from '../utils/email.js';
 import argon2 from 'argon2';
 
-const isValidUser = async (user, password) => user && await user.correctPassword(password, user.password);
 
 export const signup = async (request, reply) => {
   try {

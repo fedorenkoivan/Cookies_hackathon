@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
 import validator from "validator";
 import argon2 from "argon2";
+import crypto from "crypto";
 import { hashUserPassword } from '../middleware/hashPasswordMiddleware.js';
-
-const salt = Buffer.from(process.env.SALT, 'hex');
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -43,26 +42,11 @@ userSchema.methods.correctPassword = async function(candidatePassword, userPassw
 };
 
 userSchema.methods.createPasswordResetToken = async function() {
-    const timestamp = Date.now().toString();
-    const uniqueString = `${this.email}-${timestamp}`;
-    
-    const rawToken = await argon2.hash(uniqueString, {
-        salt,
-        type: argon2.argon2id,
-        memoryCost: 4096,
-        timeCost: 1,
-        parallelism: 1,
-        hashLength: 32
-    });
-    
-    // Аргон2 повертає строку у форматі '$argon2id$v=19$m=4096,t=1,p=1$...$...'
-    // Нам потрібна остання частина після останнього '$'
-    const resetToken = rawToken.split('$').pop();
+    const resetToken = crypto.randomBytes(32).toString('hex');
     
     this.passwordResetToken = await argon2.hash(resetToken, {
-        salt,
         type: argon2.argon2id,
-        memoryCost: 16384,  
+        memoryCost: 16384,
         timeCost: 2,
         parallelism: 1,
         hashLength: 32

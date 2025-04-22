@@ -1,8 +1,4 @@
-import bcrypt from 'bcrypt';
 import argon2 from 'argon2'
-// легко перебирати
-// краще взяти https://argon2.online/
-// або owasp, scrypt (модифікований бкрипт, вирішує проблему)
 
 export const hashPassword = async (password) => {
     const hashedPassword = await argon2.hash(password, {

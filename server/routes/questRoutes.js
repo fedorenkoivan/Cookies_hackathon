@@ -21,7 +21,6 @@ const createQuest = async (body) => {
 
 export default async function questRoutes(fastify) {
   fastify.get("/", async (request, reply) => {
-    
     return reply.code(200).send({
       status: "success",
       data: await getQuests(request.query),

@@ -18,7 +18,16 @@ interface Quest {
   reviews: number;
 }
 
-const TABS = ["All", "Sports", "Gaming", "Education", "Other"];
+const TABS: string[] = [
+  "All",
+  "Adventure",
+  "Puzzle",
+  "Educational",
+  "Gaming",
+  "Team challenges",
+  "Mystery",
+  "Other",
+];
 
 const URL = "http://localhost:5000/quests";
 
@@ -36,8 +45,6 @@ const Slider = () => {
         const res = await fetch(
           `${URL}?limit=5&sort=rating:desc&createdAt.gte=${getToday()}`
         );
-
-        console.log(`${URL}?limit=5&sort=rating:desc&createdAt.gte=${getToday()}`);
         const data = await res.json();
         setBestQuests(data.data);
       } catch (err) {
@@ -79,7 +86,9 @@ const Slider = () => {
                   <p className="reviews">({quest.reviews})</p>
                 </div>
                 <div className="start">
-                  <button className="button">Start quest</button>
+                  <button className="button">
+                    <p>Start quest</p>
+                  </button>
                 </div>
               </div>
             </div>
@@ -93,18 +102,24 @@ const Slider = () => {
 const Home = () => {
   const [active, setActive] = useState("All");
   const [searchText, setSearchText] = useState("");
+  const [inputValue, setInputValue] = useState("");
   const [quests, setQuests] = useState([]);
 
   const handleTabClick = (tab: string) => {
     setActive(tab);
+    setSearchText("");
   };
 
   const handleSearchClick = () => {
-    console.log(searchText);
+    if (inputValue.trim()) {
+      setSearchText(inputValue);
+      setInputValue("");
+    }
   };
 
   const handleClearClick = () => {
     setSearchText("");
+    setInputValue("");
   };
 
   const navigate = useNavigate();
@@ -116,14 +131,22 @@ const Home = () => {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(URL);
+        let filterQuery = `?category=${active}`;
+        if (active === "All") filterQuery = "?";
+        let searchQuery = "";
+        const search = searchText.toLowerCase().trim();
+        if (search !== "") {
+          const safeSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+          searchQuery += `&title.re=^${safeSearch}`;
+        }
+        const res = await fetch(URL + `${filterQuery}${searchQuery}`);
         const data = await res.json();
         setQuests(data.data);
       } catch (err) {
         console.log(err);
       }
     })();
-  }, []);
+  }, [active, searchText]);
 
   return (
     <section className="quest-section">
@@ -139,10 +162,12 @@ const Home = () => {
           <p className="quests__cards-title">All quests:</p>
           <button
             className="quests__cards-button"
-            onClick={() => navigate("/quest-form/1")}
+            onClick={() => navigate("/quest-form")}
           >
-            <FaPlus className="quests__cards-icon" />
-            <span className="quests__cards-title">Create quest</span>
+            <div className="quests__cards-container">
+              <FaPlus className="quests__cards-icon" />
+              <span className="quests__cards-title">Create quest</span>
+            </div>
           </button>
         </div>
         <hr className="quests__divider" />
@@ -167,10 +192,10 @@ const Home = () => {
             type="text"
             placeholder="Search..."
             className="quests__cards-input"
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
           />
-          {searchText && (
+          {inputValue && (
             <button className="quests__cards-button" onClick={handleClearClick}>
               <FaTimes />
             </button>
@@ -191,7 +216,9 @@ const Home = () => {
                 </div>
                 <div className="quests__card-author">
                   <div className="author">
-                    <FaUser className="icon" />
+                    <div className="icon">
+                      <FaUser className="" />
+                    </div>
                     <p>{quest.author}</p>
                   </div>
                   <div className="rating">
@@ -201,10 +228,14 @@ const Home = () => {
                 </div>
                 <div className="quests__card-start">
                   {quest.time === -1 ? (
-                    <div>no time limit</div>
+                    <div>
+                      <p>No time limit</p>
+                    </div>
                   ) : (
                     <div className="clock">
-                      <FaClock className="icon" />
+                      <div className="icon">
+                        <FaClock className="" />
+                      </div>
                       <p>{quest.time}s</p>
                     </div>
                   )}

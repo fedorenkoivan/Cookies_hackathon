@@ -62,7 +62,7 @@ $secondary-color: #7b7b7b;
       &::placeholder {
         color: $secondary-color;
         font-size: medium;
-        font-weight: lighter;
+        font-weight: normal;
       }
 
       &:focus { box-shadow: 0px 7px 5px -6px rgba(77, 77, 77, 0.64); }

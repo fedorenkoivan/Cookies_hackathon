@@ -22,6 +22,30 @@ const questSchema = new mongoose.Schema({
     type: Number,
     default: -1,
   },
+  questions: {
+    type: [
+      {
+        id: {
+          type: Number,
+        },
+        value: {
+          type: String,
+          required: true,
+        },
+        answers: {
+          type: [
+            {
+              id: { type: Number, },
+              value: { type: String, required: true },
+              isCorrect: Boolean,
+            },
+          ],
+          required: true,
+        },
+      },
+    ],
+    required: true,
+  },
   image: {
     type: String,
     default: "logo.jpg",
@@ -36,9 +60,14 @@ const questSchema = new mongoose.Schema({
     default: 0,
   },
   createdAt: {
-		type: Date,
-		default: Date.now(),
-	},
+    type: Date,
+    default: Date.now(),
+  },
 });
+
+questSchema.pre('save', async function(next) {
+  this.title = this.title.toLowerCase().trim();
+  next();
+})
 
 export const questModel = mongoose.model("Quest", questSchema);

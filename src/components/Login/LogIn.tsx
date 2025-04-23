@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
+import { userLoginEvent } from "../Partial/Navbar";
 import './LogIn.scss';
 
 const validationSchema = Yup.object({
@@ -28,32 +29,72 @@ const LogIn = () => {
       <Formik
         initialValues={{ companyEmail: "", password: "" }}
         validationSchema={validationSchema}
-        onSubmit={(values) => {
-          console.log(values);
-          navigate("/profile");
+        onSubmit={async (values, { setSubmitting, setStatus }) => {
+          try {
+            const response = await fetch('http://localhost:5000/users/login', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ 
+                email: values.companyEmail, 
+                password: values.password 
+              }),
+            });
+            
+            const data = await response.json();
+            
+            if (!response.ok) {
+              setStatus(data.message || `Error: ${response.statusText}`);
+              return;
+            }
+            
+            if (data.status === 'success' && data.token) {
+              localStorage.setItem('token', data.token);
+              window.dispatchEvent(new Event(userLoginEvent))
+              navigate("/profile");
+            } else {
+              setStatus('Authentication error: Invalid server response');
+            }
+          } catch (error) {
+            console.error('Error during login:', error);
+            setStatus('Connection error: Could not reach the server');
+          } finally {
+            setSubmitting(false);
+          }
         }}
       >
-        {({ handleSubmit }) => (
+        {({ handleSubmit, status, isSubmitting }) => (
           <Form onSubmit={handleSubmit} className="form">
             {[
               { name: "companyEmail", label: "1. Company email" },
-              { name: "password", label: "2. Your password" },
-            ].map(({ name, label }) => (
+              { name: "password", label: "2. Your password", type: "password" },
+            ].map(({ name, label, type = "text" }) => (
               <div key={name} className="form-group">
                 <label htmlFor={name}>{label} *</label>
-                <Field type="text" id={name} name={name} className="input" />
+                <Field type={type} id={name} name={name} className="input" />
                 <ErrorMessage name={name} component="div" className="error" />
               </div>
             ))}
 
+            {status && <div className="error">{status}</div>}
+
             <div className="btn-container">
-              <Button type="submit" variant="contained" endIcon={<SendIcon />}>
-                Send
+              <Button 
+                type="submit" 
+                variant="contained" 
+                endIcon={<SendIcon />}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Sending...' : 'Send'}
               </Button>
             </div>
             <a className="account"
             onClick={() => navigate('/sign-up')}
             >Don't have an account?</a>
+            <a className="account"
+            onClick={() => navigate('/forgot-password')}
+            >Forgot password?</a>
           </Form>
         )}
       </Formik>

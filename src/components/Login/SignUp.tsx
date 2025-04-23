@@ -57,10 +57,9 @@ const SignUp = () => {
             
             const data = await response.json();
             
-            if (data.status === 'success' && data.token) {
-              localStorage.setItem('token', data.token);
+            if (data.status === 'success' && data.accessToken) {
+              localStorage.setItem('token', data.accessToken);
               window.dispatchEvent(new Event(userLoginEvent));
-
               navigate("/profile");
             } else {
               setStatus(data.message || 'Помилка реєстрації');

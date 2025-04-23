@@ -1,6 +1,7 @@
 import Fastify from 'fastify';
 import fastifyCors from '@fastify/cors';
 import fastifyJwt from '@fastify/jwt';
+import fastifyCookie from '@fastify/cookie';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
@@ -48,6 +49,11 @@ fastify.setErrorHandler((error, request, reply) => {
     status: 'error',
     message: error.message || 'Internal Server Error'
   });
+});
+
+await fastify.register(fastifyCookie, {
+  secret: process.env.COOKIE_SECRET,
+  hook: 'onRequest',
 });
 
 await fastify.register(fastifyCors, {

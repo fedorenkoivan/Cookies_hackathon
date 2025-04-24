@@ -99,7 +99,6 @@ export const logout = async (request, reply) => {
       }
     }
     
-    reply.clearCookie('refreshToken');
     reply.send({ status: 'success', message: 'Logged out successfully' });
   } catch (err) {
     reply.code(500).send({ status: 'error', message: err.message });

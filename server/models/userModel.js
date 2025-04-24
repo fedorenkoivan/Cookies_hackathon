@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
     },
     refreshToken: {
         type: String,
-        // select: false,
+        select: false,
         nullable: true,
     },
 

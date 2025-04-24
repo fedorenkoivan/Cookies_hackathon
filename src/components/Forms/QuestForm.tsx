@@ -40,10 +40,12 @@ const QuestForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem("token");
       await fetch(`${URL}/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify({
           title,

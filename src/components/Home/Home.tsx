@@ -3,6 +3,7 @@ import StarRatingAuto from "../Rating/StarRatingAuto";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
+import WelcomeMenu from "./WelcomeMenu";
 import "swiper/swiper-bundle.css";
 import "./Home.scss";
 
@@ -104,6 +105,7 @@ const Home = () => {
   const [searchText, setSearchText] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [quests, setQuests] = useState([]);
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
   const handleTabClick = (tab: string) => {
     setActive(tab);
@@ -148,8 +150,15 @@ const Home = () => {
     })();
   }, [active, searchText]);
 
+  //temporary
+  useEffect(() => {
+    setIsAuthorized(!!sessionStorage.getItem("isAuthorized"));
+  }, [isAuthorized]);
+  //
+
   return (
     <section className="quest-section">
+      {isAuthorized ? <></> : <WelcomeMenu />}
       <div className="quests__header">
         <img alt="stars" src="src/assets/stars.png"></img>
         <h2>BEST QUESTS OF THE DAY</h2>

@@ -3,33 +3,19 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import './Navbar.scss';
+import { cacheUserData, getCachedUserData, setAuthStatus, userLoginEvent, userLogoutEvent, userAuthorizationEvent } from "@/utils/userData";
 
 interface UserData {
   name: string;
   email: string;
 }
 
-export const userLoginEvent = 'userLoggedIn';
-export const userLogoutEvent = 'userLoggedOut';
-
-const cacheUserData = (userData: UserData | null) => {
-  if (userData) {
-    sessionStorage.setItem('userData', JSON.stringify(userData));
-  } else {
-    sessionStorage.removeItem('userData');
-  }
-};
-
-const getCachedUserData = (): UserData | null => {
-  const cachedData = sessionStorage.getItem('userData');
-  return cachedData ? JSON.parse(cachedData) : null;
-};
-
 const Navbar = () => {
   const [userData, setUserData] = useState<UserData | null>(getCachedUserData());
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const location = useLocation();
+
   
   const fetchUserProfile = async () => {
     if (loading) return;
@@ -39,8 +25,7 @@ const Navbar = () => {
       const token = localStorage.getItem('token');
       
       if (!token) {
-        setUserData(null);
-        cacheUserData(null);
+        setUserData(getCachedUserData());
         setLoading(false);
         return;
       }
@@ -59,31 +44,32 @@ const Navbar = () => {
       } else {
         if (response.status === 401) {
           localStorage.removeItem('token');
+          setAuthStatus(false);
           setUserData(null);
-          cacheUserData(null);
         }
       }
     } catch (err) {
       console.error(err);
+      setAuthStatus(false);
       setUserData(null);
-      cacheUserData(null);
     } finally {
       setLoading(false);
     }
   };
   
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token && !userData) {
-      fetchUserProfile();
-    }
-  }, []);
+    console.log('User data:', userData);
+  }, [userData]);
+  
+  // useEffect(() => {
+  //   const token = localStorage.getItem('token');
+  //   if (token && !userData) {
+  //     fetchUserProfile();
+  //   }
+  // }, []);
   
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token && !userData) {
-      fetchUserProfile();
-    }
+    fetchUserProfile();
   }, [location.pathname]);
   
   useEffect(() => {
@@ -93,7 +79,6 @@ const Navbar = () => {
           fetchUserProfile();
         } else {
           setUserData(null);
-          cacheUserData(null);
         }
       }
     };
@@ -103,13 +88,16 @@ const Navbar = () => {
     };
     
     const handleUserLogout = () => {
-      setUserData(null);
-      cacheUserData(null);
+      setAuthStatus(false);
+      setTimeout(() => navigate('/'), 10);
     };
     
     window.addEventListener('storage', handleStorageChange);
     window.addEventListener(userLoginEvent, handleUserLogin);
     window.addEventListener(userLogoutEvent, handleUserLogout);
+    window.addEventListener(userAuthorizationEvent, () => {
+      setUserData(getCachedUserData());
+    });
     
     return () => {
       window.removeEventListener('storage', handleStorageChange);
@@ -121,9 +109,7 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     setUserData(null);
-    cacheUserData(null);
     window.dispatchEvent(new Event(userLogoutEvent));
-    navigate('/');
   };
   
   return (

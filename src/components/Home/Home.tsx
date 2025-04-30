@@ -6,6 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import WelcomeMenu from "./WelcomeMenu";
 import "swiper/swiper-bundle.css";
 import "./Home.scss";
+import { userAuthorizationEvent } from "@/utils/userData";
 
 interface Quest {
   author: string;
@@ -152,8 +153,17 @@ const Home = () => {
 
   //temporary
   useEffect(() => {
-    setIsAuthorized(!!sessionStorage.getItem("isAuthorized"));
-  }, [isAuthorized]);
+    const handleAuthStatus = () => {
+      setIsAuthorized(!!sessionStorage.getItem("isAuthorized"));
+      console.log("isAuthorized useState", !!sessionStorage.getItem("isAuthorized"));
+    }
+
+    handleAuthStatus();
+
+    window.addEventListener(userAuthorizationEvent, handleAuthStatus);
+
+    return () => window.removeEventListener(userAuthorizationEvent, handleAuthStatus);
+  }, []);
   //
 
   return (

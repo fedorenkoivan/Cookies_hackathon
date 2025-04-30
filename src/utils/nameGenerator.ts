@@ -1,11 +1,11 @@
-const generateInt = (from, to) =>
+const generateInt = (from: number, to: number): number =>
   Math.round(Math.random() * (to - from) + from);
 
-const ID_LENGTH = 4;
+const ID_LENGTH: number = 4;
 
-const convertResult = (res) => res.toString().padStart(ID_LENGTH, "0");
+const convertResult = (res: number): string => res.toString().padStart(ID_LENGTH, "0");
 
-const ANIMALS = [
+const ANIMALS: string[] = [
   "Dog", "Cat", "Lion", "Tiger", "Bear", "Wolf", "Fox", "Panda", "Koala", "Elephant", 
   "Giraffe", "Zebra", "Hippo", "Rhino", "Monkey", "Gorilla", "Kangaroo", "Penguin",
   "Owl", "Eagle", "Hawk", "Falcon", "Parrot", "Flamingo", "Dolphin", "Whale", "Shark",
@@ -20,7 +20,7 @@ const ANIMALS = [
   "Peacock", "Robin", "Sparrow", "Hummingbird", "Raven", "Crow", "Magpie", "Pigeon"
 ];
 
-const ADJECTIVES = [
+const ADJECTIVES: string[] = [
   "Fluffy", "Fierce", "Gentle", "Wise", "Crafty", "Sneaky", "Clever", "Brave", "Mighty",
   "Majestic", "Graceful", "Elegant", "Mysterious", "Playful", "Mischievous", "Loyal", 
   "Proud", "Noble", "Swift", "Agile", "Cunning", "Adorable", "Cuddly", "Ferocious", 
@@ -35,14 +35,17 @@ const ADJECTIVES = [
   "Clean", "Dirty", "Wet", "Dry", "Nocturnal", "Diurnal", "Tropical", "Arctic", "Desert"
 ];
 
-const MAX_INT = 9999;
+const MAX_INT: number = 9999;
 
-function* generateName() {
-	while (true) {
-		const animal = ANIMALS[generateInt(0, ANIMALS.length - 1)];
-		const adjective = ADJECTIVES[generateInt(0, ADJECTIVES.length - 1)];
-		const id = convertResult(generateInt(0, MAX_INT));
-		yield `${adjective}${animal}${id}`;
-	}
+function* generateName(): Generator<string, never, unknown> {
+  while (true) {
+    const animal = ANIMALS[generateInt(0, ANIMALS.length - 1)];
+    const adjective = ADJECTIVES[generateInt(0, ADJECTIVES.length - 1)];
+    const id = convertResult(generateInt(0, MAX_INT));
+    yield `${adjective}${animal}${id}`;
+  }
 }
+
 export const nameGenerator = generateName();
+
+export default nameGenerator;

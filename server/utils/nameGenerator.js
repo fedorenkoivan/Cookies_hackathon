@@ -1,0 +1,48 @@
+const generateInt = (from, to) =>
+  Math.round(Math.random() * (to - from) + from);
+
+const ID_LENGTH = 4;
+
+const convertResult = (res) => res.toString().padStart(ID_LENGTH, "0");
+
+const ANIMALS = [
+  "Dog", "Cat", "Lion", "Tiger", "Bear", "Wolf", "Fox", "Panda", "Koala", "Elephant", 
+  "Giraffe", "Zebra", "Hippo", "Rhino", "Monkey", "Gorilla", "Kangaroo", "Penguin",
+  "Owl", "Eagle", "Hawk", "Falcon", "Parrot", "Flamingo", "Dolphin", "Whale", "Shark",
+  "Octopus", "Turtle", "Crocodile", "Alligator", "Snake", "Lizard", "Frog", "Toad",
+  "Butterfly", "Bee", "Ant", "Spider", "Rabbit", "Squirrel", "Deer", "Moose", "Bison",
+  "Horse", "Donkey", "Pig", "Goat", "Sheep", "Cow", "Chicken", "Duck", "Goose", "Swan",
+  "Hedgehog", "Raccoon", "Badger", "Otter", "Beaver", "Mole", "Bat", "Mouse", "Rat",
+  "Hamster", "Ferret", "Sloth", "Armadillo", "Porcupine", "Skunk", "Camel", "Llama",
+  "Cheetah", "Jaguar", "Leopard", "Panther", "Lynx", "Bobcat", "Hyena", "Weasel",
+  "Meerkat", "Platypus", "Walrus", "Seal", "Polar Bear", "Crab", "Lobster", "Jellyfish",
+  "Starfish", "Squid", "Chameleon", "Iguana", "Gecko", "Salamander", "Newt", "Ostrich",
+  "Peacock", "Robin", "Sparrow", "Hummingbird", "Raven", "Crow", "Magpie", "Pigeon"
+];
+
+const ADJECTIVES = [
+  "Fluffy", "Fierce", "Gentle", "Wise", "Crafty", "Sneaky", "Clever", "Brave", "Mighty",
+  "Majestic", "Graceful", "Elegant", "Mysterious", "Playful", "Mischievous", "Loyal", 
+  "Proud", "Noble", "Swift", "Agile", "Cunning", "Adorable", "Cuddly", "Ferocious", 
+  "Wild", "Tame", "Feisty", "Calm", "Serene", "Peaceful", "Energetic", "Lazy", "Sleepy",
+  "Alert", "Watchful", "Curious", "Inquisitive", "Shy", "Bold", "Daring", "Timid", 
+  "Cautious", "Stealthy", "Noisy", "Quiet", "Loud", "Musical", "Chatty", "Silent",
+  "Colorful", "Vibrant", "Dull", "Bright", "Shiny", "Glossy", "Fuzzy", "Scaly", "Slimy",
+  "Smooth", "Rough", "Prickly", "Spiky", "Soft", "Hard", "Tiny", "Small", "Large", 
+  "Huge", "Gigantic", "Massive", "Miniature", "Towering", "Lanky", "Stout", "Plump",
+  "Skinny", "Slender", "Chubby", "Spotted", "Striped", "Speckled", "Dotted", "Plain",
+  "Patchy", "Furry", "Hairy", "Bald", "Woolly", "Silky", "Glossy", "Dusty", "Muddy",
+  "Clean", "Dirty", "Wet", "Dry", "Nocturnal", "Diurnal", "Tropical", "Arctic", "Desert"
+];
+
+const MAX_INT = 9999;
+
+function* generateName() {
+	while (true) {
+		const animal = ANIMALS[generateInt(0, ANIMALS.length - 1)];
+		const adjective = ADJECTIVES[generateInt(0, ADJECTIVES.length - 1)];
+		const id = convertResult(generateInt(0, MAX_INT));
+		yield `${adjective}${animal}${id}`;
+	}
+}
+export const nameGenerator = generateName();

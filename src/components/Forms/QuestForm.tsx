@@ -40,14 +40,16 @@ const QuestForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     const token = localStorage.getItem("token");
     const userData = sessionStorage.getItem("userData");
-    const author = userData ? JSON.parse(userData).name || "Anonymous" : "Anonymous";
+    const author = userData
+      ? JSON.parse(userData).name || "Anonymous"
+      : "Anonymous";
     e.preventDefault();
     try {
       await fetch(`${URL}/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify({
           title,

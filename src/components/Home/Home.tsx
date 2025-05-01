@@ -162,7 +162,15 @@ const Home = () => {
           <p className="quests__cards-title">All quests:</p>
           <button
             className="quests__cards-button"
-            onClick={() => navigate("/quest-form")}
+            onClick={() => {
+              const token = localStorage.getItem('token');
+              
+              if (token) {
+                navigate("/quest-form");
+              } else {
+                navigate("/sign-up", { state: { from: "/quest-form" } });
+              }
+            }}
           >
             <div className="quests__cards-container">
               <FaPlus className="quests__cards-icon" />

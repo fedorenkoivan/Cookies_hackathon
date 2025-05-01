@@ -78,7 +78,6 @@ const Home = () => {
     })();
   }, [active, searchText]);
 
-  //temporary
   useEffect(() => {
     const handleAuthStatus = () => {
       setIsAuthorized(!!sessionStorage.getItem("isAuthorized"));
@@ -95,7 +94,6 @@ const Home = () => {
     return () =>
       window.removeEventListener(userAuthorizationEvent, handleAuthStatus);
   }, []);
-  //
 
   return (
     <section className="quest-section">

@@ -112,6 +112,9 @@ const Navbar = () => {
       window.removeEventListener("storage", handleStorageChange);
       window.removeEventListener(userLoginEvent, handleUserLogin);
       window.removeEventListener(userLogoutEvent, handleUserLogout);
+      window.removeEventListener(userAuthorizationEvent, () => {
+        setUserData(getCachedUserData());
+      });
     };
   }, []);
 

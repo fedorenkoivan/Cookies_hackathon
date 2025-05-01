@@ -34,7 +34,8 @@ const Profile = () => {
         const response = await fetch('http://localhost:5000/users/profile', {
           headers: {
             'Authorization': `Bearer ${token}`
-          }
+          },
+          credentials: 'include',
         });
         
         const data = await response.json();

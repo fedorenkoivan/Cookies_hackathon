@@ -70,7 +70,7 @@ export const login = async (request, reply) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', 
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days (croissants)
-      path: '/'
+      path: '/',
     });
 
     reply.send({ status: 'success', accessToken });
@@ -83,6 +83,12 @@ export const login = async (request, reply) => {
 export const logout = async (request, reply) => {
   try {
     const refreshToken = request.cookies.refreshToken;
+
+    reply.clearCookie('refreshToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      path: '/'
+    });
     
     if (refreshToken) {
       try {
@@ -215,6 +221,9 @@ export const resetPassword = async (request, reply) => {
     const accessToken = createAccessToken(request.server, user._id);
     const refreshToken = createRefreshToken(request.server, user._id);
     
+    user.refreshToken = refreshToken;
+    await user.save({ validateBeforeSave: false });
+
     reply.setCookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',

@@ -35,7 +35,6 @@ const Profile = () => {
           headers: {
             'Authorization': `Bearer ${token}`
           },
-          credentials: 'include',
         });
         
         const data = await response.json();

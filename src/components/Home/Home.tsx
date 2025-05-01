@@ -43,6 +43,15 @@ const Home = () => {
     setInputValue("");
   };
 
+  const handleCreateClick = () => {
+    const token = localStorage.getItem('token'); 
+    if (!token) {
+      navigate('/log-in');
+    } else {
+      navigate('/quest-form')
+    }
+  };
+
   const navigate = useNavigate();
 
   const truncateText = (text: string, limit: number) => {
@@ -90,7 +99,6 @@ const Home = () => {
 
   return (
     <section className="quest-section">
-
       {isAuthorized ? <></> : <WelcomeMenu />}
 
       <div className="quests__header">
@@ -103,10 +111,7 @@ const Home = () => {
       <div className="quests__cards">
         <div className="quests__cards-header">
           <p className="quests__cards-title">All quests:</p>
-          <button
-            className="quests__cards-button"
-            onClick={() => navigate("/quest-form")}
-          >
+          <button className="quests__cards-button" onClick={handleCreateClick}>
             <div className="quests__cards-container">
               <FaPlus className="quests__cards-icon" />
               <span className="quests__cards-title">Create quest</span>

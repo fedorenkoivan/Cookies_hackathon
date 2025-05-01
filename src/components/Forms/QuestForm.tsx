@@ -41,7 +41,7 @@ const QuestForm = () => {
     const token = localStorage.getItem("token");
     e.preventDefault();
     try {
-      const userData = localStorage.getItem("userData");
+      const userData = sessionStorage.getItem("userData");
       const author = userData ? JSON.parse(userData).name || "Anonymous" : "Anonymous";
       await fetch(`${URL}/create`, {
         method: "POST",

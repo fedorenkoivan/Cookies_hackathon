@@ -53,6 +53,7 @@ const ResetPassword = () => {
               headers: {
                 'Content-Type': 'application/json',
               },
+              credentials: 'include',
               body: JSON.stringify({ 
                 password: values.password,
                 passwordConfirm: values.passwordConfirm

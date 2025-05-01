@@ -84,13 +84,13 @@ export const login = async (request, reply) => {
 export const logout = async (request, reply) => {
   try {
     const refreshToken = request.cookies.refreshToken;
-     
+
     reply.clearCookie('refreshToken', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       path: '/',
     });
-
+    
     if (refreshToken) {
       try {
         const decoded = request.server.jwt.verify(refreshToken);

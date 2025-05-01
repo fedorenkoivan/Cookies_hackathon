@@ -36,6 +36,7 @@ const LogIn = () => {
               headers: {
                 'Content-Type': 'application/json',
               },
+              credentials: 'include',
               body: JSON.stringify({ 
                 email: values.companyEmail, 
                 password: values.password 

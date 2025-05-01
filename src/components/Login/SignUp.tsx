@@ -47,6 +47,7 @@ const SignUp = () => {
               headers: {
                 'Content-Type': 'application/json',
               },
+              credentials: 'include',
               body: JSON.stringify({ 
                 name: values.username,
                 email: values.email, 

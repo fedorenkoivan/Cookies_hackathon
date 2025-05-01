@@ -38,9 +38,11 @@ const QuestForm = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+    const token = localStorage.getItem("token");
     e.preventDefault();
     try {
-      const token = localStorage.getItem("token");
+      const userData = localStorage.getItem("userData");
+      const author = userData ? JSON.parse(userData).name || "Anonymous" : "Anonymous";
       await fetch(`${URL}/create`, {
         method: "POST",
         headers: {
@@ -49,7 +51,7 @@ const QuestForm = () => {
         },
         body: JSON.stringify({
           title,
-          author: "Maksym",
+          author,
           description,
           category,
           time,

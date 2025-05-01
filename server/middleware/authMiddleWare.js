@@ -24,6 +24,8 @@ export const verifyToken = async (request, reply) => {
     
     request.user = { id: decoded.id };
     
+    return;
+    
   } catch (err) {
     return reply.code(401).send({ 
       status: 'error', 

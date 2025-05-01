@@ -58,6 +58,7 @@ await fastify.register(fastifyCookie, {
 
 await fastify.register(fastifyCors, {
   origin: true,
+  credentials: true,
 });
 
 await fastify.register(fastifyJwt, {

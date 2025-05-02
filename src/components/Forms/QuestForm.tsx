@@ -81,12 +81,12 @@ const QuestForm = () => {
 
   const addQuestion = () => {
     setQuestions((prev) => [
-      ...prev, 
-      { 
-        id: prev.length, 
-        value: "", 
-        answers: [{ id: 0, value: "", isCorrect: false }] 
-      }
+      ...prev,
+      {
+        id: prev.length,
+        value: "",
+        answers: [{ id: 0, value: "", isCorrect: false }],
+      },
     ]);
   };
 
@@ -97,15 +97,19 @@ const QuestForm = () => {
         // Re-index questions
         return filtered.map((q, index) => ({
           ...q,
-          id: index
+          id: index,
         }));
       });
     }
   };
 
-  const updateQuestion = (id: number, value: string, answers: { id: number; value: string; isCorrect: boolean }[]) => {
-    setQuestions(prev => 
-      prev.map(q => q.id === id ? { ...q, value, answers } : q)
+  const updateQuestion = (
+    id: number,
+    value: string,
+    answers: { id: number; value: string; isCorrect: boolean }[]
+  ) => {
+    setQuestions((prev) =>
+      prev.map((q) => (q.id === id ? { ...q, value, answers } : q))
     );
   };
 
@@ -175,7 +179,7 @@ const QuestForm = () => {
             <div className="controls">
               <button
                 type="button"
-                onClick={() => setTime(prev => Math.max(0, prev - 1))}
+                onClick={() => setTime((prev) => Math.max(0, prev - 1))}
               >
                 -
               </button>
@@ -190,7 +194,7 @@ const QuestForm = () => {
               />
               <button
                 type="button"
-                onClick={() => setTime(prev => Math.min(999, prev + 1))}
+                onClick={() => setTime((prev) => Math.min(999, prev + 1))}
               >
                 +
               </button>

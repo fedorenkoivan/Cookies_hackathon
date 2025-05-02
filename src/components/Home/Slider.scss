@@ -1,0 +1,95 @@
+$lightgray: #e5e5e5;
+$darker-gray: #c5c5c5;
+$white: #ffffff;
+$black: #000000;
+
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.quests {
+  &__slider {
+    @include flex-center;
+    height: 40vh;
+    margin: 20px;
+    p {
+      font-size: 16px;
+    }
+
+    &-wrapper {
+      width: 80%;
+      height: 100%;
+      background-color: $lightgray;
+      display: flex;
+      align-items: center;
+      border-radius: 15px;
+
+      .image-container {
+        height: 40vh;
+        width: 60%;
+        .image {
+          height: 100%;
+          width: 100%;
+          object-fit: cover;
+          border-radius: 15px 0 0 15px;
+        }
+      }
+
+      .info-container {
+        height: 40vh;
+        width: 40%;
+        padding: 20px;
+        font-size: 18px;
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+
+        .top {
+          display: flex;
+          justify-content: space-between;
+          margin: 20px 20px 30px 0;
+          .clock,
+          .author {
+            @include flex-center;
+          }
+          .icon {
+            margin-right: 15px;
+          }
+        }
+
+        .middle {
+          .title {
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 20px;
+          }
+          .category {
+            margin-top: 2vh;
+          }
+        }
+
+        .rating {
+          display: flex;
+          margin-top: 4vh;
+          height: 25px;
+          .reviews {
+            margin-left: 10px;
+            @include flex-center;
+            height: 25px;
+            width: 25px;
+          }
+        }
+
+        .start {
+          margin-top: 5vh;
+          @include flex-center;
+        }
+      }
+    }
+
+    &-slide {
+      @include flex-center;
+    }
+  }
+}

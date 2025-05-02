@@ -1,11 +1,31 @@
+$lightgray: #e5e5e5;
+$darker-gray: #c5c5c5;
+$white: #ffffff;
+$black: #000000;
+
 * {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-    font-family: "Poppins", sans-serif;
-    font-weight: 500;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
 }
 
-p, span {
-    font-size: 14px;
+p,
+span {
+  font-size: 14px;
+}
+
+button {
+  cursor: pointer;
+  border: solid $black 2px;
+  border-radius: 5px;
+  padding: 5px 15px;
+  display: flex;
+  gap: 5px;
+  background-color: $lightgray;
+}
+button:hover {
+  background-color: $darker-gray;
+  transition: 0.3s;
 }

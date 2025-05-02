@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import { userLoginEvent } from "../Partial/Navbar";
+import { userLoginEvent } from "@/utils/userData";
 import './LogIn.scss';
 
 const validationSchema = Yup.object({

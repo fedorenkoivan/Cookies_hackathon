@@ -2,21 +2,11 @@ import { FaPlus, FaSearch, FaTimes, FaUser, FaClock } from "react-icons/fa";
 import StarRatingAuto from "../Rating/StarRatingAuto";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Swiper, SwiperSlide } from "swiper/react";
+import WelcomeMenu from "./WelcomeMenu";
+import Slider, { Quest, URL } from "./Slider";
 import "swiper/swiper-bundle.css";
 import "./Home.scss";
-
-interface Quest {
-  author: string;
-  id: number;
-  title: string;
-  description: string;
-  category: string;
-  time: number;
-  image: string;
-  rating: number;
-  reviews: number;
-}
+import { userAuthorizationEvent } from "@/utils/userData";
 
 const TABS: string[] = [
   "All",
@@ -29,81 +19,12 @@ const TABS: string[] = [
   "Other",
 ];
 
-const URL = "http://localhost:5000/quests";
-
-const Slider = () => {
-  const [bestQuests, setBestQuests] = useState([]);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const getToday = () => {
-          const today = new Date();
-          today.setHours(0, 0, 0, 0);
-          return today.toISOString();
-        };
-        const res = await fetch(
-          `${URL}?limit=5&sort=rating:desc&createdAt.gte=${getToday()}`
-        );
-        const data = await res.json();
-        setBestQuests(data.data);
-      } catch (err) {
-        console.log(err);
-      }
-    })();
-  }, []);
-
-  return (
-    <div className="quests__slider">
-      <Swiper spaceBetween={20} slidesPerView={1} loop={true}>
-        {bestQuests.map((quest: Quest) => (
-          <SwiperSlide key={quest.id} className="quests__slider-slide">
-            <div className="quests__slider-wrapper">
-              <div className="image-container">
-                <img src="src/assets/logo.jpg" className="image" />
-              </div>
-              <div className="info-container">
-                <div className="top">
-                  <div className="author">
-                    <FaUser className="icon" />
-                    <p>{quest.author}</p>
-                  </div>
-                  {quest.time === -1 ? (
-                    <div>no time limit</div>
-                  ) : (
-                    <div className="clock">
-                      <FaClock className="icon" />
-                      <p>{quest.time}s</p>
-                    </div>
-                  )}
-                </div>
-                <div className="middle">
-                  <p className="title">{quest.title}</p>
-                  <p className="category">{quest.category}</p>
-                </div>
-                <div className="rating">
-                  <StarRatingAuto rating={quest.rating} />
-                  <p className="reviews">({quest.reviews})</p>
-                </div>
-                <div className="start">
-                  <button className="button">
-                    <p>Start quest</p>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </div>
-  );
-};
-
 const Home = () => {
   const [active, setActive] = useState("All");
   const [searchText, setSearchText] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [quests, setQuests] = useState([]);
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
   const handleTabClick = (tab: string) => {
     setActive(tab);
@@ -120,6 +41,15 @@ const Home = () => {
   const handleClearClick = () => {
     setSearchText("");
     setInputValue("");
+  };
+
+  const handleCreateClick = () => {
+    const token = localStorage.getItem('token'); 
+    if (!token) {
+      navigate('/log-in');
+    } else {
+      navigate('/quest-form')
+    }
   };
 
   const navigate = useNavigate();
@@ -148,8 +78,27 @@ const Home = () => {
     })();
   }, [active, searchText]);
 
+  useEffect(() => {
+    const handleAuthStatus = () => {
+      setIsAuthorized(!!sessionStorage.getItem("isAuthorized"));
+      console.log(
+        "isAuthorized useState",
+        !!sessionStorage.getItem("isAuthorized")
+      );
+    };
+
+    handleAuthStatus();
+
+    window.addEventListener(userAuthorizationEvent, handleAuthStatus);
+
+    return () =>
+      window.removeEventListener(userAuthorizationEvent, handleAuthStatus);
+  }, []);
+
   return (
     <section className="quest-section">
+      {isAuthorized ? <></> : <WelcomeMenu />}
+
       <div className="quests__header">
         <img alt="stars" src="src/assets/stars.png"></img>
         <h2>BEST QUESTS OF THE DAY</h2>
@@ -160,10 +109,7 @@ const Home = () => {
       <div className="quests__cards">
         <div className="quests__cards-header">
           <p className="quests__cards-title">All quests:</p>
-          <button
-            className="quests__cards-button"
-            onClick={() => navigate("/quest-form")}
-          >
+          <button className="quests__cards-button" onClick={handleCreateClick}>
             <div className="quests__cards-container">
               <FaPlus className="quests__cards-icon" />
               <span className="quests__cards-title">Create quest</span>

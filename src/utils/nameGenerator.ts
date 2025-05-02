@@ -37,7 +37,7 @@ const ADJECTIVES: string[] = [
 
 const MAX_INT: number = 9999;
 
-function* generateName(): Generator<string> {
+function* generateName(): Generator<string, never, unknown> {
   while (true) {
     const animal = ANIMALS[generateInt(0, ANIMALS.length - 1)];
     const adjective = ADJECTIVES[generateInt(0, ADJECTIVES.length - 1)];

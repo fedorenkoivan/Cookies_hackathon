@@ -3,13 +3,19 @@ import { useEffect, useState } from "react";
 
 const ProtectedRoutes = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
+    const accessToken = localStorage.getItem('token');
     setIsAuthenticated(!!accessToken);
+    setIsLoading(false);
   }, []);
 
-  if (isAuthenticated) {
+  if (isLoading) {
+    return <div>Downloading...</div>;
+  }
+
+  if (isAuthenticated === true) {
     return <Outlet />;
   }
 

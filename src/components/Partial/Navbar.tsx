@@ -40,7 +40,7 @@ const Navbar = () => {
 
       const response = await fetch("http://localhost:5000/users/profile", {
         headers: {
-          Authorization: `Bearer ${token}`,
+          'Authorization': `Bearer ${token}`
         },
       });
 
@@ -118,10 +118,24 @@ const Navbar = () => {
     };
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setUserData(null);
-    window.dispatchEvent(new Event(userLogoutEvent));
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/users/logout', {
+        method: 'POST',
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        localStorage.removeItem('token');
+        setUserData(null);
+        window.dispatchEvent(new Event(userLogoutEvent));
+        navigate('/');
+      } else {
+        console.error('Failed to logout: Server returned', response.status);
+      }
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
   };
 
   return (

@@ -36,6 +36,7 @@ const LogIn = () => {
               headers: {
                 'Content-Type': 'application/json',
               },
+              credentials: 'include',
               body: JSON.stringify({ 
                 email: values.companyEmail, 
                 password: values.password 
@@ -49,8 +50,8 @@ const LogIn = () => {
               return;
             }
             
-            if (data.status === 'success' && data.token) {
-              localStorage.setItem('token', data.token);
+            if (data.status === 'success' && data.accessToken) {
+              localStorage.setItem('token', data.accessToken);
               window.dispatchEvent(new Event(userLoginEvent))
               navigate("/profile");
             } else {

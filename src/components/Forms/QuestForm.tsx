@@ -39,12 +39,10 @@ const QuestForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     const token = localStorage.getItem("token");
-    const userData = sessionStorage.getItem("userData");
-    const author = userData
-      ? JSON.parse(userData).name || "Anonymous"
-      : "Anonymous";
     e.preventDefault();
     try {
+      const userData = sessionStorage.getItem("userData");
+      const author = userData ? JSON.parse(userData).name || "Anonymous" : "Anonymous";
       await fetch(`${URL}/create`, {
         method: "POST",
         headers: {

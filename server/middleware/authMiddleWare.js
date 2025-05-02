@@ -2,7 +2,6 @@ export const verifyToken = async (request, reply) => {
   try {
     const authHeader = request.headers.authorization;
     let token;
-    
     if (authHeader && authHeader.startsWith('Bearer ')) {
       token = authHeader.split(' ')[1];
     }
@@ -22,8 +21,17 @@ export const verifyToken = async (request, reply) => {
     console.log(decoded);
     
     
+    if (decoded.scope !== 'access_token') {
+      return reply.code(401).send({ 
+        status: 'error', 
+        message: 'Invalid token type' 
+      });
+    }
+    
     request.user = { id: decoded.id };
 
+    return;
+    
     return;
     
   } catch (err) {

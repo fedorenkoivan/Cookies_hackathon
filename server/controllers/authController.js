@@ -1,8 +1,8 @@
+import path from 'path';
 import User from '../models/userModel.js';
-import { createToken } from '../utils/createToken.js';
+import { createAccessToken, createRefreshToken } from '../utils/createTokens.js';
 import { sendEmail } from '../utils/email.js';
 import argon2 from 'argon2';
-
 
 export const signup = async (request, reply) => {
   try {
@@ -10,11 +10,22 @@ export const signup = async (request, reply) => {
 
     const newUser = await User.create({ name, email, password, passwordConfirm });
 
-    const token = createToken(request.server, newUser._id);
+    const accessToken = createAccessToken(request.server, newUser._id);
+    const refreshToken = createRefreshToken(request.server, newUser._id);
+
+    newUser.refreshToken = refreshToken;
+    await newUser.save({ validateBeforeSave: false });
+
+    reply.setCookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days (croissants)
+      path: '/'
+    });
 
     reply.code(201).send({
       status: 'success',
-      token,
+      accessToken,
       data: { user: { id: newUser._id, name: newUser.name, email: newUser.email } },
     });
   } catch (err) {
@@ -50,9 +61,52 @@ export const login = async (request, reply) => {
       });
     }
 
-    const token = createToken(request.server, user._id);
+    const accessToken = createAccessToken(request.server, user._id);
+    const refreshToken = createRefreshToken(request.server, user._id);
 
-    reply.send({ status: 'success', token });
+    user.refreshToken = refreshToken;
+    await user.save({ validateBeforeSave: false });
+
+    reply.setCookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', 
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days (croissants)
+      path: '/',
+    });
+
+    reply.send({ status: 'success', accessToken });
+
+  } catch (err) {
+    reply.code(500).send({ status: 'error', message: err.message });
+  }
+};
+
+export const logout = async (request, reply) => {
+  try {
+    const refreshToken = request.cookies.refreshToken;
+
+    reply.clearCookie('refreshToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      path: '/',
+    });
+    
+    if (refreshToken) {
+      try {
+        const decoded = request.server.jwt.verify(refreshToken);
+        
+        if (decoded && decoded.id) {
+          await User.findByIdAndUpdate(
+            decoded.id,
+            { refreshToken: null }
+          );
+        }
+      } catch (tokenErr) {
+        console.log('Invalid token during logout:', tokenErr.message);
+      }
+    }
+    
+    reply.send({ status: 'success', message: 'Logged out successfully' });
   } catch (err) {
     reply.code(500).send({ status: 'error', message: err.message });
   }
@@ -165,13 +219,57 @@ export const resetPassword = async (request, reply) => {
     
     await user.save();
     
-    const newToken = createToken(request.server, user._id);
+    const accessToken = createAccessToken(request.server, user._id);
+    const refreshToken = createRefreshToken(request.server, user._id);
     
+    user.refreshToken = refreshToken;
+    await user.save({ validateBeforeSave: false });
+    
+    reply.setCookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      path: '/'
+    });
+
     reply.code(200).send({
       status: 'success',
-      token: newToken
+      token: accessToken
     });
   } catch (err) {
     reply.code(400).send({ status: 'error', message: err.message });
+  }
+};
+
+export const refresh = async (request, reply) => {
+  try {
+    const refreshToken = request.cookies.refreshToken;
+    
+    if (!refreshToken) {
+      return reply.code(401).send({ status: 'error', message: 'Refresh token not found' });
+    }
+    
+    let decoded;
+    try {
+      decoded = request.server.jwt.verify(refreshToken);
+      
+      if (decoded.scope !== 'refresh_token') {
+        return reply.code(401).send({ status: 'error', message: 'Invalid token type' });
+      }
+    } catch (err) {
+      return reply.code(401).send({ status: 'error', message: 'Invalid or expired token' });
+    }
+    
+    const user = await User.findById(decoded.id).select('+refreshToken');
+    
+    if (!user) {
+      return reply.code(401).send({ status: 'error', message: 'User not found' });
+    }
+    
+    const accessToken = createAccessToken(request.server, user._id);
+    
+    reply.send({ status: 'success', accessToken });
+  } catch (err) {
+    reply.code(500).send({ status: 'error', message: err.message });
   }
 };

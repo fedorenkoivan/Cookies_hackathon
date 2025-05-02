@@ -46,7 +46,7 @@ const Home = () => {
   const handleCreateClick = () => {
     const token = localStorage.getItem('token'); 
     if (!token) {
-      navigate('/log-in');
+      navigate("/sign-up", { state: { from: "/quest-form" } });
     } else {
       navigate('/quest-form')
     }

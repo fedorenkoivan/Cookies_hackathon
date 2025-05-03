@@ -1,6 +1,7 @@
 import Fastify from 'fastify';
 import fastifyCors from '@fastify/cors';
 import fastifyJwt from '@fastify/jwt';
+import fastifyCookie from '@fastify/cookie';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
@@ -50,8 +51,14 @@ fastify.setErrorHandler((error, request, reply) => {
   });
 });
 
+await fastify.register(fastifyCookie, {
+  secret: process.env.COOKIE_SECRET,
+  hook: 'onRequest',
+});
+
 await fastify.register(fastifyCors, {
   origin: true,
+  credentials: true,
 });
 
 await fastify.register(fastifyJwt, {

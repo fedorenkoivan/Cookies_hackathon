@@ -12,6 +12,7 @@ import RatingForm from "@components/Rating/RatingForm";
 import ForgotPassword from "@components/Login/ForgotPassword";
 import NewPassword from "@components/Login/NewPassword";
 import ResetPassword from "@components/Login/ResetPassword";
+import ProtectedRoutes from './utils/ProtectedRoutes';
 
 import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -24,13 +25,20 @@ function App() {
       <Routes>
         <Route path="/" element={<Home/>} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/quest-form" element={<QuestForm />} />
+        {/* <Route path="/quest-form" element={<QuestForm />} /> */}
         <Route path="/rating-form" element={<RatingForm />} />
         <Route path="/sign-up" element={<SignUp/>} />
         <Route path="/log-in" element={<LogIn/>} />
         <Route path="/forgot-password" element={<ForgotPassword/>} />
         <Route path="/new-password" element={<NewPassword/>} />
-        <Route path="/reset-password/:token" element={<ResetPassword/>} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        
+        <Route element={<ProtectedRoutes />}>
+          {/* <Route path="/profile" element={<Profile />} /> */}
+          <Route path="/quest-form" element={<QuestForm />} />
+          {/* <Route path="/rating-form" element={<RatingForm />} /> */}
+        </Route>
+
       </Routes>
       <Footer />
 

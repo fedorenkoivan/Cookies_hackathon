@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import { userLoginEvent } from "../Partial/Navbar";
+import { userLoginEvent } from "@/utils/userData";
 
 import './SignUp.scss';
 
@@ -47,6 +47,7 @@ const SignUp = () => {
               headers: {
                 'Content-Type': 'application/json',
               },
+              credentials: 'include',
               body: JSON.stringify({ 
                 name: values.username,
                 email: values.email, 
@@ -57,10 +58,9 @@ const SignUp = () => {
             
             const data = await response.json();
             
-            if (data.status === 'success' && data.token) {
-              localStorage.setItem('token', data.token);
+            if (data.status === 'success' && data.accessToken) {
+              localStorage.setItem('token', data.accessToken);
               window.dispatchEvent(new Event(userLoginEvent));
-
               navigate("/profile");
             } else {
               setStatus(data.message || 'Помилка реєстрації');

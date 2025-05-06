@@ -48,7 +48,7 @@ const questSchema = new mongoose.Schema({
   },
   image: {
     type: String,
-    default: "logo.jpg",
+    default: "",
   },
   rating: {
     type: Number,

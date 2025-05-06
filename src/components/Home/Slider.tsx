@@ -49,7 +49,11 @@ const Slider = () => {
           <SwiperSlide key={quest.id} className="quests__slider-slide">
             <div className="quests__slider-wrapper">
               <div className="image-container">
-                <img src="src/assets/logo.jpg" className="image" />
+                {quest.image ? (
+                  <img src={quest.image} className="image" />
+                ) : (
+                  <img src="src/assets/logo.jpg" className="image" />
+                )}
               </div>
               <div className="info-container">
                 <div className="top">

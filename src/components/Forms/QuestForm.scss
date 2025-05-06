@@ -130,6 +130,9 @@ $secondary-color: #7b7b7b;
       font-weight: bold;
       transition: 0.3s ease-in-out;
       cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
       &:hover { background: $secondary-color; }
     }

@@ -33,7 +33,13 @@ const QuestForm = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setImage(file.name);
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          setImage(event.target.result as string);
+        }
+      };
+      reader.readAsDataURL(file);
     }
   };
 

@@ -23,16 +23,16 @@ function App() {
     <>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Home/>} />
+        <Route path="/" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
         {/* <Route path="/quest-form" element={<QuestForm />} /> */}
         <Route path="/rating-form" element={<RatingForm />} />
-        <Route path="/sign-up" element={<SignUp/>} />
-        <Route path="/log-in" element={<LogIn/>} />
-        <Route path="/forgot-password" element={<ForgotPassword/>} />
-        <Route path="/new-password" element={<NewPassword/>} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
-        
+        <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/log-in" element={<LogIn />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/new-password" element={<NewPassword />} />
+        <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
+
         <Route element={<ProtectedRoutes />}>
           {/* <Route path="/profile" element={<Profile />} /> */}
           <Route path="/quest-form" element={<QuestForm />} />
@@ -42,14 +42,14 @@ function App() {
       </Routes>
       <Footer />
 
-      <ToastContainer 
-        position="top-center" 
-        autoClose={3000} 
-        hideProgressBar={false} 
-        newestOnTop={true} 
-        closeOnClick 
-        pauseOnHover 
-        theme="colored" 
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        pauseOnHover
+        theme="colored"
       />
     </>
   );

@@ -44,7 +44,7 @@ const QuestForm = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    const token = localStorage.getItem("token");
+    const accessToken = localStorage.getItem("accessToken");
     e.preventDefault();
     try {
       const userData = sessionStorage.getItem("userData");
@@ -53,7 +53,7 @@ const QuestForm = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
+          "Authorization": `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
           title,

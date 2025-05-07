@@ -1,25 +1,18 @@
 export const verifyToken = async (request, reply) => {
   try {
     const authHeader = request.headers.authorization;
-    let token;
+    let accessToken;
     if (authHeader && authHeader.startsWith('Bearer ')) {
-      token = authHeader.split(' ')[1];
+      accessToken = authHeader.split(' ')[1];
     }
-    console.log(request.headers.authorization);
-    console.log(request.headers);
-    if (!token) {
+
+    if (!accessToken) {
       return reply.code(401).send({ 
         status: 'error', 
         message: 'You are not logged in. Please log in to get access.' 
       });
     }
-
-    console.log(token);
-
-    const decoded = await request.server.jwt.verify(token);
-
-    console.log(decoded);
-    
+    const decoded = await request.server.jwt.verify(accessToken);    
     
     if (decoded.scope !== 'access_token') {
       return reply.code(401).send({ 
@@ -30,8 +23,6 @@ export const verifyToken = async (request, reply) => {
     
     request.user = { id: decoded.id };
 
-    return;
-    
     return;
     
   } catch (err) {

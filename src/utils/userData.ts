@@ -22,10 +22,10 @@ export const getCachedUserData = (): UserData | null => {
 };
 
 export const setAuthStatus = (status: boolean) => {
-  const token = localStorage.getItem('token');
+  const accessToken = localStorage.getItem('accessToken');
   if (status) {
     sessionStorage.setItem("isAuthorized", "true");
-    if (!token) cacheUserData({ name: nameGenerator.next().value, email: "" });
+    if (!accessToken) cacheUserData({ name: nameGenerator.next().value, email: "" });
   } else {
     sessionStorage.removeItem("isAuthorized");
     sessionStorage.removeItem("userData");

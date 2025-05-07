@@ -14,7 +14,7 @@ const Profile = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   const navigate = useNavigate();
 
   const handleNavItemClick = (item: string) => {
@@ -24,27 +24,27 @@ const Profile = () => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const token = localStorage.getItem('token');
-        
-        if (!token) {
+        const accessToken = localStorage.getItem('accessToken');
+
+        if (!accessToken) {
           navigate('/log-in');
           return;
         }
-        
+
         const response = await fetch('http://localhost:5000/users/profile', {
           headers: {
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${accessToken}`
           },
         });
-        
+
         const data = await response.json();
-        
+
         if (data.status === 'success') {
           setUserData(data.data.user);
         } else {
           setError(data.message || 'Помилка отримання даних користувача');
           if (response.status === 401) {
-            localStorage.removeItem('token');
+            localStorage.removeItem('accessToken');
             navigate('/log-in');
           }
         }
@@ -55,7 +55,7 @@ const Profile = () => {
         setLoading(false);
       }
     };
-    
+
     fetchUserProfile();
   }, [navigate]);
 

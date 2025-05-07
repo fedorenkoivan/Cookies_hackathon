@@ -6,7 +6,7 @@ const ProtectedRoutes = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('token');
+    const accessToken = localStorage.getItem('accessToken');
     setIsAuthenticated(!!accessToken);
     setIsLoading(false);
   }, []);
@@ -19,7 +19,7 @@ const ProtectedRoutes = () => {
     return <Outlet />;
   }
 
-  return <Navigate to="/sign-up"/>;
+  return <Navigate to="/sign-up" />;
 };
 
 export default ProtectedRoutes;

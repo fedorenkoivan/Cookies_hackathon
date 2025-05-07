@@ -183,7 +183,7 @@ export const forgotPassword = async (request, reply) => {
 
 export const resetPassword = async (request, reply) => {
   try {
-    const { token } = request.params;
+    const { resetToken } = request.params;
     const { password, passwordConfirm } = request.body;
     
     const users = await User.find({
@@ -194,7 +194,7 @@ export const resetPassword = async (request, reply) => {
     
     for (const potentialUser of users) {
       try {
-        const isValidToken = await argon2.verify(potentialUser.passwordResetToken, token);
+        const isValidToken = await argon2.verify(potentialUser.passwordResetToken, resetToken);
         
         if (isValidToken) {
           user = potentialUser;
@@ -234,7 +234,7 @@ export const resetPassword = async (request, reply) => {
 
     reply.code(200).send({
       status: 'success',
-      token: accessToken
+      accessToken,
     });
   } catch (err) {
     reply.code(400).send({ status: 'error', message: err.message });

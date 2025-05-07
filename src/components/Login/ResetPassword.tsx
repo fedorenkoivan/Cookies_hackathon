@@ -20,21 +20,21 @@ const validationSchema = Yup.object({
 
 const ResetPassword = () => {
   const navigate = useNavigate();
-  const { token } = useParams(); // Отримуємо токен з URL
+  const { resetToken } = useParams(); // Отримуємо токен з URL
   const [tokenValid, setTokenValid] = useState(true);
-  
+
   useEffect(() => {
-    if (!token) {
+    if (!resetToken) {
       setTokenValid(false);
       toast.error("Invalid reset token");
       setTimeout(() => navigate('/forgot-password'), 2000);
     }
-  }, [token, navigate]);
-  
+  }, [resetToken, navigate]);
+
   if (!tokenValid) {
     return <div className="card">Redirecting to password reset page...</div>;
   }
-  
+
   return (
     <div className="card">
       <div className="banner">
@@ -48,33 +48,33 @@ const ResetPassword = () => {
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting, setStatus }) => {
           try {
-            const response = await fetch(`http://localhost:5000/users/reset-password/${token}`, {
+            const response = await fetch(`http://localhost:5000/users/reset-password/${resetToken}`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
               },
-              body: JSON.stringify({ 
+              body: JSON.stringify({
                 password: values.password,
                 passwordConfirm: values.passwordConfirm
               }),
             });
-            
+
             const data = await response.json();
-            
+
             if (!response.ok) {
               setStatus(data.message || `Error: ${response.statusText}`);
               return;
             }
-            
-            if (data.status === 'success' && data.token) {
-              localStorage.setItem('token', data.token);
+
+            if (data.status === 'success' && data.accessToken) {
+              localStorage.setItem('accessToken', data.accessToken);
               window.dispatchEvent(new Event(userLoginEvent));
               toast.success("Password successfully reset!");
               navigate("/profile");
             } else {
               setStatus('Error: Invalid server response');
             }
-            
+
           } catch (error) {
             console.error('Error during password reset:', error);
             setStatus('Connection error: Could not reach the server');
@@ -99,9 +99,9 @@ const ResetPassword = () => {
             {status && <div className="error">{status}</div>}
 
             <div className="btn-container">
-              <Button 
-                type="submit" 
-                variant="contained" 
+              <Button
+                type="submit"
+                variant="contained"
                 endIcon={<SendIcon />}
                 disabled={isSubmitting}
               >

@@ -30,9 +30,9 @@ const Navbar = () => {
 
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
+      const accessToken = localStorage.getItem("accessToken");
 
-      if (!token) {
+      if (!accessToken) {
         setUserData(getCachedUserData());
         setLoading(false);
         return;
@@ -40,7 +40,7 @@ const Navbar = () => {
 
       const response = await fetch("http://localhost:5000/users/profile", {
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${accessToken}`
         },
       });
 
@@ -52,7 +52,7 @@ const Navbar = () => {
         setAuthStatus(true);
       } else {
         if (response.status === 401) {
-          localStorage.removeItem("token");
+          localStorage.removeItem("accessToken");
           setAuthStatus(false);
           setUserData(null);
         }
@@ -71,8 +71,8 @@ const Navbar = () => {
   }, [userData]);
 
   // useEffect(() => {
-  //   const token = localStorage.getItem('token');
-  //   if (token && !userData) {
+  //   const accessToken = localStorage.getItem('accessToken');
+  //   if (accessToken && !userData) {
   //     fetchUserProfile();
   //   }
   // }, []);
@@ -83,7 +83,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === "token") {
+      if (e.key === "accessToken") {
         if (e.newValue) {
           fetchUserProfile();
         } else {
@@ -126,7 +126,7 @@ const Navbar = () => {
       });
 
       if (response.ok) {
-        localStorage.removeItem('token');
+        localStorage.removeItem('accessToken');
         setUserData(null);
         window.dispatchEvent(new Event(userLogoutEvent));
         navigate('/');

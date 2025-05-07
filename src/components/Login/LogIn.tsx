@@ -37,21 +37,21 @@ const LogIn = () => {
                 'Content-Type': 'application/json',
               },
               credentials: 'include',
-              body: JSON.stringify({ 
-                email: values.companyEmail, 
-                password: values.password 
+              body: JSON.stringify({
+                email: values.companyEmail,
+                password: values.password
               }),
             });
-            
+
             const data = await response.json();
-            
+
             if (!response.ok) {
               setStatus(data.message || `Error: ${response.statusText}`);
               return;
             }
-            
+
             if (data.status === 'success' && data.accessToken) {
-              localStorage.setItem('token', data.accessToken);
+              localStorage.setItem('accessToken', data.accessToken);
               window.dispatchEvent(new Event(userLoginEvent))
               navigate("/profile");
             } else {
@@ -81,9 +81,9 @@ const LogIn = () => {
             {status && <div className="error">{status}</div>}
 
             <div className="btn-container">
-              <Button 
-                type="submit" 
-                variant="contained" 
+              <Button
+                type="submit"
+                variant="contained"
                 endIcon={<SendIcon />}
                 disabled={isSubmitting}
               >
@@ -91,10 +91,10 @@ const LogIn = () => {
               </Button>
             </div>
             <a className="account"
-            onClick={() => navigate('/sign-up')}
+              onClick={() => navigate('/sign-up')}
             >Don't have an account?</a>
             <a className="account"
-            onClick={() => navigate('/forgot-password')}
+              onClick={() => navigate('/forgot-password')}
             >Forgot password?</a>
           </Form>
         )}

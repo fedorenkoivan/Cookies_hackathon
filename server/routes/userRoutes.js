@@ -23,7 +23,7 @@ export default async function userRoutes(fastify) {
     return forgotPassword(request, reply);
   });
   
-  fastify.post('/reset-password/:token', async (request, reply) => {
+  fastify.post('/reset-password/:resetToken', async (request, reply) => {
     return resetPassword(request, reply);
   });
 

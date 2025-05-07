@@ -44,8 +44,8 @@ const Home = () => {
   };
 
   const handleCreateClick = () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
       navigate("/sign-up", { state: { from: "/quest-form" } });
     } else {
       navigate("/quest-form");
@@ -153,14 +153,14 @@ const Home = () => {
           {quests.map((quest: Quest) => (
             <div className="quests__card-container" key={quest.id}>
               {quest.image ? (
-                 <div className="quests__card-image">
-                   <img src={quest.image} />
-                 </div>
-               ) : (
-                 <div className="quests__card-image">
-                   <img src="src/assets/logo.jpg" />
-                 </div>
-               )}
+                <div className="quests__card-image">
+                  <img src={quest.image} />
+                </div>
+              ) : (
+                <div className="quests__card-image">
+                  <img src="src/assets/logo.jpg" />
+                </div>
+              )}
               <div className="quests__card-info">
                 <div className="quests__card-title">
                   <p className="title">{truncateText(quest.title, 15)}</p>

@@ -18,8 +18,8 @@ const validationSchema = Yup.object({
     .matches(/[a-zA-Z]/, "Password can only contain Latin letters.")
     .required("Please complete this required field."),
   confirmPassword: Yup.string()
-     .oneOf([Yup.ref('password')], 'Passwords must match')
-     .required("Please complete this required field."),
+    .oneOf([Yup.ref('password')], 'Passwords must match')
+    .required("Please complete this required field."),
 });
 
 const SignUp = () => {
@@ -33,7 +33,7 @@ const SignUp = () => {
       </div>
 
       <Formik
-        initialValues={{ 
+        initialValues={{
           username: "",
           email: "",
           password: "",
@@ -48,18 +48,18 @@ const SignUp = () => {
                 'Content-Type': 'application/json',
               },
               credentials: 'include',
-              body: JSON.stringify({ 
+              body: JSON.stringify({
                 name: values.username,
-                email: values.email, 
+                email: values.email,
                 password: values.password,
                 passwordConfirm: values.confirmPassword
               }),
             });
-            
+
             const data = await response.json();
-            
+
             if (data.status === 'success' && data.accessToken) {
-              localStorage.setItem('token', data.accessToken);
+              localStorage.setItem('accessToken', data.accessToken);
               window.dispatchEvent(new Event(userLoginEvent));
               navigate("/profile");
             } else {
@@ -91,9 +91,9 @@ const SignUp = () => {
             {status && <div className="error">{status}</div>}
 
             <div className="btn-container">
-              <Button 
-                type="submit" 
-                variant="contained" 
+              <Button
+                type="submit"
+                variant="contained"
                 endIcon={<SendIcon />}
                 disabled={isSubmitting}
               >
@@ -101,7 +101,7 @@ const SignUp = () => {
               </Button>
             </div>
             <a className="account"
-            onClick={() => navigate('/log-in')}
+              onClick={() => navigate('/log-in')}
             >Already have an account?</a>
           </Form>
         )}

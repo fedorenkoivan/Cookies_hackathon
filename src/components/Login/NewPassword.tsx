@@ -12,8 +12,8 @@ const validationSchema = Yup.object({
     .matches(/[a-zA-Z]/, "Password can only contain Latin letters.")
     .required("Please complete this required field."),
   confirmPassword: Yup.string()
-     .oneOf([Yup.ref('password')], 'Passwords must match')
-     .required("Please complete this required field."),
+    .oneOf([Yup.ref('password')], 'Passwords must match')
+    .required("Please complete this required field."),
 });
 
 const LogIn = () => {
@@ -36,20 +36,20 @@ const LogIn = () => {
               headers: {
                 'Content-Type': 'application/json',
               },
-              body: JSON.stringify({ 
-                password: values.password 
+              body: JSON.stringify({
+                password: values.password
               }),
             });
-            
+
             const data = await response.json();
-            
+
             if (!response.ok) {
               setStatus(data.message || `Error: ${response.statusText}`);
               return;
             }
-            
-            if (data.status === 'success' && data.token) {
-              localStorage.setItem('token', data.token);
+
+            if (data.status === 'success' && data.accessToken) {
+              localStorage.setItem('accessToken', data.accessToken);
               window.dispatchEvent(new Event(userLoginEvent))
               navigate("/profile");
             } else {
@@ -78,9 +78,9 @@ const LogIn = () => {
             {status && <div className="error">{status}</div>}
 
             <div className="btn-container">
-              <Button 
-                type="submit" 
-                variant="contained" 
+              <Button
+                type="submit"
+                variant="contained"
                 endIcon={<SendIcon />}
                 disabled={isSubmitting}
               >
@@ -88,7 +88,7 @@ const LogIn = () => {
               </Button>
             </div>
             <a className="account"
-            onClick={() => navigate('/sign-up')}
+              onClick={() => navigate('/sign-up')}
             >Don't have an account?</a>
           </Form>
         )}

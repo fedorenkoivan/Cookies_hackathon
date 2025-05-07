@@ -5,6 +5,7 @@ import QuestionForm from "./QuestionForm";
 import { FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { CATEGORIES as QUEST_CATEGORIES, QUESTS_URL as URL } from "@/constants/questConstants";
+import { Question, Answer } from "@/types/quest";
 
 
 const QuestForm = () => {
@@ -14,13 +15,7 @@ const QuestForm = () => {
   const [category, setCategory] = useState<string>("");
   const [time, setTime] = useState<number>(-1);
   const [showTimeControls, setShowTimeControls] = useState<boolean>(false);
-  const [questions, setQuestions] = useState<
-    {
-      id: number;
-      value: string;
-      answers: { id: number; value: string; isCorrect: boolean }[];
-    }[]
-  >([{ id: 0, value: "", answers: [{ id: 0, value: "", isCorrect: false }] }]);
+  const [questions, setQuestions] = useState<Question[]>([{ id: 0, value: "", answers: [{ id: 0, value: "", isCorrect: false }] }]);
 
   const navigate = useNavigate();
 
@@ -102,7 +97,7 @@ const QuestForm = () => {
   const updateQuestion = (
     id: number,
     value: string,
-    answers: { id: number; value: string; isCorrect: boolean }[]
+    answers: Answer[]
   ) => {
     setQuestions((prev) =>
       prev.map((q) => (q.id === id ? { ...q, value, answers } : q))

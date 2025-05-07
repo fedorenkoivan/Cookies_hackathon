@@ -2,20 +2,21 @@ import { useState, useEffect } from "react";
 import "./QuestionForm.scss";
 
 import AnswerForm from "./AnswerForm";
+import { Answer } from "@/types/quest";
 
 import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 
 interface QuestionProps {
   questionNumber: number;
   onDelete: () => void;
-  onChange: (q: string, a: { id: number; value: string; isCorrect: boolean }[]) => void;
+  onChange: (q: string, a: Answer[]) => void;
   updateValue: string;
-  updateAnswers: { id: number; value: string; isCorrect: boolean }[];
+  updateAnswers: Answer[];
 }
 
 const QuestionsForm: React.FC<QuestionProps> = ({ questionNumber, onDelete, onChange, updateValue, updateAnswers }) => {
   const [question, setQuestion] = useState(updateValue);
-  const [answers, setAnswers] = useState<{ id: number; value: string; isCorrect: boolean }[]>(updateAnswers);
+  const [answers, setAnswers] = useState<Answer[]>(updateAnswers);
   const [isEditing, setIsEditing] = useState(false);
 
   const onEdit = () => {

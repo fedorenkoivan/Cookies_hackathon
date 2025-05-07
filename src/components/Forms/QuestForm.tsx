@@ -10,7 +10,7 @@ const QuestForm = () => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [category, setCategory] = useState<string>("");
-  const [time, setTime] = useState<number>(90);
+  const [time, setTime] = useState<number>(-1);
   const [showTimeControls, setShowTimeControls] = useState<boolean>(false);
   const [questions, setQuestions] = useState<
     {
@@ -26,20 +26,20 @@ const QuestForm = () => {
   const handleToggle = () => {
     const newState = !showTimeControls;
     setShowTimeControls(newState);
-    if (!newState) setTime(90); // Reset to default when disabling
-    else setTime(0); // Initialize to 0 when enabling
+    if (!newState) setTime(-1);
+    else setTime(30);
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
+      reader.readAsDataURL(file);
       reader.onload = (event) => {
         if (event.target?.result) {
           setImage(event.target.result as string);
         }
       };
-      reader.readAsDataURL(file);
     }
   };
 
@@ -100,7 +100,6 @@ const QuestForm = () => {
     if (questions.length > 1) {
       setQuestions((prev) => {
         const filtered = prev.filter((q) => q.id !== id);
-        // Re-index questions
         return filtered.map((q, index) => ({
           ...q,
           id: index,
@@ -185,7 +184,7 @@ const QuestForm = () => {
             <div className="controls">
               <button
                 type="button"
-                onClick={() => setTime((prev) => Math.max(0, prev - 1))}
+                onClick={() => setTime((prev) => Math.max(30, prev - 1))}
               >
                 -
               </button>
@@ -194,7 +193,7 @@ const QuestForm = () => {
                 value={time}
                 onChange={(e) => {
                   setTime(
-                    Math.min(Math.max(0, parseInt(e.target.value) || 0), 999)
+                    Math.min(Math.max(30, parseInt(e.target.value) || 0), 999)
                   );
                 }}
               />

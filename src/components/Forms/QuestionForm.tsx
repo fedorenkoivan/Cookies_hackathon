@@ -1,64 +1,83 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./QuestionForm.scss";
 
 import AnswerForm from "./AnswerForm";
+import { Answer } from "@/types/quest";
 
-import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
+import { FaEdit, FaTrash, FaPlus, FaImage, FaTimes } from "react-icons/fa";
+import { convertImage } from "@/utils/fileHandling";
 
 interface QuestionProps {
   questionNumber: number;
   onDelete: () => void;
-  onChange: (q: string, a: { id: number; value: string; isCorrect: boolean }[]) => void;
+  onChange: (q: string, image: string, points: number, a: Answer[]) => void;
   updateValue: string;
-  updateAnswers: { id: number; value: string; isCorrect: boolean }[];
+  updateImage: string;
+  updatePoints: number;
+  updateAnswers: Answer[];
 }
 
-const QuestionsForm: React.FC<QuestionProps> = ({ questionNumber, onDelete, onChange, updateValue, updateAnswers }) => {
+const QuestionsForm: React.FC<QuestionProps> = ({ questionNumber, onDelete, onChange, updateValue, updateAnswers, updatePoints, updateImage }) => {
   const [question, setQuestion] = useState(updateValue);
-  const [answers, setAnswers] = useState<{ id: number; value: string; isCorrect: boolean }[]>(updateAnswers);
+  const [answers, setAnswers] = useState<Answer[]>(updateAnswers);
+  const [points, setPoints] = useState<number>(updatePoints);
   const [isEditing, setIsEditing] = useState(false);
+  const [image, setImage] = useState(updateImage || "");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newImage = await convertImage(e);
+    setImage(newImage);
+    console.log("Image changed:", newImage);
+  };
 
   const onEdit = () => {
     setIsEditing((prev) => !prev);
   };
 
-  // Update answers from props, but only when external props change
   useEffect(() => {
     if (JSON.stringify(updateAnswers) !== JSON.stringify(answers)) {
       setAnswers(updateAnswers);
     }
   }, [updateAnswers]);
 
-  // Update question from props, but only when external props change
   useEffect(() => {
     if (updateValue !== question) {
       setQuestion(updateValue);
     }
   }, [updateValue]);
 
-  // Report changes to parent component
   useEffect(() => {
-    
-    // Use a debounce to prevent excessive updates
+    if (updatePoints !== points) {
+      setPoints(updatePoints);
+    }
+  }, [updatePoints]);
+
+  useEffect(() => {
+    if (updateImage !== image) {
+      setImage(updateImage);
+    }
+  }, [updateImage]);
+
+  useEffect(() => {
     const timer = setTimeout(() => {
-      onChange(question, answers);
+      onChange(question, image, points as number, answers);
     }, 300);
     
     return () => clearTimeout(timer);
-  }, [question, answers, onChange]);
+  }, [question, answers, points, image, onChange]);
 
   const addAnswer = () => {
+    if (answers.length >= 7) return;
     setAnswers((prev) => [...prev, { id: prev.length, value: "", isCorrect: false }]);
   };
 
   const removeAnswer = (id: number) => {
-    if (answers.length > 1) {
-      setAnswers((prev) => {
-        const filtered = prev.filter((q) => q.id !== id);
-        // Re-index the answers
-        return filtered.map((ans, index) => ({ ...ans, id: index }));
-      });
-    }
+    if (answers.length <= 1) return;
+    setAnswers((prev) => {
+      const filtered = prev.filter((q) => q.id !== id);
+      return filtered.map((ans, index) => ({ ...ans, id: index }));
+    });
   };
 
   return (
@@ -73,11 +92,40 @@ const QuestionsForm: React.FC<QuestionProps> = ({ questionNumber, onDelete, onCh
             onChange={(e) => setQuestion(e.target.value)}
           ></input>
           <div className="icons-wrapper">
+            <div className={`icon-container ${image ? 'has-image' : ''}`}>
+              {image ? (
+                <>
+                  <FaTimes className="icon" onClick={() => setImage("")} />
+                  <div className="image-badge"></div>
+                </>
+              ) : (
+                <FaImage className="icon" onClick={() => fileInputRef.current?.click()} />
+              )}
+            </div>
             <FaTrash className="icon" onClick={onDelete} />
             <FaEdit className="icon" onClick={onEdit} />
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleImageChange}
+              accept="image/*"
+              style={{ display: 'none' }}
+            />
           </div>
         </div>
         {isEditing && (
+          <>
+          <div className="points-wrapper">
+              <p>Points</p>
+            <input
+              type="text"
+              placeholder="Points"
+              value={points}
+              onChange={(e) => {
+                setPoints(Math.min(Math.max(0, parseInt(e.target.value) || 0), 99));
+              }}
+            />
+          </div>
           <div className="answer-wrapper">
             {answers.map((answer) => (
               <AnswerForm
@@ -99,6 +147,7 @@ const QuestionsForm: React.FC<QuestionProps> = ({ questionNumber, onDelete, onCh
               <p>Add Answer</p>
             </button>
           </div>
+          </>
         )}
         <div className="question-group"></div>
       </div>

@@ -46,6 +46,25 @@ $secondary-color: #7b7b7b;
       min-height: 2px;
       border-bottom: 2px solid $secondary-color;
     }
+
+    .header-info {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+      span {
+        font-size: 14px;
+        font-weight: light;
+        color: $secondary-color;
+      }
+
+      h3 {
+        font-weight: bold;
+        font-size: 16px;
+        text-transform: none;
+      }
+    }
     
     input, textarea {
       width: 100%;

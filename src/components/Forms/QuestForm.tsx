@@ -4,6 +4,10 @@ import { Dropdown } from "./Dropdown";
 import QuestionForm from "./QuestionForm";
 import { FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { CATEGORIES as QUEST_CATEGORIES, QUESTS_URL as URL } from "@/constants/questConstants";
+import { Question, Answer } from "@/types/quest";
+import { convertImage } from "@/utils/fileHandling";
+
 
 const QuestForm = () => {
   const [image, setImage] = useState<string>("");
@@ -12,15 +16,9 @@ const QuestForm = () => {
   const [category, setCategory] = useState<string>("");
   const [time, setTime] = useState<number>(-1);
   const [showTimeControls, setShowTimeControls] = useState<boolean>(false);
-  const [questions, setQuestions] = useState<
-    {
-      id: number;
-      value: string;
-      answers: { id: number; value: string; isCorrect: boolean }[];
-    }[]
-  >([{ id: 0, value: "", answers: [{ id: 0, value: "", isCorrect: false }] }]);
+  const [questions, setQuestions] = useState<Question[]>([{ id: 0, value: "", image: "", points: 1 ,answers: [{ id: 0, value: "", isCorrect: false }] }]);
+  const [totalPoints, setTotalPoints] = useState<number>(1);
 
-  const URL = "http://localhost:5000/quests";
   const navigate = useNavigate();
 
   const handleToggle = () => {
@@ -30,17 +28,9 @@ const QuestForm = () => {
     else setTime(30);
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (event) => {
-        if (event.target?.result) {
-          setImage(event.target.result as string);
-        }
-      };
-    }
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const convertedImage = await convertImage(e);
+    setImage(convertedImage);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -71,51 +61,49 @@ const QuestForm = () => {
     navigate("/");
   };
 
-  const questCategories: string[] = [
-    "Adventure",
-    "Puzzle",
-    "Educational",
-    "Gaming",
-    "Team challenges",
-    "Mystery",
-    "Other",
-  ];
-
   useEffect(() => {
     setQuestions((prev) => prev.map((q, index) => ({ ...q, id: index })));
   }, [questions.length]);
 
   const addQuestion = () => {
+    if (questions.length >= 20) return; 
     setQuestions((prev) => [
       ...prev,
       {
         id: prev.length,
         value: "",
+        image: "",
+        points: 1,
         answers: [{ id: 0, value: "", isCorrect: false }],
       },
     ]);
   };
 
   const removeQuestion = (id: number) => {
-    if (questions.length > 1) {
-      setQuestions((prev) => {
-        const filtered = prev.filter((q) => q.id !== id);
-        return filtered.map((q, index) => ({
-          ...q,
-          id: index,
-        }));
-      });
-    }
+    if (questions.length <= 1) return; 
+    setQuestions((prev) => {
+      const filtered = prev.filter((q) => q.id !== id);
+      return filtered.map((q, index) => ({
+        ...q,
+        id: index,
+      }));
+    });
   };
 
   const updateQuestion = (
     id: number,
     value: string,
-    answers: { id: number; value: string; isCorrect: boolean }[]
+    image: string,
+    points: number,
+    answers: Answer[]
   ) => {
     setQuestions((prev) =>
-      prev.map((q) => (q.id === id ? { ...q, value, answers } : q))
+      prev.map((q) => (q.id === id ? { ...q, value, image, points, answers } : q))
     );
+    setTotalPoints(() => {
+      const newPoints = questions.reduce((acc, q) => acc + q.points, 0);
+      return newPoints;
+    });
   };
 
   return (
@@ -155,7 +143,7 @@ const QuestForm = () => {
           <h3>Category</h3>
           <Dropdown
             buttonText="Select a category"
-            content={questCategories}
+            content={QUEST_CATEGORIES}
             onSelect={(category) => {
               setCategory(category);
             }}
@@ -193,7 +181,7 @@ const QuestForm = () => {
                 value={time}
                 onChange={(e) => {
                   setTime(
-                    Math.min(Math.max(30, parseInt(e.target.value) || 0), 999)
+                    Math.min(Math.max(0, parseInt(e.target.value) || 0), 999)
                   );
                 }}
               />
@@ -208,15 +196,16 @@ const QuestForm = () => {
         )}
 
         <div className="quest-form__group">
-          <h3>Questions</h3>
-          <div className="question-header" />
+          <div className="header-info"><h3>Questions</h3><span>(Total {totalPoints} points)</span></div>
           {questions.map((question) => (
             <QuestionForm
               key={question.id}
               questionNumber={question.id + 1}
               onDelete={() => removeQuestion(question.id)}
-              onChange={(q, a) => updateQuestion(question.id, q, a)}
+              onChange={(q, image, points, a) => updateQuestion(question.id, q, image, points, a)}
               updateValue={question.value}
+              updateImage={question.image}
+              updatePoints={question.points}
               updateAnswers={question.answers}
             />
           ))}

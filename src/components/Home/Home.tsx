@@ -7,17 +7,7 @@ import Slider, { Quest, URL } from "./Slider";
 import "swiper/swiper-bundle.css";
 import "./Home.scss";
 import { userAuthorizationEvent } from "@/utils/userData";
-
-const TABS: string[] = [
-  "All",
-  "Adventure",
-  "Puzzle",
-  "Educational",
-  "Gaming",
-  "Team challenges",
-  "Mystery",
-  "Other",
-];
+import {CATEGORIES as TABS} from "@/constants/questConstants";
 
 const Home = () => {
   const [active, setActive] = useState("All");
@@ -119,7 +109,7 @@ const Home = () => {
         <hr className="quests__divider" />
 
         <div className="quests__cards-tabs">
-          {TABS.map((tab) => (
+          {TABS.map((tab: string) => (
             <button
               key={tab}
               className={`button${active === tab ? "-active" : ""}`}

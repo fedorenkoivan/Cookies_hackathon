@@ -22,24 +22,20 @@ const QuestionsForm: React.FC<QuestionProps> = ({ questionNumber, onDelete, onCh
     setIsEditing((prev) => !prev);
   };
 
-  // Update answers from props, but only when external props change
   useEffect(() => {
     if (JSON.stringify(updateAnswers) !== JSON.stringify(answers)) {
       setAnswers(updateAnswers);
     }
   }, [updateAnswers]);
 
-  // Update question from props, but only when external props change
   useEffect(() => {
     if (updateValue !== question) {
       setQuestion(updateValue);
     }
   }, [updateValue]);
 
-  // Report changes to parent component
   useEffect(() => {
     
-    // Use a debounce to prevent excessive updates
     const timer = setTimeout(() => {
       onChange(question, answers);
     }, 300);
@@ -48,17 +44,16 @@ const QuestionsForm: React.FC<QuestionProps> = ({ questionNumber, onDelete, onCh
   }, [question, answers, onChange]);
 
   const addAnswer = () => {
+    if (answers.length >= 7) return;
     setAnswers((prev) => [...prev, { id: prev.length, value: "", isCorrect: false }]);
   };
 
   const removeAnswer = (id: number) => {
-    if (answers.length > 1) {
-      setAnswers((prev) => {
-        const filtered = prev.filter((q) => q.id !== id);
-        // Re-index the answers
-        return filtered.map((ans, index) => ({ ...ans, id: index }));
-      });
-    }
+    if (answers.length <= 1) return;
+    setAnswers((prev) => {
+      const filtered = prev.filter((q) => q.id !== id);
+      return filtered.map((ans, index) => ({ ...ans, id: index }));
+    });
   };
 
   return (

@@ -6,6 +6,7 @@ import { FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { CATEGORIES as QUEST_CATEGORIES, QUESTS_URL as URL } from "@/constants/questConstants";
 
+
 const QuestForm = () => {
   const [image, setImage] = useState<string>("");
   const [title, setTitle] = useState<string>("");
@@ -76,6 +77,7 @@ const QuestForm = () => {
   }, [questions.length]);
 
   const addQuestion = () => {
+    if (questions.length >= 20) return; 
     setQuestions((prev) => [
       ...prev,
       {
@@ -87,15 +89,14 @@ const QuestForm = () => {
   };
 
   const removeQuestion = (id: number) => {
-    if (questions.length > 1) {
-      setQuestions((prev) => {
-        const filtered = prev.filter((q) => q.id !== id);
-        return filtered.map((q, index) => ({
-          ...q,
-          id: index,
-        }));
-      });
-    }
+    if (questions.length <= 1) return; 
+    setQuestions((prev) => {
+      const filtered = prev.filter((q) => q.id !== id);
+      return filtered.map((q, index) => ({
+        ...q,
+        id: index,
+      }));
+    });
   };
 
   const updateQuestion = (

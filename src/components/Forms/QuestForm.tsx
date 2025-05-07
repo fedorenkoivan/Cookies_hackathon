@@ -4,6 +4,7 @@ import { Dropdown } from "./Dropdown";
 import QuestionForm from "./QuestionForm";
 import { FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { CATEGORIES as QUEST_CATEGORIES, QUESTS_URL as URL } from "@/constants/questConstants";
 
 const QuestForm = () => {
   const [image, setImage] = useState<string>("");
@@ -20,7 +21,6 @@ const QuestForm = () => {
     }[]
   >([{ id: 0, value: "", answers: [{ id: 0, value: "", isCorrect: false }] }]);
 
-  const URL = "http://localhost:5000/quests";
   const navigate = useNavigate();
 
   const handleToggle = () => {
@@ -70,16 +70,6 @@ const QuestForm = () => {
     }
     navigate("/");
   };
-
-  const questCategories: string[] = [
-    "Adventure",
-    "Puzzle",
-    "Educational",
-    "Gaming",
-    "Team challenges",
-    "Mystery",
-    "Other",
-  ];
 
   useEffect(() => {
     setQuestions((prev) => prev.map((q, index) => ({ ...q, id: index })));
@@ -155,7 +145,7 @@ const QuestForm = () => {
           <h3>Category</h3>
           <Dropdown
             buttonText="Select a category"
-            content={questCategories}
+            content={QUEST_CATEGORIES}
             onSelect={(category) => {
               setCategory(category);
             }}

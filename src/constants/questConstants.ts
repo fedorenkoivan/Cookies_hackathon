@@ -10,15 +10,3 @@ export const CATEGORIES: string[] = [
   ];
 
 export const QUESTS_URL = "http://localhost:5000/quests";
-
-export interface Answer {
-  id: number;
-  value: string;
-  isCorrect: boolean;
-}
-
-export interface Question {
-  id: number;
-  value: string;
-  answers: Answer[];
-}

@@ -65,6 +65,51 @@ $secondary-color: #7b7b7b;
     justify-content: start;
     align-items: start;
   }
+  .icon-container {
+    position: relative;
+    display: flex;
+    justify-content: center;  
+    align-items: center;
+    
+    .image-badge {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background-color: #4CAF50;
+      border-radius: 50%;
+      top: 0;
+      right: 0;
+      transform: translate(25%, -25%);
+    }
+  }
+
+  .points-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+
+    p {
+      margin-left: 15px;
+      font-size: 16px;
+    }
+    
+    input {
+      width: 70px;
+      height: 40px;
+      margin-left: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: none;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 16px;
+      font-weight: normal;
+
+      &:focus { box-shadow: 0px 7px 5px -6px rgba(77, 77, 77, 0.64); }
+    }
+  }
 }
 
 .add-answer-btn {

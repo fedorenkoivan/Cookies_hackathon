@@ -7,5 +7,7 @@ export interface Answer {
   export interface Question {
     id: number;
     value: string;
+    image: string;
+    points: number;
     answers: Answer[];
   }

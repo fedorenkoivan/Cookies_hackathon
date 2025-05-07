@@ -32,6 +32,14 @@ const questSchema = new mongoose.Schema({
           type: String,
           required: true,
         },
+        image: {
+          type: String,
+          default: "",
+        },
+        points: {
+          type: Number,
+          default: 0,
+        },
         answers: {
           type: [
             {

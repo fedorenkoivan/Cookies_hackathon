@@ -15,7 +15,9 @@ const getQuests = async (query) => {
 };
 
 const createQuest = async (body) => {
+  console.log(`quest body ${body}`);
   const newQuest = await questModel.create(body);
+  console.log(`quest created ${newQuest}`);
   return newQuest;
 };
 

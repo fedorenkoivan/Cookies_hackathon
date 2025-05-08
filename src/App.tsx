@@ -33,7 +33,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/new-password" element={<NewPassword />} />
         <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
-        <Route path="/complete-quest/:id" element={<QuestPage />} />
+        <Route path="/preview-quest/:id" element={<QuestPage />} />
 
         <Route element={<ProtectedRoutes />}>
           {/* <Route path="/profile" element={<Profile />} /> */}

@@ -10,6 +10,7 @@ export interface Question {
   image: string;
   points: number;
   answers: Answer[];
+  _id: number;
 }
 
 export interface Quest {

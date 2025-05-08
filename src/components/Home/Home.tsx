@@ -191,7 +191,7 @@ const Home = () => {
                   )}
                   <button
                     className="button"
-                    onClick={() => navigate(`/complete-quest/${quest._id}`)}
+                    onClick={() => navigate(`/preview-quest/${quest._id}`)}
                   >
                     Start quest
                   </button>

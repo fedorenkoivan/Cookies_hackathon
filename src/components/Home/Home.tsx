@@ -3,11 +3,15 @@ import StarRatingAuto from "../Rating/StarRatingAuto";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import WelcomeMenu from "./WelcomeMenu";
-import Slider, { Quest, URL } from "./Slider";
+import Slider from "./Slider";
 import "swiper/swiper-bundle.css";
 import "./Home.scss";
 import { userAuthorizationEvent } from "@/utils/userData";
-import {CATEGORIES as TABS} from "@/constants/questConstants";
+import {
+  CATEGORIES as TABS,
+  QUESTS_URL as URL,
+} from "@/constants/questConstants";
+import { Quest } from "@/types/quest";
 
 const Home = () => {
   const [active, setActive] = useState("All");
@@ -185,7 +189,12 @@ const Home = () => {
                       <p>{quest.time}s</p>
                     </div>
                   )}
-                  <button className="button" onClick={() => navigate(`/complete-quest/${quest._id}`)}>Start quest</button>
+                  <button
+                    className="button"
+                    onClick={() => navigate(`/complete-quest/${quest._id}`)}
+                  >
+                    Start quest
+                  </button>
                 </div>
               </div>
             </div>

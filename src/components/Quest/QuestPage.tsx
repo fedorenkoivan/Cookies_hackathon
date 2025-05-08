@@ -1,7 +1,8 @@
 import { useParams } from "react-router-dom";
 import StarRatingAuto from "../Rating/StarRatingAuto";
 import { useEffect, useState } from "react";
-import { URL, Quest } from "@/components/Home/Slider";
+import { Quest } from "@/types/quest";
+import { QUESTS_URL as URL } from "@/constants/questConstants";
 import "./QuestPage.scss";
 
 const QuestPage = () => {
@@ -34,12 +35,16 @@ const QuestPage = () => {
     <div className="quest">
       <section className="quest__info">
         <div className="description">
-          <p>{quest.title}</p>
+          <p>{quest.category}</p>
           <h2>{quest.title}</h2>
           <div className="rating">
             <StarRatingAuto rating={quest.rating} />
             <p className="reviews">({quest.reviews})</p>
           </div>
+          <h3>Description</h3>
+          <p>{quest.description}</p>
+          <p>Number of questions: {quest.questions.length}</p>
+          <p>Time limit: {quest.time}s</p>
         </div>
         <div className="image"></div>
       </section>

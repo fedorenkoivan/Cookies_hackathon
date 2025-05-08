@@ -4,21 +4,9 @@ import { FaUser, FaClock } from "react-icons/fa";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
 import StarRatingAuto from "../Rating/StarRatingAuto";
+import { QUESTS_URL as URL } from "@/constants/questConstants"
+import { Quest } from "@/types/quest";
 import "./Slider.scss";
-
-export const URL = "http://localhost:5000/quests";
-
-export interface Quest {
-  author: string;
-  _id: number;
-  title: string;
-  description: string;
-  category: string;
-  time: number;
-  image: string;
-  rating: number;
-  reviews: number;
-}
 
 const getToday = () => {
   const today = new Date();

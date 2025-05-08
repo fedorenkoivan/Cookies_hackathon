@@ -16,6 +16,9 @@
     align-items: center;
     .description {
       width: 60%;
+      h2 {
+        text-transform: uppercase;
+      }
       .rating {
         display: flex;
         flex-direction: row;

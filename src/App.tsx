@@ -12,6 +12,7 @@ import RatingForm from "@components/Rating/RatingForm";
 import ForgotPassword from "@components/Login/ForgotPassword";
 import NewPassword from "@components/Login/NewPassword";
 import ResetPassword from "@components/Login/ResetPassword";
+import QuestPage from "@components/Quest/QuestPage";
 import ProtectedRoutes from './utils/ProtectedRoutes';
 
 import { Routes, Route } from "react-router-dom";
@@ -32,6 +33,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/new-password" element={<NewPassword />} />
         <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
+        <Route path="/complete-quest/:id" element={<QuestPage />} />
 
         <Route element={<ProtectedRoutes />}>
           {/* <Route path="/profile" element={<Profile />} /> */}

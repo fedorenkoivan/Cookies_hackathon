@@ -1,0 +1,48 @@
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.quest {
+  display: flex;
+  flex-direction: column;
+  width: 90vw;
+  height: 40vh;
+  margin: 5vw 5vh;
+  &__info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .description {
+      width: 60%;
+      .rating {
+        display: flex;
+        flex-direction: row;
+        gap: 15px;
+        .quests__rating {
+          display: flex;
+          gap: 5px;
+
+          .star-wrapper {
+            position: relative;
+            @include flex-center;
+          }
+
+          .star-bg {
+            color: gray;
+          }
+
+          .star-fill {
+            color: gold;
+            position: absolute;
+            clip-path: inset(0 100% 0 0);
+          }
+        }
+      }
+      .image {
+        width: 40%;
+      }
+    }
+  }
+}

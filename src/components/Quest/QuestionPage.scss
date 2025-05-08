@@ -1,0 +1,121 @@
+$primary-color: #c8c7c7;
+$secondary-color: #7b7b7b;
+
+.question__info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+
+    h1 {
+        margin : 20px 0 0 0;
+    }
+
+    p {
+        font-weight: regular;
+    }
+
+    .question__image {
+        position: relative;
+        width: 90%;
+        max-width: 700px;
+        margin: 0 auto;
+        border-radius: 15px;
+        border: solid 0.5px #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        padding-left: 40px;   // <--- add horizontal padding
+        padding-right: 40px;  // <--- add horizontal padding
+
+        // Gradient background
+        &::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            border-radius: 15px;
+            background: linear-gradient(
+                90deg,
+                #ffffff 0%,
+                #626060 50%,
+                #ffffff 100%
+            );
+            opacity: 1;
+        }
+
+        img {
+            position: relative;
+            z-index: 1;
+            object-fit: contain;
+            width: 100%;
+            max-width: 500px;
+            max-height: 300px;
+            background: transparent;
+            box-shadow: none;
+        }
+    }
+
+    .question__answers {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem 1rem;
+        width: 60%;
+        margin-top: 2rem;
+
+        .answer {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: #e5e5e5;
+            border-radius: 25px 100px 100px 100px;
+            padding: 1.2rem 2.5rem;
+            font-size: 1.6rem;
+            font-weight: bold;
+            justify-content: center;
+            min-height: 60px;
+            box-sizing: border-box;
+            width: 100%;
+
+            input[type="radio"] {
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                margin: 0;
+                accent-color: #8cbcff;
+                width: 22px;
+                height: 22px;
+            }
+        }
+
+        // Make last odd answer span both columns
+        .answer:only-child,
+        .answer:last-child:nth-child(odd) {
+            grid-column: 1 / -1;
+            justify-content: center;
+        }
+    }
+}
+.question__submit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem 0;
+
+    button {
+        background-color: $primary-color;
+        color: black;
+        font-size: 1.6rem;
+        font-weight: bold;
+        padding: 1rem 3rem;
+        border-radius: 15px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            background-color: $secondary-color;
+        }
+    }
+}

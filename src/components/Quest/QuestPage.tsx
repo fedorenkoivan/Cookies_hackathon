@@ -1,38 +1,29 @@
 import { useParams, useNavigate } from "react-router-dom";
 import StarRatingAuto from "../Rating/StarRatingAuto";
-import { useEffect, useState } from "react";
-import { Quest } from "@/types/quest";
-import { QUESTS_URL as URL } from "@/constants/questConstants";
+import { useEffect } from "react";
 import "./QuestPage.scss";
 import Comments from "./Comments";
+import { useQuestContext } from "@/contexts/QuestContext";
 
 const QuestPage = () => {
   const { id } = useParams();
-  const [quests, setQuests] = useState<Quest[]>([]);
-  const [loading, setLoading] = useState(true);
-
+  const { quest, loading, error, fetchQuest } = useQuestContext();
   const navigate = useNavigate();
 
   useEffect(() => {
-    (async () => {
-      try {
-        setLoading(true);
-        const res = await fetch(`${URL}?_id=${id}`);
-        const data = await res.json();
-        setQuests(data.data);
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [id]);
+    fetchQuest(id as string);
+  }, [id, fetchQuest]);
 
-  const quest = quests[0];
-  console.log(quest);
-
-  if (loading || !quest) {
+  if (loading) {
     return <div className="quest">Loading quest data...</div>;
+  }
+
+  if (!quest) {
+    return <div className="quest">Quest not found</div>;
+  }
+
+  if (error) {
+    return <div className="quest">Error: {error}</div>;
   }
 
   return (
@@ -57,9 +48,13 @@ const QuestPage = () => {
       </section>
       <section className="quest__start">
         <button
-          onClick={() =>
-            navigate(`/complete-quest/${quest._id}/${quest.questions[0]._id}`)
-          }
+          onClick={() => {
+            if (quest.questions && quest.questions.length > 0) {
+              navigate(`/complete-quest/${quest._id}/${quest.questions[0]._id}`);
+            } else {
+              alert("This quest has no questions.");
+            }
+          }}
         >
           Start
         </button>

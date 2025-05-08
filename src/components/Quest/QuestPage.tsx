@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Quest } from "@/types/quest";
 import { QUESTS_URL as URL } from "@/constants/questConstants";
 import "./QuestPage.scss";
+import Comments from "./Comments";
 
 const QuestPage = () => {
   const { id } = useParams();
@@ -47,13 +48,14 @@ const QuestPage = () => {
           <h3>Description</h3>
           <p>{quest.description}</p>
           <p>Number of questions: {quest.questions.length}</p>
+          <p>Maximum score: 12 points</p>
           <p>Time limit: {quest.time}s</p>
         </div>
         <div className="image">
           <img src={quest.image} />
         </div>
       </section>
-      <section>
+      <section className="quest__start">
         <button
           onClick={() =>
             navigate(`/complete-quest/${quest._id}/${quest.questions[0]._id}`)
@@ -64,7 +66,13 @@ const QuestPage = () => {
 
         <hr />
       </section>
-      <section className="quest__comments"></section>
+      <section className="quest__comments">
+        <p>Number of completions: 1234</p>
+        <p>Comments: 123</p>
+        <div>
+            <Comments />
+        </div>
+      </section>
     </div>
   );
 };

@@ -70,7 +70,7 @@ const Slider = () => {
                   <p className="reviews">({quest.reviews})</p>
                 </div>
                 <div className="start">
-                  <button className="button" onClick={() => navigate(`/complete-quest/${quest._id}`)}>
+                  <button className="button" onClick={() => navigate(`/preview-quest/${quest._id}`)}>
                     <p>Start quest</p>
                   </button>
                 </div>

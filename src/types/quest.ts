@@ -10,12 +10,14 @@ export interface Question {
   image: string;
   points: number;
   answers: Answer[];
-  _id: number;
+}
+export interface ExtendedQuestion extends Question {
+  _id: string;
 }
 
 export interface Quest {
   author: string;
-  _id: number;
+  _id: string;
   title: string;
   description: string;
   category: string;
@@ -23,5 +25,6 @@ export interface Quest {
   image: string;
   rating: number;
   reviews: number;
-  questions: Question[];
+  questions: ExtendedQuestion[];
 }
+

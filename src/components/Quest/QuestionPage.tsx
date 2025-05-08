@@ -6,7 +6,6 @@ import "./QuestionPage.scss";
 
 const QuestionPage = () => {
   const { id, question_id } = useParams<{ id: string; question_id: string }>();
-  // const [questionNumber, setQuestionNumber] = useState<number>(0);
   const { quest, loading, error, fetchQuest } = useQuestContext();
   const [question, setQuestion] = useState<Question | null>(
     quest?.questions[0] || null
@@ -38,10 +37,10 @@ const QuestionPage = () => {
     console.log(currentQuestionIndex);
     if (currentQuestionIndex < quest.questions.length - 1) {
       const nextIndex = currentQuestionIndex + 1;
-      // setQuestionNumber(nextIndex);
       setQuestion(quest.questions[nextIndex]);
       navigate(`/complete-quest/${id}/${quest.questions[nextIndex]._id}`);
     } else {
+      navigate(`/preview-quest/${id}`);
       console.log("This is the last question");
     }
   };

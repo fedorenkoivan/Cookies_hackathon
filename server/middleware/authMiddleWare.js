@@ -1,4 +1,5 @@
 import { verifyJwtToken } from "../utils/handleTokens.js";
+import mongoose from "mongoose";
 
 export const verifyToken = async (request, reply) => {
   try {
@@ -16,11 +17,27 @@ export const verifyToken = async (request, reply) => {
     }
 
     const decoded = verifyJwtToken(accessToken, "access_token");
-    request.user = { id: decoded.id };
-
+    
+    // Validate ID format before setting it on request object
+    // This prevents "Invalid ID format" errors in MongoDB operations
+    try {
+      // Check if ID is a valid MongoDB ObjectId
+      if (!mongoose.Types.ObjectId.isValid(decoded.id)) {
+        throw new Error('Invalid ID format in token');
+      }
+      
+      request.user = { id: decoded.id };
+    } catch (idError) {
+      console.error("ID format error:", idError.message);
+      return reply.code(401).send({
+        status: "error",
+        message: "Invalid user identification. Please log in again.",
+      });
+    }
+    
     return;
   } catch (err) {
-    console.error(err);
+    console.error("Token verification error:", err.message);
     return reply.code(401).send({
       status: "error",
       message: "Invalid token or token expired",

@@ -108,16 +108,19 @@ export const resetPassword = async (request, reply) => {
         message: "Token is invalid or has expired",
       });
     }
-
+    
     user.password = password;
     user.passwordConfirm = passwordConfirm;
     user.passwordResetToken = undefined;
-    user.passwordResetExpires = undefined;
-
+    user.passwordResetExpires = undefined;    
     await user.save();
 
-    const accessToken = createAccessToken(request.server, user._id);
-    const refreshToken = createRefreshToken(request.server, user._id);
+    // Use proper MongoDB ObjectId without toString()
+    const userId = user._id;
+    
+    // Create tokens with userId
+    const accessToken = createAccessToken(userId);
+    const refreshToken = createRefreshToken(userId);
 
     user.refreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
@@ -127,6 +130,7 @@ export const resetPassword = async (request, reply) => {
       secure: process.env.NODE_ENV === "production",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       path: "/",
+      sameSite: "lax"
     });
 
     reply.code(200).send({

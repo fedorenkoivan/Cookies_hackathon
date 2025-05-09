@@ -2,29 +2,33 @@ import User from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 
 export const createAccessToken = (userId) => {
+  // Ensure we have a string representation of the ObjectId
+  const idStr = userId.toString();
   return jwt.sign(
     {
-      id: userId,
+      id: idStr,
       scope: "access_token",
     },
     process.env.JWT_SECRET,
     {
       expiresIn: process.env.JWT_ACCESS_EXPIRES_IN,
-      subject: userId.toString(),
+      subject: idStr,
     },
   );
 };
 
 export const createRefreshToken = (userId) => {
+  // Ensure we have a string representation of the ObjectId
+  const idStr = userId.toString();
   return jwt.sign(
     {
-      id: userId,
+      id: idStr,
       scope: "refresh_token",
     },
     process.env.JWT_SECRET,
     {
       expiresIn: process.env.JWT_REFRESH_EXPIRES_IN,
-      subject: userId.toString(),
+      subject: idStr,
     },
   );
 };

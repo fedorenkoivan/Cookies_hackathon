@@ -64,13 +64,24 @@ const ResetPassword = () => {
             if (!response.ok) {
               setStatus(data.message || `Error: ${response.statusText}`);
               return;
-            }
-
-            if (data.status === 'success' && data.accessToken) {
-              localStorage.setItem('accessToken', data.accessToken);
-              window.dispatchEvent(new Event(userLoginEvent));
-              toast.success("Password successfully reset!");
-              navigate("/profile");
+            }            if (data.status === 'success' && data.accessToken) {
+              // Store the token and validate it's a proper JWT before proceeding
+              try {
+                // Simple check if token is properly formatted (has 3 parts separated by dots)
+                if (data.accessToken.split('.').length !== 3) {
+                  throw new Error('Invalid token format');
+                }
+                
+                localStorage.setItem('accessToken', data.accessToken);
+                window.dispatchEvent(new Event(userLoginEvent));
+                toast.success("Password successfully reset!");
+                setTimeout(() => {
+                  navigate("/profile");
+                }, 3000);
+              } catch (tokenError) {
+                console.error('Token validation error:', tokenError);
+                setStatus('Error: Received invalid authentication token');
+              }
             } else {
               setStatus('Error: Invalid server response');
             }

@@ -1,12 +1,37 @@
-import {
-  createAccessToken,
-  createRefreshToken,
-} from "../utils/createTokens.js";
 import User from "../models/userModel.js";
+import jwt from "jsonwebtoken";
 
-export const handleTokens = async (server, userId, reply, options = {}) => {
-  const accessToken = createAccessToken(server, userId);
-  const refreshToken = createRefreshToken(server, userId);
+export const createAccessToken = (userId) => {
+  return jwt.sign(
+    {
+      id: userId,
+      scope: "access_token",
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: process.env.JWT_ACCESS_EXPIRES_IN,
+      subject: userId.toString(),
+    },
+  );
+};
+
+export const createRefreshToken = (userId) => {
+  return jwt.sign(
+    {
+      id: userId,
+      scope: "refresh_token",
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: process.env.JWT_REFRESH_EXPIRES_IN,
+      subject: userId.toString(),
+    },
+  );
+};
+
+export const handleTokens = async (userId, reply, options = {}) => {
+  const accessToken = createAccessToken(userId);
+  const refreshToken = createRefreshToken(userId);
 
   await User.findByIdAndUpdate(
     userId,
@@ -19,6 +44,7 @@ export const handleTokens = async (server, userId, reply, options = {}) => {
     secure: process.env.NODE_ENV === "production",
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days (croissants)
     path: "/",
+    sameSite: "lax",
   };
   const cookieOptions = { ...defaultOptions, ...options };
 
@@ -38,28 +64,13 @@ export const clearRefreshTokenCookie = (reply, options = {}) => {
   reply.clearCookie("refreshToken", cookieOptions);
 };
 
-// export const verifyRefreshToken = (server, refreshToken) => {
-//   if (!refreshToken) {
-//     throw new Error('Refresh token not found');
-//   }
-//   //'Refresh token not found' - > norm?
-
-//   const decoded = server.jwt.verify(refreshToken);
-
-//   if (decoded.scope !== 'refresh_token') {
-//     throw new Error('Invalid token type');
-//   }
-
-//   return decoded;
-// };
-
-export const verifyJwtToken = (server, token, expectedScope) => {
+export const verifyJwtToken = (token, expectedScope) => {
   if (!token) {
     throw new Error("Token not found");
   }
-  //maybe concrete access or refresh?
 
-  const decoded = server.jwt.verify(token);
+  const secret = process.env.JWT_SECRET;
+  const decoded = jwt.verify(token, secret);
 
   if (decoded.scope !== expectedScope) {
     throw new Error(`Invalid token type. Expected: ${expectedScope}`);

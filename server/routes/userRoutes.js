@@ -14,7 +14,6 @@ import {
   verifyJwtToken,
 } from "../utils/handleTokens.js";
 
-import { createAccessToken } from "../utils/createTokens.js";
 import { getProfile } from "../controllers/userController.js";
 import { verifyToken } from "../middleware/authMiddleWare.js";
 import User from "../models/userModel.js";
@@ -30,7 +29,7 @@ export default async function userRoutes(fastify) {
       passwordConfirm,
     });
 
-    const accessToken = await handleTokens(request.server, newUser._id, reply);
+    const accessToken = await handleTokens(newUser._id, reply);
 
     reply.code(201).send({
       status: "success",
@@ -60,8 +59,7 @@ export default async function userRoutes(fastify) {
         message: credErrorMsg,
       });
     }
-
-    const accessToken = await handleTokens(request.server, user._id, reply);
+    const accessToken = await handleTokens(user._id, reply);
 
     reply.code(200).send({ status: "success", accessToken });
   });
@@ -73,7 +71,7 @@ export default async function userRoutes(fastify) {
 
     if (refreshToken) {
       try {
-        const decoded = request.server.jwt.verify(refreshToken);
+        const decoded = verifyJwtToken(refreshToken, "refresh_token");
 
         if (decoded?.id) {
           await User.findByIdAndUpdate(decoded.id, { refreshToken: null });
@@ -113,28 +111,23 @@ export default async function userRoutes(fastify) {
   fastify.post("/refresh", async (request, reply) => {
     const refreshToken = request.cookies.refreshToken;
 
+    let decoded;
     try {
-      const decoded = verifyJwtToken(
-        request.server,
-        refreshToken,
-        "refresh_token",
-      );
-
-      const user = await User.findById(decoded.id).select("+refreshToken");
-      if (!user) {
-        return reply
-          .code(401)
-          .send({ status: "error", message: "User not found" });
-      }
-
-      // maybe update refresh too?
-      const accessToken = createAccessToken(request.server, user._id);
-
-      reply.code(200).send({ status: "success", accessToken });
+      decoded = verifyJwtToken(refreshToken, "refresh_token");
     } catch (err) {
       return reply
         .code(401)
         .send({ status: "error", message: "Invalid or expired token" });
     }
+
+    const user = await User.findById(decoded.id).select("+refreshToken");
+    if (!user) {
+      return reply
+        .code(401)
+        .send({ status: "error", message: "User not found" });
+    }
+
+    const accessToken = await handleTokens(user._id, reply);
+    reply.code(200).send({ status: "success", accessToken });
   });
 }

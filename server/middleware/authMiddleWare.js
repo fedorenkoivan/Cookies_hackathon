@@ -15,7 +15,7 @@ export const verifyToken = async (request, reply) => {
       });
     }
 
-    const decoded = verifyJwtToken(request.server, accessToken, "access_token");
+    const decoded = verifyJwtToken(accessToken, "access_token");
     request.user = { id: decoded.id };
 
     return;

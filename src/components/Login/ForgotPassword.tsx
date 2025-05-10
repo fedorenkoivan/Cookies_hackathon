@@ -47,10 +47,7 @@ const ForgotPassword = () => {
             
             toast.success("Password reset link sent to your email!");
             resetForm();
-            
-            setTimeout(() => {
-              navigate("/log-in");
-            }, 3000);
+            navigate("/log-in");
             
           } catch (error) {
             console.error('Error during password reset request:', error);

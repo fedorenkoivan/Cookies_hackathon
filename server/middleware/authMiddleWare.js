@@ -18,10 +18,7 @@ export const verifyToken = async (request, reply) => {
 
     const decoded = verifyJwtToken(accessToken, "access_token");
     
-    // Validate ID format before setting it on request object
-    // This prevents "Invalid ID format" errors in MongoDB operations
     try {
-      // Check if ID is a valid MongoDB ObjectId
       if (!mongoose.Types.ObjectId.isValid(decoded.id)) {
         throw new Error('Invalid ID format in token');
       }

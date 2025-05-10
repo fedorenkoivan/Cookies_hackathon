@@ -115,12 +115,8 @@ export const resetPassword = async (request, reply) => {
     user.passwordResetExpires = undefined;    
     await user.save();
 
-    // Use proper MongoDB ObjectId without toString()
-    const userId = user._id;
-    
-    // Create tokens with userId
-    const accessToken = createAccessToken(userId);
-    const refreshToken = createRefreshToken(userId);
+    const accessToken = createAccessToken(user._id);
+    const refreshToken = createRefreshToken(user._id);
 
     user.refreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });

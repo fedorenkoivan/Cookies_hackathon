@@ -64,13 +64,21 @@ const ResetPassword = () => {
             if (!response.ok) {
               setStatus(data.message || `Error: ${response.statusText}`);
               return;
-            }
-
+            }            
             if (data.status === 'success' && data.accessToken) {
-              localStorage.setItem('accessToken', data.accessToken);
-              window.dispatchEvent(new Event(userLoginEvent));
-              toast.success("Password successfully reset!");
-              navigate("/profile");
+              try {
+                if (data.accessToken.split('.').length !== 3) {
+                  throw new Error('Invalid token format');
+                }
+                
+                localStorage.setItem('accessToken', data.accessToken);
+                window.dispatchEvent(new Event(userLoginEvent));
+                toast.success("Password successfully reset!");
+                navigate("/profile");
+              } catch (tokenError) {
+                console.error('Token validation error:', tokenError);
+                setStatus('Error: Received invalid authentication token');
+              }
             } else {
               setStatus('Error: Invalid server response');
             }

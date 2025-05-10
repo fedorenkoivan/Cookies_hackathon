@@ -1,6 +1,6 @@
 export function createError(statusCode, message) {
   const error = new Error(message);
-  error.statusCode = statusCode; // rewrite as subclass - http error
+  error.statusCode = statusCode; // rewrite as class - http error
   return error;
 }
 

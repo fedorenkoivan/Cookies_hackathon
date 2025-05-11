@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useQuestContext } from "@/contexts/QuestContext";
 import { Question } from "@/types/quest";
 import "./QuestionPage.scss";
+import logoImage from "@/assets/logo.jpg";
 
 const QuestionPage = () => {
   const { id, question_id } = useParams<{ id: string; question_id: string }>();
@@ -63,7 +64,7 @@ const QuestionPage = () => {
               </p>
               <div className="question__image">
                 <img
-                  src={question?.image || "src/assets/logo.jpg"}
+                  src={question?.image || logoImage}
                   alt="Question image"
                 />
               </div>

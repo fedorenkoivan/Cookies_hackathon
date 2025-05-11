@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import "./QuestPage.scss";
 import Comments from "./Comments";
 import { useQuestContext } from "@/contexts/QuestContext";
+import logoImage from "@/assets/logo.jpg";
 
 const QuestPage = () => {
   const { id } = useParams();
@@ -43,14 +44,18 @@ const QuestPage = () => {
           <p>Time limit: {quest.time}s</p>
         </div>
         <div className="image">
-          <img src={quest.image} />
+          <img
+            src={quest?.image || logoImage}
+          />
         </div>
       </section>
       <section className="quest__start">
         <button
           onClick={() => {
             if (quest.questions && quest.questions.length > 0) {
-              navigate(`/complete-quest/${quest._id}/${quest.questions[0]._id}`);
+              navigate(
+                `/complete-quest/${quest._id}/${quest.questions[0]._id}`
+              );
             } else {
               alert("This quest has no questions.");
             }
@@ -65,7 +70,7 @@ const QuestPage = () => {
         <p>Number of completions: 1234</p>
         <p>Comments: 123</p>
         <div>
-            <Comments />
+          <Comments />
         </div>
       </section>
     </div>

@@ -3,10 +3,10 @@ import { useState, useEffect } from "react";
 import { useQuestContext } from "@/contexts/QuestContext";
 import { Question } from "@/types/quest";
 import "./QuestionPage.scss";
+import logoImage from "@/assets/logo.jpg";
 
 const QuestionPage = () => {
   const { id, question_id } = useParams<{ id: string; question_id: string }>();
-  // const [questionNumber, setQuestionNumber] = useState<number>(0);
   const { quest, loading, error, fetchQuest } = useQuestContext();
   const [question, setQuestion] = useState<Question | null>(
     quest?.questions[0] || null
@@ -38,7 +38,6 @@ const QuestionPage = () => {
     console.log(currentQuestionIndex);
     if (currentQuestionIndex < quest.questions.length - 1) {
       const nextIndex = currentQuestionIndex + 1;
-      // setQuestionNumber(nextIndex);
       setQuestion(quest.questions[nextIndex]);
       navigate(`/complete-quest/${id}/${quest.questions[nextIndex]._id}`);
     } else {
@@ -64,7 +63,7 @@ const QuestionPage = () => {
               </p>
               <div className="question__image">
                 <img
-                  src={question?.image || "src/assets/logo.jpg"}
+                  src={question?.image || logoImage}
                   alt="Question image"
                 />
               </div>

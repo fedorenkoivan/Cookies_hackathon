@@ -3,11 +3,15 @@ import StarRatingAuto from "../Rating/StarRatingAuto";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import WelcomeMenu from "./WelcomeMenu";
-import Slider, { Quest, URL } from "./Slider";
+import Slider from "./Slider";
 import "swiper/swiper-bundle.css";
 import "./Home.scss";
 import { userAuthorizationEvent } from "@/utils/userData";
-import {CATEGORIES as TABS} from "@/constants/questConstants";
+import {
+  CATEGORIES as TABS,
+  QUESTS_URL as URL,
+} from "@/constants/questConstants";
+import { Quest } from "@/types/quest";
 
 const Home = () => {
   const [active, setActive] = useState("All");
@@ -76,7 +80,11 @@ const Home = () => {
         !!sessionStorage.getItem("isAuthorized")
       );
     };
-
+    /*
+    Array.prototype.asyncMap = () => {
+    
+    }
+    */
     handleAuthStatus();
 
     window.addEventListener(userAuthorizationEvent, handleAuthStatus);
@@ -141,7 +149,7 @@ const Home = () => {
         <hr className="quests__divider" />
         <div className="quests__card">
           {quests.map((quest: Quest) => (
-            <div className="quests__card-container" key={quest.id}>
+            <div className="quests__card-container" key={quest._id}>
               {quest.image ? (
                 <div className="quests__card-image">
                   <img src={quest.image} />
@@ -181,7 +189,12 @@ const Home = () => {
                       <p>{quest.time}s</p>
                     </div>
                   )}
-                  <button className="button">Start quest</button>
+                  <button
+                    className="button"
+                    onClick={() => navigate(`/preview-quest/${quest._id}`)}
+                  >
+                    Start quest
+                  </button>
                 </div>
               </div>
             </div>

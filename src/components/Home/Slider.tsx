@@ -1,23 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaUser, FaClock } from "react-icons/fa";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
 import StarRatingAuto from "../Rating/StarRatingAuto";
+import { QUESTS_URL as URL } from "@/constants/questConstants"
+import { Quest } from "@/types/quest";
 import "./Slider.scss";
-
-export const URL = "http://localhost:5000/quests";
-
-export interface Quest {
-  author: string;
-  id: number;
-  title: string;
-  description: string;
-  category: string;
-  time: number;
-  image: string;
-  rating: number;
-  reviews: number;
-}
 
 const getToday = () => {
   const today = new Date();
@@ -27,6 +16,8 @@ const getToday = () => {
 
 const Slider = () => {
   const [bestQuests, setBestQuests] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -46,7 +37,7 @@ const Slider = () => {
     <div className="quests__slider">
       <Swiper spaceBetween={20} slidesPerView={1} loop={true}>
         {bestQuests.map((quest: Quest) => (
-          <SwiperSlide key={quest.id} className="quests__slider-slide">
+          <SwiperSlide key={quest._id} className="quests__slider-slide">
             <div className="quests__slider-wrapper">
               <div className="image-container">
                 {quest.image ? (
@@ -79,7 +70,7 @@ const Slider = () => {
                   <p className="reviews">({quest.reviews})</p>
                 </div>
                 <div className="start">
-                  <button className="button">
+                  <button className="button" onClick={() => navigate(`/preview-quest/${quest._id}`)}>
                     <p>Start quest</p>
                   </button>
                 </div>

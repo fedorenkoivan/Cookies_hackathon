@@ -11,6 +11,7 @@ import {
   userLogoutEvent,
   userAuthorizationEvent,
 } from "@/utils/userData";
+import profileImage from "@/assets/img1.png";
 
 interface UserData {
   name: string;
@@ -155,7 +156,7 @@ const Navbar = () => {
               <>
                 <Link to="/profile" className="navbar__profile">
                   <img
-                    src="src/assets/img1.png"
+                    src={profileImage}
                     alt="Profile"
                     className="profile-photo-circle"
                   />
@@ -173,7 +174,7 @@ const Navbar = () => {
               <>
                 <Link to="/log-in" className="navbar__profile">
                   <img
-                    src="src/assets/img1.png"
+                    src={profileImage}
                     alt="Profile"
                     className="profile-photo-circle"
                   />

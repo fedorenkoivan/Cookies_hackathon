@@ -8,9 +8,11 @@ import logoImage from "@/assets/logo.jpg";
 const QuestionPage = () => {
   const { id, question_id } = useParams<{ id: string; question_id: string }>();
   const { quest, loading, error, fetchQuest } = useQuestContext();
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [question, setQuestion] = useState<Question | null>(
     quest?.questions[0] || null
   );
+  const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
 
   useEffect(() => {
     if (id) {
@@ -26,8 +28,8 @@ const QuestionPage = () => {
       return;
     }
 
-    const currentQuestionIndex = quest.questions.findIndex(
-      (question) => question._id === question_id
+    setCurrentQuestionIndex(
+      quest.questions.findIndex((question) => question._id === question_id)
     );
 
     if (currentQuestionIndex === -1) {
@@ -36,15 +38,27 @@ const QuestionPage = () => {
     }
 
     console.log(currentQuestionIndex);
+    setSelectedAnswers([]);
+
     if (currentQuestionIndex < quest.questions.length - 1) {
       const nextIndex = currentQuestionIndex + 1;
+      setCurrentQuestionIndex(nextIndex);
       setQuestion(quest.questions[nextIndex]);
       navigate(`/complete-quest/${id}/${quest.questions[nextIndex]._id}`);
     } else {
-      navigate(`/preview-quest/${id}`);
+
+      navigate("/rating-form");
       console.log("This is the last question");
     }
   };
+
+const handleCheckboxChange = (value: string) => {
+  setSelectedAnswers((prev) =>
+    prev.includes(value)
+      ? prev.filter((v) => v !== value)
+      : [...prev, value]
+  );
+};
 
   return (
     <>
@@ -63,15 +77,19 @@ const QuestionPage = () => {
                 {question?.points} {question?.points === 1 ? "point" : "points"}
               </p>
               <div className="question__image">
-                <img
-                  src={question?.image || logoImage}
-                  alt="Question image"
-                />
+                <img src={question?.image || logoImage} alt="Question image" />
               </div>
               <div className="question__answers">
                 {question?.answers.map((answer) => (
-                  <label className="answer">
-                    <input type="radio" name="answer" value={answer.value} />
+                  <label className="answer" key={answer.id}>
+                    <input
+                      type="checkbox"
+                      name="answer"
+                      value={answer.id}
+                      checked={selectedAnswers.includes(answer.id.toString())}
+                      onChange={() => handleCheckboxChange(answer.id.toString())}
+                    />
+                    <span className="custom-checkbox"></span>
                     {answer.value}
                   </label>
                 ))}
@@ -82,7 +100,9 @@ const QuestionPage = () => {
                 onClick={handleNextQuestion}
                 disabled={loading || !quest.questions}
               >
-                Next
+                {currentQuestionIndex === quest.questions.length - 1
+                  ? "Finish"
+                  : "Next"}
               </button>
             </div>
           </div>

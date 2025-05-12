@@ -83,10 +83,6 @@ const Home = () => {
   useEffect(() => {
     const handleAuthStatus = () => {
       setIsAuthorized(!!sessionStorage.getItem("isAuthorized"));
-      console.log(
-        "isAuthorized useState",
-        !!sessionStorage.getItem("isAuthorized")
-      );
     };
     handleAuthStatus();
 

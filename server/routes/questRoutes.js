@@ -5,6 +5,8 @@ import {
   checkSort,
 } from "../utils/getQuestsUtils.js";
 import { verifyToken } from "../middleware/authMiddleWare.js";
+import { asyncMap } from "../utils/asyncMap.js";
+import { compressImage } from "../utils/compressImage.js";
 
 const getQuests = async (query) => {
   const limitValue = checkLimit(query.limit);
@@ -15,7 +17,11 @@ const getQuests = async (query) => {
 };
 
 const createQuest = async (body) => {
-  console.log(`quest body ${body}`);
+  console.log(`quest body: ${body}`);
+  await asyncMap(body.questions, async (question) => {
+    question.image = await compressImage(question.image);
+  });
+  body.image = await compressImage(body.image);
   const newQuest = await questModel.create(body);
   console.log(`quest created ${newQuest}`);
   return newQuest;

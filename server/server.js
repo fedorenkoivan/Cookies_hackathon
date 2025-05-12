@@ -16,10 +16,12 @@ await mongoose
 
 const fastify = Fastify({
   logger: true,
+  bodyLimit: 10 * 1024 * 1024
 });
 const PORT = 5000;
 
 fastify.setErrorHandler((error, request, reply) => {
+  console.error("Error handler caught:", error);
   // викликати хттп, errorUtils must be class
   if (error.name === 'DocumentNotFoundError' || error.message === 'User not found') {
     return reply.code(404).send({

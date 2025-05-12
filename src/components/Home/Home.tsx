@@ -17,7 +17,8 @@ const Home = () => {
   const [active, setActive] = useState("All");
   const [searchText, setSearchText] = useState("");
   const [inputValue, setInputValue] = useState("");
-  const [quests, setQuests] = useState([]);
+  const [quests, setQuests] = useState<Quest[]>([]);
+  const [allQuests, setAllQuests] = useState([]);
   const [isAuthorized, setIsAuthorized] = useState(false);
 
   const handleTabClick = (tab: string) => {
@@ -55,22 +56,29 @@ const Home = () => {
   useEffect(() => {
     (async () => {
       try {
-        let filterQuery = `?category=${active}`;
-        if (active === "All") filterQuery = "?";
-        let searchQuery = "";
-        const search = searchText.toLowerCase().trim();
-        if (search !== "") {
-          const safeSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-          searchQuery += `&title.re=^${safeSearch}`;
-        }
-        const res = await fetch(URL + `${filterQuery}${searchQuery}`);
+        const res = await fetch(URL);
         const data = await res.json();
-        setQuests(data.data);
+        setAllQuests(data.data);
       } catch (err) {
         console.log(err);
+        setAllQuests([]);
       }
     })();
-  }, [active, searchText]);
+  }, []);
+
+  useEffect(() => {
+    if (allQuests) {
+      const filteredQuests = allQuests.filter((quest: Quest) => {
+        const categoryMatch = active === "All" || quest.category === active;
+        const searchMatch =
+          !searchText ||
+          quest.title.toLowerCase().startsWith(searchText.toLowerCase());
+
+        return categoryMatch && searchMatch;
+      });
+      setQuests(filteredQuests);
+    }
+  }, [active, searchText, allQuests]);
 
   useEffect(() => {
     const handleAuthStatus = () => {
@@ -80,11 +88,6 @@ const Home = () => {
         !!sessionStorage.getItem("isAuthorized")
       );
     };
-    /*
-    Array.prototype.asyncMap = () => {
-    
-    }
-    */
     handleAuthStatus();
 
     window.addEventListener(userAuthorizationEvent, handleAuthStatus);

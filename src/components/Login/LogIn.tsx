@@ -87,7 +87,7 @@ const LogIn = () => {
                 endIcon={<SendIcon />}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Sending...' : 'Send'}
+                {isSubmitting ? 'Logging In...' : 'Log In'}
               </Button>
             </div>
             <a className="account"

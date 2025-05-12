@@ -113,7 +113,7 @@ const ResetPassword = () => {
                 endIcon={<SendIcon />}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Updating...' : 'Reset Password'}
+                {isSubmitting ? 'Reseting password...' : 'Reset Password'}
               </Button>
             </div>
           </Form>

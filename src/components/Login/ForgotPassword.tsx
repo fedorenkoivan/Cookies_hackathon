@@ -80,7 +80,7 @@ const ForgotPassword = () => {
                 endIcon={<SendIcon />}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Sending...' : 'Send Reset Link'}
+                {isSubmitting ? 'Sending Reset Link...' : 'Send Reset Link'}
               </Button>
             </div>
             <div className="links">

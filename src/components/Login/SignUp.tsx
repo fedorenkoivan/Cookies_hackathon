@@ -97,7 +97,7 @@ const SignUp = () => {
                 endIcon={<SendIcon />}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Sending...' : 'Send'}
+                {isSubmitting ? 'Signing Up...' : 'Sign Up'}
               </Button>
             </div>
             <a className="account"

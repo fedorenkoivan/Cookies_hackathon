@@ -1,22 +1,15 @@
-import {
-  validateLoginInput,
-  validateCredentails,
-} from "../utils/authValidation.js";
+import { 
+  validateLoginInput, validateCredentails,
+  sendEmail,
+  createRefreshToken,
+  handleTokens, clearRefreshTokenCookie, verifyJwtToken,
+} from "../utils/authUtils.js";
 
-import {
-  handleTokens,
-  clearRefreshTokenCookie,
-  verifyJwtToken,
-} from "../utils/handleTokens.js";
-
-import { createRefreshToken } from "../utils/handleTokens.js";
-
-import { sendEmail } from "../utils/email.js";
 import argon2 from "argon2";
 
 import { getProfile } from "../controllers/userController.js";
 import { verifyToken } from "../middleware/authMiddleWare.js";
-import User from "../models/userModel.js";
+import { User } from "../models/userModel.js";
 
 export default async function userRoutes(fastify) {
   fastify.post("/signup", async (request, reply) => {

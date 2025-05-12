@@ -1,4 +1,4 @@
-import { verifyJwtToken } from "../utils/handleTokens.js";
+import { verifyJwtToken } from "../utils/authUtils.js";
 import mongoose from "mongoose";
 
 export const verifyToken = async (request, reply) => {

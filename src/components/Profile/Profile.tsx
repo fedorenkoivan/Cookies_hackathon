@@ -32,7 +32,6 @@ const fetchUserProfile = async () => {
       return;
     }
 
-    console.log('Using token:', accessToken); // Add logging
 
     const response = await fetch('http://localhost:5000/users/profile', {
       headers: {
@@ -40,7 +39,7 @@ const fetchUserProfile = async () => {
       },
     });
 
-    const data = await response.json();    console.log('Profile response:', data); 
+    const data = await response.json();
     
     if (data.status === 'success') {
       setUserData(data.data.user);

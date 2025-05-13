@@ -28,7 +28,6 @@ const QuestionsForm: React.FC<QuestionProps> = ({ questionNumber, onDelete, onCh
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const newImage = await convertImage(e);
     setImage(newImage);
-    console.log("Image changed:", newImage);
   };
 
   const onEdit = () => {

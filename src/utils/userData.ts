@@ -30,7 +30,6 @@ export const setAuthStatus = (status: boolean) => {
     sessionStorage.removeItem("isAuthorized");
     sessionStorage.removeItem("userData");
   }
-  console.log("isAuthorized event", status);
 
   window.dispatchEvent(new Event(userAuthorizationEvent));
 };

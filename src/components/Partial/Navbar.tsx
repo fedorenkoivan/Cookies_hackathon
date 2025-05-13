@@ -67,10 +67,6 @@ const Navbar = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("User data:", userData);
-  }, [userData]);
-
   // useEffect(() => {
   //   const accessToken = localStorage.getItem('accessToken');
   //   if (accessToken && !userData) {

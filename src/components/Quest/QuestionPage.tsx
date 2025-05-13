@@ -37,7 +37,6 @@ const QuestionPage = () => {
       return;
     }
 
-    console.log(currentQuestionIndex);
     setSelectedAnswers([]);
 
     if (currentQuestionIndex < quest.questions.length - 1) {
@@ -46,9 +45,7 @@ const QuestionPage = () => {
       setQuestion(quest.questions[nextIndex]);
       navigate(`/complete-quest/${id}/${quest.questions[nextIndex]._id}`);
     } else {
-
       navigate("/rating-form");
-      console.log("This is the last question");
     }
   };
 

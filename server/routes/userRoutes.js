@@ -82,13 +82,10 @@ export default async function userRoutes(fastify) {
     "/profile",
     {
       preHandler: async (request, reply) => {
-        console.log("Profile route hit before middleware");
         await verifyToken(request, reply);
-        console.log("Middleware passed successfully");
       },
     },
     async (request, reply) => {
-      console.log("Profile handler executing");
       return getProfile(request, reply);
     },
   );

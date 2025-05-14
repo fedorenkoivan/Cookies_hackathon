@@ -25,7 +25,7 @@ const questSchema = new mongoose.Schema({
   questions: {
     type: [
       {
-        id: {
+        order: {
           type: Number,
         },
         value: {
@@ -43,7 +43,7 @@ const questSchema = new mongoose.Schema({
         answers: {
           type: [
             {
-              id: { type: Number, },
+              order: { type: Number, },
               value: { type: String, required: true },
               isCorrect: Boolean,
             },

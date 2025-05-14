@@ -78,13 +78,13 @@ const handleCheckboxChange = (value: string) => {
               </div>
               <div className="question__answers">
                 {question?.answers.map((answer) => (
-                  <label className="answer" key={answer.id}>
+                  <label className="answer" key={answer.order}>
                     <input
                       type="checkbox"
                       name="answer"
-                      value={answer.id}
-                      checked={selectedAnswers.includes(answer.id.toString())}
-                      onChange={() => handleCheckboxChange(answer.id.toString())}
+                      value={answer.order}
+                      checked={selectedAnswers.includes(answer.order.toString())}
+                      onChange={() => handleCheckboxChange(answer.order.toString())}
                     />
                     <span className="custom-checkbox"></span>
                     {answer.value}

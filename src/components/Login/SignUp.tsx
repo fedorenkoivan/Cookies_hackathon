@@ -51,8 +51,7 @@ const SignUp = () => {
               body: JSON.stringify({
                 name: values.username,
                 email: values.email,
-                password: values.password,
-                passwordConfirm: values.confirmPassword
+                password: values.password
               }),
             });
 

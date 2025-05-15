@@ -22,15 +22,6 @@ const userSchema = new mongoose.Schema({
         minlength: 8,
         select: false
     },
-    passwordConfirm: {
-        type: String,
-        required: true,
-        validate: {
-            validator: function (el) {
-                return el === this.password;
-            }
-        }
-    },
     refreshToken: {
         type: String,
         select: false,

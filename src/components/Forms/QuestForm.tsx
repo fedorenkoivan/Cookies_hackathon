@@ -16,7 +16,7 @@ const QuestForm = () => {
   const [category, setCategory] = useState<string>("");
   const [time, setTime] = useState<number>(-1);
   const [showTimeControls, setShowTimeControls] = useState<boolean>(false);
-  const [questions, setQuestions] = useState<Question[]>([{ id: 0, value: "", image: "", points: 1 ,answers: [{ id: 0, value: "", isCorrect: false }] }]);
+  const [questions, setQuestions] = useState<Question[]>([{ order: 0, value: "", image: "", points: 1 ,answers: [{ order: 0, value: "", isCorrect: false }] }]);
   const [totalPoints, setTotalPoints] = useState<number>(1);
 
   const navigate = useNavigate();
@@ -62,7 +62,7 @@ const QuestForm = () => {
   };
 
   useEffect(() => {
-    setQuestions((prev) => prev.map((q, index) => ({ ...q, id: index })));
+    setQuestions((prev) => prev.map((q, index) => ({ ...q, order: index })));
   }, [questions.length]);
 
   const addQuestion = () => {
@@ -70,35 +70,35 @@ const QuestForm = () => {
     setQuestions((prev) => [
       ...prev,
       {
-        id: prev.length,
+        order: prev.length,
         value: "",
         image: "",
         points: 1,
-        answers: [{ id: 0, value: "", isCorrect: false }],
+        answers: [{ order: 0, value: "", isCorrect: false }],
       },
     ]);
   };
 
-  const removeQuestion = (id: number) => {
+  const removeQuestion = (order: number) => {
     if (questions.length <= 1) return; 
     setQuestions((prev) => {
-      const filtered = prev.filter((q) => q.id !== id);
+      const filtered = prev.filter((q) => q.order !== order);
       return filtered.map((q, index) => ({
         ...q,
-        id: index,
+        order: index,
       }));
     });
   };
 
   const updateQuestion = (
-    id: number,
+    order: number,
     value: string,
     image: string,
     points: number,
     answers: Answer[]
   ) => {
     setQuestions((prev) =>
-      prev.map((q) => (q.id === id ? { ...q, value, image, points, answers } : q))
+      prev.map((q) => (q.order === order ? { ...q, value, image, points, answers } : q))
     );
     setTotalPoints(() => {
       const newPoints = questions.reduce((acc, q) => acc + q.points, 0);
@@ -199,10 +199,10 @@ const QuestForm = () => {
           <div className="header-info"><h3>Questions</h3><span>(Total {totalPoints} points)</span></div>
           {questions.map((question) => (
             <QuestionForm
-              key={question.id}
-              questionNumber={question.id + 1}
-              onDelete={() => removeQuestion(question.id)}
-              onChange={(q, image, points, a) => updateQuestion(question.id, q, image, points, a)}
+              key={question.order}
+              questionNumber={question.order + 1}
+              onDelete={() => removeQuestion(question.order)}
+              onChange={(q, image, points, a) => updateQuestion(question.order, q, image, points, a)}
               updateValue={question.value}
               updateImage={question.image}
               updatePoints={question.points}

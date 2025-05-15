@@ -1,21 +1,22 @@
-export interface Answer {
-  id: number;
+export type Answer = {
+  order: number;
   value: string;
   isCorrect: boolean;
-}
+};
 
-export interface Question {
-  id: number;
+export type Question = {
+  order: number;
   value: string;
   image: string;
   points: number;
   answers: Answer[];
-}
-export interface ExtendedQuestion extends Question {
+};
+
+export type ExtendedQuestion = Question & {
   _id: string;
 }
 
-export interface Quest {
+export type Quest = {
   author: string;
   _id: string;
   title: string;
@@ -26,5 +27,4 @@ export interface Quest {
   rating: number;
   reviews: number;
   questions: ExtendedQuestion[];
-}
-
+};

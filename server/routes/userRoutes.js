@@ -13,13 +13,13 @@ import { User } from "../models/userModel.js";
 
 export default async function userRoutes(fastify) {
   fastify.post("/signup", async (request, reply) => {
-    const { name, email, password, passwordConfirm } = request.body;
+    const { name, email, password } = request.body;
+    console.log(request.body);
 
     const newUser = await User.create({
       name,
       email,
-      password,
-      passwordConfirm,
+      password
     });
 
     const accessToken = await handleTokens(newUser._id, reply);

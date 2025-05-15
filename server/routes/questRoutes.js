@@ -5,14 +5,15 @@ import {
   checkSort,
 } from "../utils/getQuestsUtils.js";
 import { verifyToken } from "../middleware/authMiddleWare.js";
+import { log } from "../utils/logger.js";
 
-const getQuests = async (query) => {
+const getQuests = log({ category: "SYSTEM", funcName: "getQuests" })(async (query) => {
   const limitValue = checkLimit(query.limit);
   const sort = checkSort(query.sort);
   const filters = checkFilters(query);
   const quests = await questModel.find(filters).sort(sort).limit(limitValue);
   return quests;
-};
+});
 
 const createQuest = async (body) => {
   console.log(`quest body ${body}`);

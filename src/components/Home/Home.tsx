@@ -1,4 +1,11 @@
-import { FaPlus, FaSearch, FaTimes, FaUser, FaClock } from "react-icons/fa";
+import {
+  FaPlus,
+  FaSearch,
+  FaTimes,
+  FaUser,
+  FaClock,
+  FaBookmark,
+} from "react-icons/fa";
 import StarRatingAuto from "../Rating/StarRatingAuto";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +27,9 @@ const Home = () => {
   const [quests, setQuests] = useState<Quest[]>([]);
   const [allQuests, setAllQuests] = useState([]);
   const [isAuthorized, setIsAuthorized] = useState(false);
+  const [savedQuests, setSavedQuests] = useState<string[]>(() => {
+    return JSON.parse(localStorage.getItem("savedQuests") || "[]");
+  });
 
   const handleTabClick = (tab: string) => {
     setActive(tab);
@@ -45,6 +55,28 @@ const Home = () => {
     } else {
       navigate("/quest-form");
     }
+  };
+
+  useEffect(() => {
+    const handleSavedQuestsChanged = () => {
+      setSavedQuests(JSON.parse(localStorage.getItem("savedQuests") || "[]"));
+    };
+    window.addEventListener("savedQuestsChanged", handleSavedQuestsChanged);
+    return () => {
+      window.removeEventListener("savedQuestsChanged", handleSavedQuestsChanged);
+    };
+  }, []);
+
+  const handleBookmarkClick = (questId: string) => {
+    let updated;
+    if (!savedQuests.includes(questId)) {
+      updated = [...savedQuests, questId];
+    } else {
+      updated = savedQuests.filter((id) => id !== questId);
+    }
+    setSavedQuests(updated);
+    localStorage.setItem("savedQuests", JSON.stringify(updated));
+    window.dispatchEvent(new Event("savedQuestsChanged"));
   };
 
   const navigate = useNavigate();
@@ -149,15 +181,17 @@ const Home = () => {
         <div className="quests__card">
           {quests.map((quest: Quest) => (
             <div className="quests__card-container" key={quest._id}>
-              {quest.image ? (
-                <div className="quests__card-image">
-                  <img src={quest.image} />
+              <div className="quests__card-image">
+                <img src={quest.image || "src/assets/logo.jpg"} />
+                <div className="bookmark">
+                  <FaBookmark
+                    className={`icon${
+                      savedQuests.includes(quest._id) ? "-active" : ""
+                    }`}
+                    onClick={() => handleBookmarkClick(quest._id)}
+                  />
                 </div>
-              ) : (
-                <div className="quests__card-image">
-                  <img src="src/assets/logo.jpg" />
-                </div>
-              )}
+              </div>
               <div className="quests__card-info">
                 <div className="quests__card-title">
                   <p className="title">{truncateText(quest.title, 15)}</p>

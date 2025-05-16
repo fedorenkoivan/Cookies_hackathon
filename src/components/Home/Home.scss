@@ -118,11 +118,29 @@ $black: #000000;
 
       &-image {
         @include flex-center;
+        position: relative;
         img {
           height: 150px;
           width: 100%;
           object-fit: cover;
           border-radius: 15px 15px 0 0;
+        }
+        .bookmark {
+          position: absolute;
+          top: -2px;
+          right: 20px;
+          .icon {
+            width: 32px;
+            height: 32px;
+            color: white;
+            cursor: pointer;
+          }
+          .icon-active {
+            width: 32px;
+            height: 32px;
+            color: gold;
+            cursor: pointer;
+          }
         }
       }
 

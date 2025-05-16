@@ -4,7 +4,7 @@ import QuestionForm from "./QuestionForm";
 import { useRef } from "react";
 import { FaPlus, FaImage, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { CATEGORIES as QUEST_CATEGORIES, QUESTS_URL as URL } from "@/constants/questConstants";
+import { QUESTS_URL as URL } from "@/constants/questConstants";
 import { convertImage } from "@/utils/fileHandling";
 import { QuestFormProvider } from "@/contexts/QuestFormProvider";
 import { useQuestFormContext } from "@/contexts/QuestFormContext";
@@ -150,7 +150,6 @@ const QuestFormContent = () => {
           <h3>Category</h3>
           <Dropdown
             buttonText="Select a category"
-            content={QUEST_CATEGORIES}
             onSelect={(category) => {
               setCategory(category);
             }}

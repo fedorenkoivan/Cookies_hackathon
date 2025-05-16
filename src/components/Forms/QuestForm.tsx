@@ -1,7 +1,8 @@
 import "./QuestForm.scss";
 import { Dropdown } from "./Dropdown";
 import QuestionForm from "./QuestionForm";
-import { FaPlus } from "react-icons/fa";
+import { useRef } from "react";
+import { FaPlus, FaImage, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { CATEGORIES as QUEST_CATEGORIES, QUESTS_URL as URL } from "@/constants/questConstants";
 import { convertImage } from "@/utils/fileHandling";
@@ -42,6 +43,8 @@ const QuestFormContent = () => {
   } = useQuestFormContext();
 
   const navigate = useNavigate();
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleToggle = () => {
     const newState = !showTimeControls;
@@ -96,7 +99,30 @@ const QuestFormContent = () => {
 
         <div className="quest-form__group">
           <h3>Image</h3>
-          <input type="file" accept="image/*" onChange={handleImageUpload} />
+          <div className="image-upload-container">
+            <div className={`icon-container ${image ? "has-image" : ""}`}>
+              {image ? (
+                <>
+                  <FaTimes className="icon" onClick={() => setImage("")} />
+                  <div className="image-badge"></div>
+                </>
+              ) : (
+                <FaImage
+                  className="icon"
+                  onClick={() => fileInputRef.current?.click()}
+                />
+              )}
+            </div>
+            <span className="image-label">
+              {image ? "Image added" : "Add quest image"}
+            </span>
+            <input 
+              type="file" 
+              ref={fileInputRef}
+              accept="image/*" 
+              onChange={handleImageUpload}
+              style={{ display: "none" }} />
+          </div>
         </div>
 
         <div className="quest-form__group">

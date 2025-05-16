@@ -248,3 +248,52 @@ $secondary-color: #7b7b7b;
     }
   }
 }
+
+.image-upload-container {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  
+  .icon-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    .image-badge {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background-color: #4CAF50;
+      border-radius: 50%;
+      top: 0;
+      right: 0;
+      transform: translate(25%, -25%);
+    }
+  }
+  
+  .icon {
+    width: 40px;
+    height: 40px;
+    padding: 9px;
+    background-color: white;
+    border-radius: 20%;
+    color: $secondary-color;
+    cursor: pointer;
+
+    &:hover {
+      color: white;
+      background-color: $secondary-color;
+    }
+  }
+  
+  .image-label {
+    margin-left: 10px;
+    font-size: 14px;
+    color: $secondary-color;
+  }
+}
+
+.quest-form__group .image-upload-container .icon-container.has-image .icon {
+  background-color: $primary-color;
+}

@@ -14,14 +14,13 @@ const QuestionsForm: React.FC<QuestionProps> = ({
   questionNumber,
   questionOrder,
 }) => {
-
   const {
     removeQuestion,
     updateQuestionValue,
     updateQuestionImage,
     updateQuestionPoints,
     addAnswer,
-    findQuestion
+    findQuestion,
   } = useQuestFormContext();
 
   const question = findQuestion(questionOrder);
@@ -93,10 +92,7 @@ const QuestionsForm: React.FC<QuestionProps> = ({
                 placeholder="Points"
                 value={question.points}
                 onChange={(e) => {
-                  updateQuestionPoints(
-                    questionOrder,
-                    parseInt(e.target.value)
-                  );
+                  updateQuestionPoints(questionOrder, parseInt(e.target.value));
                 }}
               />
             </div>

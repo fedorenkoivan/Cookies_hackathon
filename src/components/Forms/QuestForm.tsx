@@ -17,14 +17,13 @@ const QuestForm = () => {
   );
 };
 
-
 const QuestFormContent = () => {
   const {
     //Question state
-    questions, 
-    totalPoints, 
+    questions,
+    totalPoints,
     addQuestion,
-    
+
     //useStates
     image,
     setImage,
@@ -39,7 +38,7 @@ const QuestFormContent = () => {
     showTimeControls,
     setShowTimeControls,
 
-    clearSavedData
+    clearSavedData,
   } = useQuestFormContext();
 
   const navigate = useNavigate();
@@ -116,12 +115,13 @@ const QuestFormContent = () => {
             <span className="image-label">
               {image ? "Image added" : "Add quest image"}
             </span>
-            <input 
-              type="file" 
+            <input
+              type="file"
               ref={fileInputRef}
-              accept="image/*" 
+              accept="image/*"
               onChange={handleImageUpload}
-              style={{ display: "none" }} />
+              style={{ display: "none" }}
+            />
           </div>
         </div>
 

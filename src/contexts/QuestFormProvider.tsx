@@ -3,13 +3,13 @@ import { Question, Answer } from "@/types/quest";
 import { QuestFormContext } from "./QuestFormContext";
 
 type SavedFormData = {
-	image: string;
-	title: string;
-	description: string;
-	category: string;
-	time: number;
-	showTimeControls: boolean;
-	questions: Question[];
+  image: string;
+  title: string;
+  description: string;
+  category: string;
+  time: number;
+  showTimeControls: boolean;
+  questions: Question[];
 };
 
 const STORAGE_KEY = "questFormData";
@@ -28,7 +28,7 @@ export const QuestFormProvider: React.FC<{ children: ReactNode }> = ({
     },
   ]);
   const [totalPoints, setTotalPoints] = useState<number>(1);
-  
+
   //Form useStates
   const [image, setImage] = useState<string>("");
   const [title, setTitle] = useState<string>("");
@@ -37,58 +37,67 @@ export const QuestFormProvider: React.FC<{ children: ReactNode }> = ({
   const [time, setTime] = useState<number>(-1);
   const [showTimeControls, setShowTimeControls] = useState<boolean>(false);
 
-	const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-	//Load QuestForm progress
-	useEffect(() => {
-		setIsLoading(true);
-		try {
-		const storedData = sessionStorage.getItem(STORAGE_KEY);
-		if (storedData) {
-			const parsedData: SavedFormData = JSON.parse(storedData);
-			setImage(parsedData.image);
-			setTitle(parsedData.title);
-			setDescription(parsedData.description);
-			setCategory(parsedData.category);
-			setTime(parsedData.time);
-			setShowTimeControls(parsedData.showTimeControls);
-			setQuestions(parsedData.questions);
-		}
-	} catch (error) {
-		console.error("Error loading QuestForm progress:", error);
-	} finally {
-		setIsLoading(false);		
-	}
-	}, []);
+  //Load QuestForm progress
+  useEffect(() => {
+    setIsLoading(true);
+    try {
+      const storedData = sessionStorage.getItem(STORAGE_KEY);
+      if (storedData) {
+        const parsedData: SavedFormData = JSON.parse(storedData);
+        setImage(parsedData.image);
+        setTitle(parsedData.title);
+        setDescription(parsedData.description);
+        setCategory(parsedData.category);
+        setTime(parsedData.time);
+        setShowTimeControls(parsedData.showTimeControls);
+        setQuestions(parsedData.questions);
+      }
+    } catch (error) {
+      console.error("Error loading QuestForm progress:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
-	//Save QuestForm progress
-	useEffect(() => {
-		if (isLoading) return;
-		try {
-			const data: SavedFormData = {
-				image,
-				title,
-				description,
-				category,
-				time,
-				showTimeControls,
-				questions,
-			};
+  //Save QuestForm progress
+  useEffect(() => {
+    if (isLoading) return;
+    try {
+      const data: SavedFormData = {
+        image,
+        title,
+        description,
+        category,
+        time,
+        showTimeControls,
+        questions,
+      };
 
-			sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-		} catch (error) {
-			console.error("Error saving QuestForm progress:", error);
-		}
-	}, [isLoading, image, title, description, category, time, showTimeControls, questions]);
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (error) {
+      console.error("Error saving QuestForm progress:", error);
+    }
+  }, [
+    isLoading,
+    image,
+    title,
+    description,
+    category,
+    time,
+    showTimeControls,
+    questions,
+  ]);
 
-	//Clear QuestForm progress
-	const clearSavedData = useCallback(() => {
-		try {
-			sessionStorage.removeItem(STORAGE_KEY);
-		} catch (error) {
-			console.error("Error clearing QuestForm progress:", error);
-		}
-	}, []);
+  //Clear QuestForm progress
+  const clearSavedData = useCallback(() => {
+    try {
+      sessionStorage.removeItem(STORAGE_KEY);
+    } catch (error) {
+      console.error("Error clearing QuestForm progress:", error);
+    }
+  }, []);
 
   useEffect(() => {
     setQuestions((prev) => prev.map((q, index) => ({ ...q, order: index })));
@@ -99,9 +108,12 @@ export const QuestFormProvider: React.FC<{ children: ReactNode }> = ({
     setTotalPoints(newPoints);
   }, [questions]);
 
-  const findQuestion = useCallback((questionOrder: number): Question | undefined => {
-    return questions.find((q) => q.order === questionOrder);
-  }, [questions]);
+  const findQuestion = useCallback(
+    (questionOrder: number): Question | undefined => {
+      return questions.find((q) => q.order === questionOrder);
+    },
+    [questions]
+  );
 
   //Question methods
   const addQuestion = useCallback(() => {
@@ -118,97 +130,123 @@ export const QuestFormProvider: React.FC<{ children: ReactNode }> = ({
     ]);
   }, [questions.length]);
 
-  const removeQuestion = useCallback((order: number) => {
-    if (questions.length <= 1) return;
-    setQuestions((prev) => {
-      const filtered = prev.filter((q) => q.order !== order);
-      return filtered.map((q, index) => ({
-        ...q,
-        order: index,
-      }));
-    });
-  }, [questions.length]);
+  const removeQuestion = useCallback(
+    (order: number) => {
+      if (questions.length <= 1) return;
+      setQuestions((prev) => {
+        const filtered = prev.filter((q) => q.order !== order);
+        return filtered.map((q, index) => ({ ...q, order: index }));
+      });
+    },
+    [questions.length]
+  );
 
-  const updateQuestion = useCallback((
-    order: number,
-    value: string,
-    image: string,
-    points: number,
-    answers: Answer[]
-  ) => {
-    setQuestions((prev) =>
-      prev.map((q) =>
-        q.order === order ? { ...q, value, image, points, answers } : q
-      )
-    );
-  }, []);
+  const updateQuestion = useCallback(
+    (
+      order: number,
+      value: string,
+      image: string,
+      points: number,
+      answers: Answer[]
+    ) => {
+      setQuestions((prev) =>
+        prev.map((q) =>
+          q.order === order ? { ...q, value, image, points, answers } : q
+        )
+      );
+    },
+    []
+  );
 
-  const updateQuestionValue = useCallback((questionOrder: number, value: string) => {
-    setQuestions((prev) =>
-      prev.map((q) => (q.order === questionOrder ? { ...q, value } : q))
-    );
-  }, []);
+  const updateQuestionValue = useCallback(
+    (questionOrder: number, value: string) => {
+      setQuestions((prev) =>
+        prev.map((q) => (q.order === questionOrder ? { ...q, value } : q))
+      );
+    },
+    []
+  );
 
-  const updateQuestionImage = useCallback((questionOrder: number, image: string) => {
-    setQuestions((prev) =>
-      prev.map((q) => (q.order === questionOrder ? { ...q, image } : q))
-    );
-  }, []);
+  const updateQuestionImage = useCallback(
+    (questionOrder: number, image: string) => {
+      setQuestions((prev) =>
+        prev.map((q) => (q.order === questionOrder ? { ...q, image } : q))
+      );
+    },
+    []
+  );
 
-  const updateQuestionPoints = useCallback((questionOrder: number, points: number) => {
-    const boundedPoints = Math.min(Math.max(0, points), 99);
-    setQuestions((prev) =>
-      prev.map((q) => (q.order === questionOrder ? { ...q, points: boundedPoints } : q))
-    );
-  }, []);
+  const updateQuestionPoints = useCallback(
+    (questionOrder: number, points: number) => {
+      const boundedPoints = Math.min(Math.max(0, points), 99);
+      setQuestions((prev) =>
+        prev.map((q) =>
+          q.order === questionOrder ? { ...q, points: boundedPoints } : q
+        )
+      );
+    },
+    []
+  );
 
   //Answer methods
-  const updateAnswer = useCallback((
-    questionOrder: number,
-    order: number,
-    value: string,
-    isCorrect: boolean
-  ) => {
-    setQuestions((prev) => 
-      prev.map((q) => {
-        if (q.order !== questionOrder) return q;
+  const updateAnswer = useCallback(
+    (
+      questionOrder: number,
+      order: number,
+      value: string,
+      isCorrect: boolean
+    ) => {
+      setQuestions((prev) =>
+        prev.map((q) => {
+          if (q.order !== questionOrder) return q;
 
-        const updatedAnswers = q.answers.map((a) =>
-          a.order === order ? { ...a, value, isCorrect } : a
-        );
-        
-        return { ...q, answers: updatedAnswers };
-      })
-    );
-  }, []);
+          const updatedAnswers = q.answers.map((a) =>
+            a.order === order ? { ...a, value, isCorrect } : a
+          );
+
+          return { ...q, answers: updatedAnswers };
+        })
+      );
+    },
+    []
+  );
 
   const addAnswer = useCallback((questionOrder: number) => {
-    setQuestions((prev) => 
+    setQuestions((prev) =>
       prev.map((q) => {
         if (q.order !== questionOrder) return q;
         if (q.answers.length >= 7) return q;
 
-        return { ...q, answers: [
-          ...q.answers,
-          { order: q.answers.length, value: "", isCorrect: false }
-        ]};
+        return {
+          ...q,
+					answers: [
+            ...q.answers,
+            { order: q.answers.length, value: "", isCorrect: false },
+          ],
+        };
       })
     );
   }, []);
 
-  const deleteAnswer = useCallback((questionOrder: number, answerOrder: number) => {
-    setQuestions((prev) =>
-      prev.map((q) => {
-        if (q.order !== questionOrder) return q;
-        if (q.answers.length <= 1) return q;
-        
-        const filtered = q.answers.filter((a) => a.order !== answerOrder);
-        const reorderedAnswers = filtered.map((ans, index) => ({ ...ans, order: index }));
-        
-        return { ...q, answers: reorderedAnswers };
-      })
-    );
-  }, []);
+  const deleteAnswer = useCallback(
+    (questionOrder: number, answerOrder: number) => {
+      setQuestions((prev) =>
+        prev.map((q) => {
+          if (q.order !== questionOrder) return q;
+          if (q.answers.length <= 1) return q;
+
+          const filtered = q.answers.filter((a) => a.order !== answerOrder);
+          const reorderedAnswers = filtered.map((ans, index) => ({
+            ...ans,
+            order: index,
+          }));
+
+          return { ...q, answers: reorderedAnswers };
+        })
+      );
+    },
+    []
+  );
 
   return (
     <QuestFormContext.Provider
@@ -225,12 +263,12 @@ export const QuestFormProvider: React.FC<{ children: ReactNode }> = ({
         addAnswer,
         deleteAnswer,
         findQuestion,
-        
+
         image,
         setImage,
         title,
         setTitle,
-        description, 
+        description,
         setDescription,
         category,
         setCategory,
@@ -239,7 +277,7 @@ export const QuestFormProvider: React.FC<{ children: ReactNode }> = ({
         showTimeControls,
         setShowTimeControls,
 
-				clearSavedData,
+        clearSavedData,
       }}
     >
       {children}

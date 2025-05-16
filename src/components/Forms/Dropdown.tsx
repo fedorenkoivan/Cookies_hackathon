@@ -1,19 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { FaChevronDown } from "react-icons/fa";
 import { FaChevronUp } from "react-icons/fa";
 import "./Dropdown.scss";
+import { CATEGORIES as QUEST_CATEGORIES } from "@/constants/questConstants";
+import { useQuestFormContext } from "@/contexts/QuestFormContext";
 
 interface DropdownProps {
   buttonText: string;
-  content: string[];
   onSelect: (el: string) => void;
 }
 
-export const Dropdown: React.FC<DropdownProps> = ({ buttonText, content, onSelect }) => {
+export const Dropdown: React.FC<DropdownProps> = ({ buttonText, onSelect }) => {
   const [open, setOpen] = useState<boolean>(false);
   const [selectedContent, setContent] = useState<string>(buttonText);
   const [isSelected, setSelected] = useState<boolean>(false);
+
+  const { category } = useQuestFormContext();
 
   const handleSelect = (el: string) => {
     setContent(el);
@@ -21,6 +24,16 @@ export const Dropdown: React.FC<DropdownProps> = ({ buttonText, content, onSelec
     setSelected(true);
     onSelect(el);
   };
+
+  useEffect(() => {
+    if (category) {
+      setContent(category);
+      setSelected(true);
+    } else {
+      setContent(buttonText);
+      setSelected(false);
+    }
+  }, [category, buttonText]);
 
   const handleToggle = () => {
     setOpen((prev) => !prev);
@@ -41,7 +54,7 @@ export const Dropdown: React.FC<DropdownProps> = ({ buttonText, content, onSelec
       </div>
       {open && (
         <div className="dropdown-content">
-          {content.map((el) => (
+          {QUEST_CATEGORIES.map((el) => (
             <div className="dropdown-element" onClick={() => handleSelect(el)}>
               {el}
             </div>

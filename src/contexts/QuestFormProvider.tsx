@@ -2,9 +2,22 @@ import { useEffect, useState, ReactNode, useCallback } from "react";
 import { Question, Answer } from "@/types/quest";
 import { QuestFormContext } from "./QuestFormContext";
 
+type SavedFormData = {
+	image: string;
+	title: string;
+	description: string;
+	category: string;
+	time: number;
+	showTimeControls: boolean;
+	questions: Question[];
+};
+
+const STORAGE_KEY = "questFormData";
+
 export const QuestFormProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  //Questions
   const [questions, setQuestions] = useState<Question[]>([
     {
       order: 0,
@@ -15,11 +28,71 @@ export const QuestFormProvider: React.FC<{ children: ReactNode }> = ({
     },
   ]);
   const [totalPoints, setTotalPoints] = useState<number>(1);
-	
+  
+  //Form useStates
+  const [image, setImage] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [category, setCategory] = useState<string>("");
+  const [time, setTime] = useState<number>(-1);
+  const [showTimeControls, setShowTimeControls] = useState<boolean>(false);
+
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+
+	//Load QuestForm progress
+	useEffect(() => {
+		setIsLoading(true);
+		try {
+		const storedData = sessionStorage.getItem(STORAGE_KEY);
+		if (storedData) {
+			const parsedData: SavedFormData = JSON.parse(storedData);
+			setImage(parsedData.image);
+			setTitle(parsedData.title);
+			setDescription(parsedData.description);
+			setCategory(parsedData.category);
+			setTime(parsedData.time);
+			setShowTimeControls(parsedData.showTimeControls);
+			setQuestions(parsedData.questions);
+		}
+	} catch (error) {
+		console.error("Error loading QuestForm progress:", error);
+	} finally {
+		setIsLoading(false);		
+	}
+	}, []);
+
+	//Save QuestForm progress
+	useEffect(() => {
+		if (isLoading) return;
+		try {
+			const data: SavedFormData = {
+				image,
+				title,
+				description,
+				category,
+				time,
+				showTimeControls,
+				questions,
+			};
+
+			sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+		} catch (error) {
+			console.error("Error saving QuestForm progress:", error);
+		}
+	}, [isLoading, image, title, description, category, time, showTimeControls, questions]);
+
+	//Clear QuestForm progress
+	const clearSavedData = useCallback(() => {
+		try {
+			sessionStorage.removeItem(STORAGE_KEY);
+		} catch (error) {
+			console.error("Error clearing QuestForm progress:", error);
+		}
+	}, []);
+
   useEffect(() => {
     setQuestions((prev) => prev.map((q, index) => ({ ...q, order: index })));
   }, [questions.length]);
-
 
   useEffect(() => {
     const newPoints = questions.reduce((acc, q) => acc + q.points, 0);
@@ -30,7 +103,7 @@ export const QuestFormProvider: React.FC<{ children: ReactNode }> = ({
     return questions.find((q) => q.order === questionOrder);
   }, [questions]);
 
-  // Question operations
+  //Question methods
   const addQuestion = useCallback(() => {
     if (questions.length >= 20) return;
     setQuestions((prev) => [
@@ -89,7 +162,7 @@ export const QuestFormProvider: React.FC<{ children: ReactNode }> = ({
     );
   }, []);
 
-  // Answer operations
+  //Answer methods
   const updateAnswer = useCallback((
     questionOrder: number,
     order: number,
@@ -152,6 +225,21 @@ export const QuestFormProvider: React.FC<{ children: ReactNode }> = ({
         addAnswer,
         deleteAnswer,
         findQuestion,
+        
+        image,
+        setImage,
+        title,
+        setTitle,
+        description, 
+        setDescription,
+        category,
+        setCategory,
+        time,
+        setTime,
+        showTimeControls,
+        setShowTimeControls,
+
+				clearSavedData,
       }}
     >
       {children}

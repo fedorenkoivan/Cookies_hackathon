@@ -1,13 +1,9 @@
-import { useState } from "react";
 import "./QuestForm.scss";
 import { Dropdown } from "./Dropdown";
 import QuestionForm from "./QuestionForm";
 import { FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import {
-  CATEGORIES as QUEST_CATEGORIES,
-  QUESTS_URL as URL,
-} from "@/constants/questConstants";
+import { CATEGORIES as QUEST_CATEGORIES, QUESTS_URL as URL } from "@/constants/questConstants";
 import { convertImage } from "@/utils/fileHandling";
 import { QuestFormProvider } from "@/contexts/QuestFormProvider";
 import { useQuestFormContext } from "@/contexts/QuestFormContext";
@@ -22,13 +18,28 @@ const QuestForm = () => {
 
 
 const QuestFormContent = () => {
-  const { questions, totalPoints, addQuestion } = useQuestFormContext();
-  const [image, setImage] = useState<string>("");
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [category, setCategory] = useState<string>("");
-  const [time, setTime] = useState<number>(-1);
-  const [showTimeControls, setShowTimeControls] = useState<boolean>(false);
+  const {
+    //Question state
+    questions, 
+    totalPoints, 
+    addQuestion,
+    
+    //useStates
+    image,
+    setImage,
+    title,
+    setTitle,
+    description,
+    setDescription,
+    category,
+    setCategory,
+    time,
+    setTime,
+    showTimeControls,
+    setShowTimeControls,
+
+    clearSavedData
+  } = useQuestFormContext();
 
   const navigate = useNavigate();
 
@@ -39,7 +50,7 @@ const QuestFormContent = () => {
     else setTime(30);
   };
 
-  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const convertedImage = await convertImage(e);
     setImage(convertedImage);
   };
@@ -71,6 +82,8 @@ const QuestFormContent = () => {
     } catch (err) {
       console.error("Error submitting the quest:", err);
     }
+
+    clearSavedData();
     navigate("/");
   };
 
@@ -83,7 +96,7 @@ const QuestFormContent = () => {
 
         <div className="quest-form__group">
           <h3>Image</h3>
-          <input type="file" accept="image/*" onChange={handleImageChange} />
+          <input type="file" accept="image/*" onChange={handleImageUpload} />
         </div>
 
         <div className="quest-form__group">

@@ -1,35 +1,36 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, Dispatch, SetStateAction } from "react";
 import { Question, Answer } from "@/types/quest";
 
 type QuestFormContextType = {
+  //Questions state and methods
   questions: Question[];
   totalPoints: number;
-  
-  // Question operations
   addQuestion: () => void;
   removeQuestion: (order: number) => void;
-  updateQuestion: (
-    order: number, 
-    value: string, 
-    image: string, 
-    points: number, 
-    answers: Answer[]
-  ) => void;
+  updateQuestion: (order: number, value: string, image: string, points: number, answers: Answer[]) => void;
   updateQuestionValue: (questionOrder: number, value: string) => void;
   updateQuestionImage: (questionOrder: number, image: string) => void;
   updateQuestionPoints: (questionOrder: number, points: number) => void;
-  
-  // Answer operations
-  updateAnswer: (
-    questionOrder: number,
-    order: number,
-    value: string,
-    isCorrect: boolean
-  ) => void;
+  updateAnswer: (questionOrder: number, order: number, value: string, isCorrect: boolean) => void;
   addAnswer: (questionOrder: number) => void;
   deleteAnswer: (questionOrder: number, answerOrder: number) => void;
-
   findQuestion: (questionOrder: number) => Question | undefined;
+
+  //Form useStates and methods
+  image: string;
+  setImage: Dispatch<SetStateAction<string>>;
+  title: string;
+  setTitle: Dispatch<SetStateAction<string>>;
+  description: string;
+  setDescription: Dispatch<SetStateAction<string>>;
+  category: string;
+  setCategory: Dispatch<SetStateAction<string>>;
+  time: number;
+  setTime: Dispatch<SetStateAction<number>>;
+  showTimeControls: boolean;
+  setShowTimeControls: Dispatch<SetStateAction<boolean>>;
+
+  clearSavedData: () => void;
 };
 
 export const QuestFormContext = createContext<QuestFormContextType | undefined>(undefined);

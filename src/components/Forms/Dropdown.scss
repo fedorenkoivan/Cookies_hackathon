@@ -14,13 +14,21 @@ $secondary-color: #7b7b7b;
   transition: 0.3s ease-in-out;
   cursor: pointer;
 
-  &:hover { box-shadow: 3px 6px 3.5px -4px rgba(85, 85, 85, 1); }
-  
-  .icon { margin-top: 4px; }
+  &:hover {
+    box-shadow: 3px 6px 3.5px -4px rgba(85, 85, 85, 1);
+  }
+
+  .icon {
+    margin-top: 4px;
+  }
 }
 
-.open { border-radius: 10px 10px 0px 0px; }
-.selected { color: black; }
+.open {
+  border-radius: 10px 10px 0px 0px;
+}
+.selected {
+  color: black;
+}
 
 .dropdown-content {
   width: 100%;

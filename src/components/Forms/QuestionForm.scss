@@ -10,9 +10,14 @@ $secondary-color: #7b7b7b;
     background-color: white;
     border-radius: 0px;
     box-shadow: 0px 6px 28px -90px rgba(85, 85, 85, 1);
-    
-    &:focus { box-shadow: 0px 7px 5px -60px rgba(77, 77, 77, 0.64); }
-    &:hover, &:active { box-shadow: 3px 6px 3.5px -40px rgba(85, 85, 85, 1); }
+
+    &:focus {
+      box-shadow: 0px 7px 5px -60px rgba(77, 77, 77, 0.64);
+    }
+    &:hover,
+    &:active {
+      box-shadow: 3px 6px 3.5px -40px rgba(85, 85, 85, 1);
+    }
   }
 
   .question-number {
@@ -68,14 +73,14 @@ $secondary-color: #7b7b7b;
   .icon-container {
     position: relative;
     display: flex;
-    justify-content: center;  
+    justify-content: center;
     align-items: center;
-    
+
     .image-badge {
       position: absolute;
       width: 8px;
       height: 8px;
-      background-color: #4CAF50;
+      background-color: #4caf50;
       border-radius: 50%;
       top: 0;
       right: 0;
@@ -93,7 +98,7 @@ $secondary-color: #7b7b7b;
       margin-left: 15px;
       font-size: 16px;
     }
-    
+
     input {
       width: 70px;
       height: 40px;
@@ -107,7 +112,9 @@ $secondary-color: #7b7b7b;
       font-size: 16px;
       font-weight: normal;
 
-      &:focus { box-shadow: 0px 7px 5px -6px rgba(77, 77, 77, 0.64); }
+      &:focus {
+        box-shadow: 0px 7px 5px -6px rgba(77, 77, 77, 0.64);
+      }
     }
   }
 }
@@ -143,7 +150,7 @@ $secondary-color: #7b7b7b;
     cursor: pointer;
     text-decoration: underline;
     color: $secondary-color;
-    
+
     .icon {
       background-color: $secondary-color;
       color: white;

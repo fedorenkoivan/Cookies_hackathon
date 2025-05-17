@@ -41,7 +41,7 @@ $secondary-color: #7b7b7b;
       font-size: 16px;
       text-transform: none;
     }
-    
+
     .question-header {
       min-height: 2px;
       border-bottom: 2px solid $secondary-color;
@@ -65,8 +65,9 @@ $secondary-color: #7b7b7b;
         text-transform: none;
       }
     }
-    
-    input, textarea {
+
+    input,
+    textarea {
       width: 100%;
       padding: 12px 15px;
       font-size: 16px;
@@ -84,8 +85,13 @@ $secondary-color: #7b7b7b;
         font-weight: normal;
       }
 
-      &:focus { box-shadow: 0px 7px 5px -6px rgba(77, 77, 77, 0.64); }
-      &:hover, &:active { box-shadow: 3px 6px 3.5px -4px rgba(85, 85, 85, 1); }
+      &:focus {
+        box-shadow: 0px 7px 5px -6px rgba(77, 77, 77, 0.64);
+      }
+      &:hover,
+      &:active {
+        box-shadow: 3px 6px 3.5px -4px rgba(85, 85, 85, 1);
+      }
     }
 
     textarea {
@@ -109,9 +115,18 @@ $secondary-color: #7b7b7b;
     flex-direction: column;
     gap: 5px;
 
-    h2 { font-weight: bold; font-size: 16px; }
-    p { font-size: 14px; opacity: 0.8; }
-    b { margin-left: 35px; font-size: 14px; }
+    h2 {
+      font-weight: bold;
+      font-size: 16px;
+    }
+    p {
+      font-size: 14px;
+      opacity: 0.8;
+    }
+    b {
+      margin-left: 35px;
+      font-size: 14px;
+    }
   }
 
   .controls {
@@ -134,7 +149,9 @@ $secondary-color: #7b7b7b;
       font-size: 16px;
       font-weight: bold;
 
-      &:focus { box-shadow: 0px 7px 5px -6px rgba(77, 77, 77, 0.64); }
+      &:focus {
+        box-shadow: 0px 7px 5px -6px rgba(77, 77, 77, 0.64);
+      }
     }
 
     button {
@@ -153,7 +170,9 @@ $secondary-color: #7b7b7b;
       justify-content: center;
       align-items: center;
 
-      &:hover { background: $secondary-color; }
+      &:hover {
+        background: $secondary-color;
+      }
     }
   }
 
@@ -180,13 +199,17 @@ $secondary-color: #7b7b7b;
       transform: translateY(-50%);
     }
 
-    &:hover { background-color: $secondary-color; }
+    &:hover {
+      background-color: $secondary-color;
+    }
 
     &.toggled {
       background-color: $secondary-color;
       border-color: $secondary-color;
 
-      .thumb { left: 25px; }
+      .thumb {
+        left: 25px;
+      }
     }
   }
 
@@ -221,7 +244,7 @@ $secondary-color: #7b7b7b;
       color: $secondary-color;
       text-decoration: underline;
       cursor: pointer;
-      
+
       .icon {
         background-color: $secondary-color;
         color: white;
@@ -253,25 +276,25 @@ $secondary-color: #7b7b7b;
   display: flex;
   align-items: center;
   margin-top: 10px;
-  
+
   .icon-container {
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    
+
     .image-badge {
       position: absolute;
       width: 8px;
       height: 8px;
-      background-color: #4CAF50;
+      background-color: #4caf50;
       border-radius: 50%;
       top: 0;
       right: 0;
       transform: translate(25%, -25%);
     }
   }
-  
+
   .icon {
     width: 40px;
     height: 40px;
@@ -286,7 +309,7 @@ $secondary-color: #7b7b7b;
       background-color: $secondary-color;
     }
   }
-  
+
   .image-label {
     margin-left: 10px;
     font-size: 14px;

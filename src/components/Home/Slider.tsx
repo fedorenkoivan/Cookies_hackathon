@@ -87,14 +87,14 @@ const Slider = () => {
                     <FaUser className="icon" />
                     <p>{quest.author}</p>
                   </div>
-                  {quest.time === -1 ? (
-                    <div>no time limit</div>
-                  ) : (
-                    <div className="clock">
-                      <FaClock className="icon" />
+                  <div className="clock">
+                    <FaClock className="icon" />
+                    {quest.time === -1 ? (
+                      <p>No limit</p>
+                    ) : (
                       <p>{quest.time}s</p>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
                 <div className="middle">
                   <p className="title">{quest.title}</p>

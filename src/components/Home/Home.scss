@@ -1,7 +1,11 @@
 $lightgray: #e5e5e5;
 $darker-gray: #c5c5c5;
-$white: #ffffff;
-$black: #000000;
+$honey: #ffcc00;
+$light-blue: #3586ff;
+$light-purple: #8E2DE2;
+$soft-purple: #6A5ACD;
+$dark-purple: #4A00E0;
+
 
 @mixin flex-center {
   display: flex;
@@ -18,19 +22,57 @@ $black: #000000;
       text-align: center;
       img {
         width: 70px;
+        color: #7f2ec7;
+      }
+      h1{
+        font-size: 2rem;
+        font-weight: bold;
+        background: linear-gradient(90deg, #432a82 25%, #4800ff 33%, #990099 70%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        color: transparent;
       }
     }
 
     &__cards {
-      background-color: $lightgray;
-      margin-bottom: 5vh;
+
+      background: linear-gradient(
+        180deg,
+        #3f21a1 0%,
+        #7f2ec7 30%,
+        #883abf 40%,
+        #8a49b6 50%,
+        #8a3cbe 60%,
+        #7f2ec7 70%,
+        #3f21a1 100%
+      );
+      margin: 5vh 0;
       border-radius: 15px;
       padding: 20px;
+      box-shadow: inset 0 2px 2px 0 rgba(0, 0, 0, 0.25);
 
       &-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
+
+        p {
+          color: white;
+          font-size: 19px;
+          font-weight: 600;
+        }
+
+        button {
+          color: $honey;
+          background-color: #ffffff53;
+          font-size: 18px;
+
+          .quests__cards-title{
+            font-size: 17px;
+            font-weight: 500;
+          }
+        }
       }
 
       &-container {
@@ -47,6 +89,7 @@ $black: #000000;
         display: flex;
         .button,
         .button-active {
+          font-size: 14px;
           background-color: inherit;
           border: none;
           cursor: pointer;
@@ -54,10 +97,12 @@ $black: #000000;
           margin-right: 25px;
           padding: 5px;
           border-radius: 5px;
+          box-shadow: none;
         }
         .button-active,
         .button:hover {
-          background-color: $darker-gray;
+          background-color: #ffffff53;
+          color: $honey;
         }
       }
 
@@ -65,7 +110,7 @@ $black: #000000;
         display: flex;
         align-items: center;
         background-color: #f0f0f0;
-        border-radius: 20px;
+        border-radius: 15px;
         padding: 10px;
         margin: 10px 0;
         box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
@@ -77,6 +122,11 @@ $black: #000000;
           padding: 5px;
           display: flex;
           align-items: center;
+          box-shadow: none;
+
+          svg {
+            color : #7f2ec7;
+          }
         }
       }
 
@@ -94,8 +144,8 @@ $black: #000000;
 
     &__divider {
       width: 100%;
-      height: 2px;
-      background-color: $black;
+      height: 1px;
+      background-color: $lightgray;
       margin: 10px 0;
       border: none;
     }

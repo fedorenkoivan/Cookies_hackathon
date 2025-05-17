@@ -79,7 +79,7 @@ const Home = () => {
 
       <div className="quests__header">
         <img alt="stars" src="src/assets/stars.png"></img>
-        <h2>BEST QUESTS OF THE DAY</h2>
+        <h1>BEST QUESTS OF THE DAY</h1>
       </div>
 
       <Slider />

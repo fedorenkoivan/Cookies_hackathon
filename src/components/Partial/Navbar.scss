@@ -1,4 +1,5 @@
 @use "sass:color";
+$lightgray: #e5e5e5;
 $honey: #ffcc00;
 $light-blue: #3586ff;
 $dark-blue: #1a237e;
@@ -47,7 +48,7 @@ $gradient-animation-duration: 10s;
       transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
     
       &:hover {
-        background-color: color.adjust($honey, $lightness: -10%);
+        background-color: color.adjust($honey, $lightness: -5%);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         transform: translateY(-2px);
       }

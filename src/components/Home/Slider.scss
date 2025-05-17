@@ -2,9 +2,9 @@ $lightgray: #e5e5e5;
 $darker-gray: #c5c5c5;
 $honey: #ffcc00;
 $light-blue: #3586ff;
-$light-purple: #8E2DE2;
-$soft-purple: #6A5ACD;
-$dark-purple: #4A00E0;
+$light-purple: #8e2de2;
+$soft-purple: #6a5acd;
+$dark-purple: #4a00e0;
 
 @mixin flex-center {
   display: flex;
@@ -76,7 +76,7 @@ $dark-purple: #4A00E0;
           display: flex;
           justify-content: space-between;
           margin: 20px 5px 30px 0;
-          .clock{
+          .clock {
             @include flex-center;
             p {
               font-weight: 350;
@@ -110,10 +110,9 @@ $dark-purple: #4A00E0;
         }
 
         .rating {
-
           display: flex;
           flex-direction: row;
-          align-items: center;  ;
+          align-items: center;
           margin-top: 4vh;
           height: 35px;
 

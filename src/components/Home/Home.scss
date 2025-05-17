@@ -2,10 +2,9 @@ $lightgray: #e5e5e5;
 $darker-gray: #c5c5c5;
 $honey: #ffcc00;
 $light-blue: #3586ff;
-$light-purple: #8E2DE2;
-$soft-purple: #6A5ACD;
-$dark-purple: #4A00E0;
-
+$light-purple: #8e2de2;
+$soft-purple: #6a5acd;
+$dark-purple: #4a00e0;
 
 @mixin flex-center {
   display: flex;
@@ -24,10 +23,15 @@ $dark-purple: #4A00E0;
         width: 70px;
         color: #7f2ec7;
       }
-      h1{
+      h1 {
         font-size: 2rem;
         font-weight: bold;
-        background: linear-gradient(90deg, #432a82 25%, #4800ff 33%, #990099 70%);
+        background: linear-gradient(
+          90deg,
+          #432a82 25%,
+          #4800ff 33%,
+          #990099 70%
+        );
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -36,7 +40,6 @@ $dark-purple: #4A00E0;
     }
 
     &__cards {
-
       background: linear-gradient(
         180deg,
         #3f21a1 0%,
@@ -68,7 +71,7 @@ $dark-purple: #4A00E0;
           background-color: #ffffff53;
           font-size: 18px;
 
-          .quests__cards-title{
+          .quests__cards-title {
             font-size: 17px;
             font-weight: 500;
           }
@@ -125,7 +128,7 @@ $dark-purple: #4A00E0;
           box-shadow: none;
 
           svg {
-            color : #7f2ec7;
+            color: #7f2ec7;
           }
         }
       }

@@ -42,7 +42,10 @@ const Slider = () => {
     };
     window.addEventListener("savedQuestsChanged", handleSavedQuestsChanged);
     return () => {
-      window.removeEventListener("savedQuestsChanged", handleSavedQuestsChanged);
+      window.removeEventListener(
+        "savedQuestsChanged",
+        handleSavedQuestsChanged
+      );
     };
   }, []);
 
@@ -65,10 +68,15 @@ const Slider = () => {
           <SwiperSlide key={quest._id} className="quests__slider-slide">
             <div className="quests__slider-wrapper">
               <div className="image-container">
-                <img src={quest.image || "src/assets/logo.jpg"} className="image" />
+                <img
+                  src={quest.image || "src/assets/logo.jpg"}
+                  className="image"
+                />
                 <div className="bookmark">
                   <FaBookmark
-                    className={`icon${savedQuests.includes(quest._id) ? "-active" : ""}`}
+                    className={`icon${
+                      savedQuests.includes(quest._id) ? "-active" : ""
+                    }`}
                     onClick={() => handleBookmarkClick(quest._id)}
                   />
                 </div>
@@ -97,7 +105,10 @@ const Slider = () => {
                   <p className="reviews">({quest.reviews})</p>
                 </div>
                 <div className="start">
-                  <button className="button" onClick={() => navigate(`/preview-quest/${quest._id}`)}>
+                  <button
+                    className="button"
+                    onClick={() => navigate(`/preview-quest/${quest._id}`)}
+                  >
                     <p>Start quest</p>
                   </button>
                 </div>

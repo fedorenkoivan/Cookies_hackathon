@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { userLoginEvent } from "@/utils/userData";
+import { useQuestContext } from "@/contexts/QuestContext";
 import './LogIn.scss';
 
 const validationSchema = Yup.object({
@@ -18,6 +19,7 @@ const validationSchema = Yup.object({
 
 const LogIn = () => {
   const navigate = useNavigate();
+  const { fetchAllQuests } = useQuestContext();
   return (
     <div className="card">
       <div className="banner">
@@ -53,6 +55,7 @@ const LogIn = () => {
             if (data.status === 'success' && data.accessToken) {
               localStorage.setItem('accessToken', data.accessToken);
               window.dispatchEvent(new Event(userLoginEvent))
+              await fetchAllQuests();
               navigate("/profile");
             } else {
               setStatus('Authentication error: Invalid server response');

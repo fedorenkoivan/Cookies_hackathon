@@ -8,6 +8,7 @@ import { QUESTS_URL as URL } from "@/constants/questConstants";
 import { convertImage } from "@/utils/fileHandling";
 import { QuestFormProvider } from "@/contexts/QuestFormProvider";
 import { useQuestFormContext } from "@/contexts/QuestFormContext";
+import { useQuestContext } from "@/contexts/QuestContext";
 
 const QuestForm = () => {
   return (
@@ -40,6 +41,8 @@ const QuestFormContent = () => {
 
     clearSavedData,
   } = useQuestFormContext();
+
+  const { fetchAllQuests } = useQuestContext();
 
   const navigate = useNavigate();
 
@@ -81,6 +84,7 @@ const QuestFormContent = () => {
           image,
         }),
       });
+      await fetchAllQuests();
     } catch (err) {
       console.error("Error submitting the quest:", err);
     }

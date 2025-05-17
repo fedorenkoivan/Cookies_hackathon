@@ -21,7 +21,6 @@ const Home = () => {
   const [inputValue, setInputValue] = useState("");
   const [isAuthorized, setIsAuthorized] = useState(false);
 
-
   const { allQuests } = useQuestContext();
 
   const handleTabClick = (tab: string) => {

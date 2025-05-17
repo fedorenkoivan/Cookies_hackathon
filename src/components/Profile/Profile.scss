@@ -88,7 +88,7 @@
   }
 
   &__quests {
-    margin: 30px 0 5px 0;
+    margin: 20px 0 5px 0;
     flex-grow: 1;
     width: 100%;
     min-height: 50vh;
@@ -97,6 +97,7 @@
     align-items: center;
     border-radius: 15px;
     background-color: #dfdede;
+    padding: 20px 0px
   }
 
 }

@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import "./Profile.scss";
 import { useQuestContext } from "@/contexts/QuestContext";
 import { Quest } from "@/types/quest";
+import QuestCard from "../Home/QuestCard";
+import "@/components/Home/QuestCard.scss";
 interface UserData {
   id: string;
   name: string;
@@ -16,13 +18,7 @@ const Profile = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const { allQuests, fetchAllQuests } = useQuestContext();
-
-  useEffect(() => {
-    if (!allQuests.length) {
-      fetchAllQuests();
-    }
-  }, [allQuests.length, fetchAllQuests]);
+  const { allQuests } = useQuestContext();
 
   const filteredQuests = useMemo(() => {
     return allQuests.filter((quest: Quest) => {
@@ -150,11 +146,9 @@ const Profile = () => {
         ))}
       </div>
       <div className="profile__quests">
-        {filteredQuests.map((quest: Quest) => (
-          <div>
-            {quest.title}
-          </div>
-        ))}
+        <div className="quests">
+          <QuestCard quests={filteredQuests} />
+        </div>
       </div>
     </div>
   );

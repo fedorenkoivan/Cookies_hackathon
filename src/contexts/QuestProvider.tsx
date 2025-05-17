@@ -1,6 +1,5 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useCallback, useEffect, useState, useMemo } from "react";
 import { Quest } from "@/types/quest";
-import { useState, useCallback } from "react";
 import { QUESTS_URL as URL } from "@/constants/questConstants";
 import { QuestContext } from "./QuestContext";
 
@@ -13,7 +12,6 @@ export const QuestProvider = ({ children }: PropsWithChildren) => {
   const fetchQuest = useCallback(
     async (questId: string) => {
       if (!questId) return;
-
       if (quest && quest._id === questId) return;
 
       try {
@@ -28,11 +26,11 @@ export const QuestProvider = ({ children }: PropsWithChildren) => {
         const data = await res.json();
         const quests = data.data;
 
-          if (quests && quests.length > 0) {
-            setQuest(quests[0]);
-          } else {
-            setError("Quest not found");
-          }
+        if (quests && quests.length > 0) {
+          setQuest(quests[0]);
+        } else {
+          setError("Quest not found");
+        }
       } catch (err) {
         console.error("Error fetching quest:", err);
         setError("Failed to load quest");
@@ -43,7 +41,7 @@ export const QuestProvider = ({ children }: PropsWithChildren) => {
     [quest]
   );
 
-  const fetchAllQuests = async () => {
+  const fetchAllQuests = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -68,10 +66,26 @@ export const QuestProvider = ({ children }: PropsWithChildren) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchAllQuests();
+  }, [fetchAllQuests]);
+
+  const value = useMemo(
+    () => ({
+      allQuests,
+      quest,
+      loading,
+      error,
+      fetchQuest,
+      fetchAllQuests,
+    }),
+    [allQuests, quest, loading, error, fetchQuest, fetchAllQuests]
+  );
 
   return (
-    <QuestContext.Provider value={{ allQuests, quest, loading, error, fetchQuest, fetchAllQuests }}>
+    <QuestContext.Provider value={value}>
       {children}
     </QuestContext.Provider>
   );

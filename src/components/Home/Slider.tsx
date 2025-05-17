@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaUser, FaClock } from "react-icons/fa";
+import { FaUser, FaClock, FaBookmark } from "react-icons/fa";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
 import StarRatingAuto from "../Rating/StarRatingAuto";
-import { QUESTS_URL as URL } from "@/constants/questConstants"
+import { QUESTS_URL as URL } from "@/constants/questConstants";
 import { Quest } from "@/types/quest";
 import "./Slider.scss";
 
@@ -15,7 +15,10 @@ const getToday = () => {
 };
 
 const Slider = () => {
-  const [bestQuests, setBestQuests] = useState([]);
+  const [bestQuests, setBestQuests] = useState<Quest[]>([]);
+  const [savedQuests, setSavedQuests] = useState<string[]>(() => {
+    return JSON.parse(localStorage.getItem("savedQuests") || "[]");
+  });
 
   const navigate = useNavigate();
 
@@ -33,6 +36,28 @@ const Slider = () => {
     })();
   }, []);
 
+  useEffect(() => {
+    const handleSavedQuestsChanged = () => {
+      setSavedQuests(JSON.parse(localStorage.getItem("savedQuests") || "[]"));
+    };
+    window.addEventListener("savedQuestsChanged", handleSavedQuestsChanged);
+    return () => {
+      window.removeEventListener("savedQuestsChanged", handleSavedQuestsChanged);
+    };
+  }, []);
+
+  const handleBookmarkClick = (questId: string) => {
+    let updated;
+    if (!savedQuests.includes(questId)) {
+      updated = [...savedQuests, questId];
+    } else {
+      updated = savedQuests.filter((id) => id !== questId);
+    }
+    setSavedQuests(updated);
+    localStorage.setItem("savedQuests", JSON.stringify(updated));
+    window.dispatchEvent(new Event("savedQuestsChanged"));
+  };
+
   return (
     <div className="quests__slider">
       <Swiper spaceBetween={20} slidesPerView={1} loop={true}>
@@ -40,11 +65,13 @@ const Slider = () => {
           <SwiperSlide key={quest._id} className="quests__slider-slide">
             <div className="quests__slider-wrapper">
               <div className="image-container">
-                {quest.image ? (
-                  <img src={quest.image} className="image" />
-                ) : (
-                  <img src="src/assets/logo.jpg" className="image" />
-                )}
+                <img src={quest.image || "src/assets/logo.jpg"} className="image" />
+                <div className="bookmark">
+                  <FaBookmark
+                    className={`icon${savedQuests.includes(quest._id) ? "-active" : ""}`}
+                    onClick={() => handleBookmarkClick(quest._id)}
+                  />
+                </div>
               </div>
               <div className="info-container">
                 <div className="top">

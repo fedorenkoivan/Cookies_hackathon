@@ -1,8 +1,11 @@
 import StarRatingAuto from "../Rating/StarRatingAuto";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import './Profile.scss';
-
+import "./Profile.scss";
+import { useQuestContext } from "@/contexts/QuestContext";
+import { Quest } from "@/types/quest";
+import QuestCard from "../Home/QuestCard";
+import "@/components/Home/QuestCard.scss";
 interface UserData {
   id: string;
   name: string;
@@ -15,6 +18,25 @@ const Profile = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  const { allQuests } = useQuestContext();
+
+  const filteredQuests = useMemo(() => {
+    return allQuests.filter((quest: Quest) => {
+      if (activeNavItem === "Quests") {
+        const authorName = JSON.parse(sessionStorage.userData).name;
+        return quest.author === authorName;
+      } else if (activeNavItem === "Saved") {
+        const savedQuests = JSON.parse(localStorage.savedQuests);
+        return savedQuests.includes(quest._id);
+      } else {
+        //History
+        return false;
+      }
+    });
+  }, [allQuests, activeNavItem]);
+
+  console.log(filteredQuests);
+
   const navigate = useNavigate();
 
   const handleNavItemClick = (item: string) => {
@@ -23,54 +45,58 @@ const Profile = () => {
 
   useEffect(() => {
     // Update your fetchUserProfile function to handle the error better
-const fetchUserProfile = async () => {
-  try {
-    const accessToken = localStorage.getItem('accessToken');
+    const fetchUserProfile = async () => {
+      try {
+        const accessToken = localStorage.getItem("accessToken");
 
-    if (!accessToken) {
-      navigate('/log-in');
-      return;
-    }
+        if (!accessToken) {
+          navigate("/log-in");
+          return;
+        }
 
-
-    const response = await fetch('http://localhost:5000/users/profile', {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`
-      },
-    });
-
-    const data = await response.json();
-    
-    if (data.status === 'success') {
-      setUserData(data.data.user);
-    } else {
-      // Handle specific error cases
-      if (data.message === 'Invalid ID format' || 
-          data.message === 'Invalid user identification. Please log in again.' ||
-          data.message?.toLowerCase().includes('invalid')) {
-        console.error('Token contains invalid ID, logging out');
-        // Clear token and redirect to login
-        localStorage.removeItem('accessToken');
-        
-        // Redirect without toast since it's not imported or configured
-        navigate('/log-in', { 
-          state: { message: 'Your session is invalid. Please log in again.' }
+        const response = await fetch("http://localhost:5000/users/profile", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         });
-        return;
+
+        const data = await response.json();
+
+        if (data.status === "success") {
+          setUserData(data.data.user);
+        } else {
+          // Handle specific error cases
+          if (
+            data.message === "Invalid ID format" ||
+            data.message ===
+              "Invalid user identification. Please log in again." ||
+            data.message?.toLowerCase().includes("invalid")
+          ) {
+            console.error("Token contains invalid ID, logging out");
+            // Clear token and redirect to login
+            localStorage.removeItem("accessToken");
+
+            // Redirect without toast since it's not imported or configured
+            navigate("/log-in", {
+              state: {
+                message: "Your session is invalid. Please log in again.",
+              },
+            });
+            return;
+          }
+
+          setError(data.message || "Помилка отримання даних користувача");
+          if (response.status === 401) {
+            localStorage.removeItem("accessToken");
+            navigate("/log-in");
+          }
+        }
+      } catch (err) {
+        setError("Помилка конекту з сервером");
+        console.error(err);
+      } finally {
+        setLoading(false);
       }
-      
-      setError(data.message || 'Помилка отримання даних користувача');
-      if (response.status === 401) {
-        localStorage.removeItem('accessToken');
-        navigate('/log-in');
-      }
-    }
-  } catch (err) {
-    setError('Помилка конекту з сервером');
-    console.error(err);
-  } finally {
-    setLoading(false);
-  }
     };
 
     fetchUserProfile();
@@ -110,7 +136,9 @@ const fetchUserProfile = async () => {
         {["Saved", "Quests", "History"].map((item) => (
           <span
             key={item}
-            className={`profile__nav-item ${activeNavItem === item ? "active" : ""}`}
+            className={`profile__nav-item ${
+              activeNavItem === item ? "active" : ""
+            }`}
             onClick={() => handleNavItemClick(item)}
           >
             {item}
@@ -118,6 +146,9 @@ const fetchUserProfile = async () => {
         ))}
       </div>
       <div className="profile__quests">
+        <div className="quests">
+          <QuestCard quests={filteredQuests} />
+        </div>
       </div>
     </div>
   );

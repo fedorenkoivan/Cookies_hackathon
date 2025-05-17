@@ -7,29 +7,27 @@ import {
   FaBookmark,
 } from "react-icons/fa";
 import StarRatingAuto from "../Rating/StarRatingAuto";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import WelcomeMenu from "./WelcomeMenu";
 import Slider from "./Slider";
 import "swiper/swiper-bundle.css";
 import "./Home.scss";
 import { userAuthorizationEvent } from "@/utils/userData";
-import {
-  CATEGORIES as TABS,
-  QUESTS_URL as URL,
-} from "@/constants/questConstants";
+import { CATEGORIES as TABS } from "@/constants/questConstants";
 import { Quest } from "@/types/quest";
+import { useQuestContext } from "@/contexts/QuestContext";
 
 const Home = () => {
   const [active, setActive] = useState("All");
   const [searchText, setSearchText] = useState("");
   const [inputValue, setInputValue] = useState("");
-  const [quests, setQuests] = useState<Quest[]>([]);
-  const [allQuests, setAllQuests] = useState([]);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [savedQuests, setSavedQuests] = useState<string[]>(() => {
     return JSON.parse(localStorage.getItem("savedQuests") || "[]");
   });
+
+  const { allQuests, fetchAllQuests } = useQuestContext();
 
   const handleTabClick = (tab: string) => {
     setActive(tab);
@@ -63,7 +61,10 @@ const Home = () => {
     };
     window.addEventListener("savedQuestsChanged", handleSavedQuestsChanged);
     return () => {
-      window.removeEventListener("savedQuestsChanged", handleSavedQuestsChanged);
+      window.removeEventListener(
+        "savedQuestsChanged",
+        handleSavedQuestsChanged
+      );
     };
   }, []);
 
@@ -86,31 +87,20 @@ const Home = () => {
   };
 
   useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch(URL);
-        const data = await res.json();
-        setAllQuests(data.data);
-      } catch (err) {
-        console.log(err);
-        setAllQuests([]);
-      }
-    })();
+    if (!allQuests.length) {
+      fetchAllQuests();
+    }
   }, []);
 
-  useEffect(() => {
-    if (allQuests) {
-      const filteredQuests = allQuests.filter((quest: Quest) => {
-        const categoryMatch = active === "All" || quest.category === active;
-        const searchMatch =
-          !searchText ||
-          quest.title.toLowerCase().startsWith(searchText.toLowerCase());
-
-        return categoryMatch && searchMatch;
-      });
-      setQuests(filteredQuests);
-    }
-  }, [active, searchText, allQuests]);
+  const filteredQuests = useMemo(() => {
+    return allQuests.filter((quest: Quest) => {
+      const categoryMatch = active === "All" || quest.category === active;
+      const searchMatch =
+        !searchText ||
+        quest.title.toLowerCase().startsWith(searchText.toLowerCase());
+      return categoryMatch && searchMatch;
+    });
+  }, [allQuests, active, searchText]);
 
   useEffect(() => {
     const handleAuthStatus = () => {
@@ -179,7 +169,7 @@ const Home = () => {
 
         <hr className="quests__divider" />
         <div className="quests__card">
-          {quests.map((quest: Quest) => (
+          {filteredQuests.map((quest: Quest) => (
             <div className="quests__card-container" key={quest._id}>
               <div className="quests__card-image">
                 <img src={quest.image || "src/assets/logo.jpg"} />

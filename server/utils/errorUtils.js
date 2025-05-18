@@ -1,22 +1,27 @@
 import createError from '@fastify/error';
 
-const FastifyErrors = {
-  BAD_REQUEST: createError('FST_ERR_BAD_REQUEST', '%s', 400),
-  UNAUTHORIZED: createError('FST_ERR_UNAUTHORIZED', '%s', 401),
-  FORBIDDEN: createError('FST_ERR_FORBIDDEN', '%s', 403),
-  NOT_FOUND: createError('FST_ERR_NOT_FOUND', '%s', 404),
-  METHOD_NOT_ALLOWED: createError('FST_ERR_METHOD_NOT_ALLOWED', '%s', 405),
-  CONFLICT: createError('FST_ERR_CONFLICT', '%s', 409),
-  UNSUPPORTED_MEDIA_TYPE: createError('FST_ERR_UNSUPPORTED_MEDIA_TYPE', '%s', 415),
-  UNPROCESSABLE_ENTITY: createError('FST_ERR_UNPROCESSABLE_ENTITY', '%s', 422),
-  TOO_MANY_REQUESTS: createError('FST_ERR_TOO_MANY_REQUESTS', '%s', 429),
-  
-  INTERNAL_SERVER_ERROR: createError('FST_ERR_INTERNAL_SERVER_ERROR', '%s', 500),
-  NOT_IMPLEMENTED: createError('FST_ERR_NOT_IMPLEMENTED', '%s', 501),
-  BAD_GATEWAY: createError('FST_ERR_BAD_GATEWAY', '%s', 502),
-  SERVICE_UNAVAILABLE: createError('FST_ERR_SERVICE_UNAVAILABLE', '%s', 503),
-  GATEWAY_TIMEOUT: createError('FST_ERR_GATEWAY_TIMEOUT', '%s', 504)
+const ERROR_TYPES = {
+  BAD_REQUEST: 400,
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  NOT_FOUND: 404,
+  METHOD_NOT_ALLOWED: 405,
+  CONFLICT: 409,
+  UNSUPPORTED_MEDIA_TYPE: 415,
+  UNPROCESSABLE_ENTITY: 422,
+  TOO_MANY_REQUESTS: 429,
+  INTERNAL_SERVER_ERROR: 500,
+  NOT_IMPLEMENTED: 501,
+  BAD_GATEWAY: 502,
+  SERVICE_UNAVAILABLE: 503,
+  GATEWAY_TIMEOUT: 504
 };
+
+const FastifyErrors = Object.fromEntries(
+  Object.entries(ERROR_TYPES).map(([key, code]) => 
+    [key, createError(`FST_ERR_${key}`, '%s', code)]
+  )
+);
 
 const DefaultErrorMessages = {
   BAD_REQUEST: 'Bad Request',
@@ -28,7 +33,6 @@ const DefaultErrorMessages = {
   UNSUPPORTED_MEDIA_TYPE: 'Unsupported Media Type',
   UNPROCESSABLE_ENTITY: 'Unprocessable Entity',
   TOO_MANY_REQUESTS: 'Too Many Requests',
-  
   INTERNAL_SERVER_ERROR: 'Internal Server Error',
   NOT_IMPLEMENTED: 'Not Implemented',
   BAD_GATEWAY: 'Bad Gateway',
@@ -36,13 +40,28 @@ const DefaultErrorMessages = {
   GATEWAY_TIMEOUT: 'Gateway Timeout'
 };
 
-const ErrorType = Object.freeze(
-  Object.fromEntries(
-    Object.entries(FastifyErrors).map(([key, error]) => [key, error.statusCode])
-  )
-);
-// custom error класи наслідники хттп еррро, ентітіт дазнт екзіст
-// не робити наслідників
+function createHttpError(type, message, metadata = {}) {
+  if (!ERROR_TYPES[type]) {
+    type = 'INTERNAL_SERVER_ERROR';
+  }
+  
+  const errorMessage = message || DefaultErrorMessages[type] || type.replace(/_/g, ' ');
+  const fastifyError = new FastifyErrors[type](errorMessage);
+  
+  const error = new HttpError(
+    fastifyError.statusCode,
+    fastifyError.message,
+    metadata
+  );
+  
+  Object.assign(error, {
+    code: fastifyError.code,
+    name: fastifyError.name
+  });
+  
+  return error;
+}
+
 class HttpError extends Error {
   constructor(statusCode, message, metadata = {}) {
     super(message);
@@ -53,8 +72,8 @@ class HttpError extends Error {
   }
 
   getErrorType() {
-    return Object.keys(ErrorType).find(
-      key => ErrorType[key] === this.statusCode
+    return Object.keys(ERROR_TYPES).find(
+      key => ERROR_TYPES[key] === this.statusCode
     ) || 'UNKNOWN';
   }
 
@@ -76,75 +95,33 @@ class HttpError extends Error {
       timestamp: new Date().toISOString()
     };
   }
-
-  static createError(statusCode, message, metadata = {}) {
-    const errorType = Object.keys(ErrorType).find(key => ErrorType[key] === statusCode);
-    
-    if (errorType) {
-      const camelCaseMethod = errorType.toLowerCase()
-        .replace(/_([a-z])/g, (match, letter) => letter.toUpperCase());
-      
-      return httpErrorProxy[camelCaseMethod](message, metadata);
-    }
-    
-    return new HttpError(statusCode, message, metadata);
-  }
-
-  static _enhanceError(fastifyError, metadata) {
-    const httpError = new HttpError(
-      fastifyError.statusCode, 
-      fastifyError.message,
-      metadata
-    );
-    
-    Object.assign(httpError, {
-      code: fastifyError.code,
-      name: fastifyError.name
-    });
-    
-    return httpError;
-  }
-
-  static fromDatabaseError(error) {
-    if (error.name === 'DocumentNotFoundError' || error.message === 'User not found') {
-      return httpErrorProxy.notFound('Resource not found');
-    }
-    
-    if (error.name === 'CastError' && error.kind === 'ObjectId') {
-      return httpErrorProxy.badRequest('Invalid ID format');
-    }
-    
-    if (error.name === 'MongoError' || error.name === 'ValidationError') {
-      return httpErrorProxy.badRequest(error.message);
-    }
-    
-    return httpErrorProxy.internalServerError('Database error occurred');
-  }
 }
 
-const httpErrorProxy = new Proxy(HttpError, {
-  get(target, prop) {
-    if (typeof target[prop] === 'function') {
-      return target[prop];
-    }
-    
-    if (typeof prop === 'string') {
-      const upperProp = prop
-        .replace(/([A-Z])/g, '_$1')
-        .toUpperCase()
-        .replace(/^_/, '');
-      
-      if (upperProp in FastifyErrors) {
-        return (message, metadata = {}) => {
-          const errorMessage = message || DefaultErrorMessages[upperProp] || upperProp.replace(/_/g, ' ');
-          const fastifyError = new FastifyErrors[upperProp](errorMessage);
-          return HttpError._enhanceError(fastifyError, metadata);
-        };
-      }
-    }
+function fromDatabaseError(error) {
+  if (error.name === 'DocumentNotFoundError' || error.message === 'User not found') {
+    return createHttpError('NOT_FOUND', 'Resource not found');
+  }
+  
+  if (error.name === 'CastError' && error.kind === 'ObjectId') {
+    return createHttpError('BAD_REQUEST', 'Invalid ID format');
+  }
+  
+  if (error.name === 'MongoError' || error.name === 'ValidationError') {
+    return createHttpError('BAD_REQUEST', error.message);
+  }
+  
+  return createHttpError('INTERNAL_SERVER_ERROR', 'Database error occurred');
+}
 
-    return target[prop];
+const HttpError = Object.assign(createHttpError, {
+  fromDatabaseError,
+  
+  createFromStatusCode(statusCode, message, metadata = {}) {
+    const errorType = Object.keys(ERROR_TYPES).find(key => ERROR_TYPES[key] === statusCode);
+    return errorType 
+      ? createHttpError(errorType, message, metadata)
+      : new HttpError(statusCode, message || 'Unknown Error', metadata);
   }
 });
 
-export { httpErrorProxy as HttpError, ErrorType, FastifyErrors };
+export { HttpError, ERROR_TYPES as ErrorType, FastifyErrors };

@@ -59,20 +59,20 @@ fastify.setErrorHandler((error, request, reply) => {
   
   let httpError;
   
-  if (error instanceof HttpError.constructor) {
+  if (error instanceof HttpError) {
     httpError = error;
   } else if (error.statusCode && error.validation) {
-    httpError = HttpError.badRequest('Validation Error', { 
+    httpError = HttpError('BAD_REQUEST', 'Validation Error', { 
       validation: error.validation 
-    }); // change to error.validation
+    });
   } else if (error.name === 'DocumentNotFoundError' || 
              error.name === 'CastError' || 
              error.name === 'MongoError' || 
              error.name === 'ValidationError') {
-    httpError = HttpError.fromDatabaseError(error); // change naming
+    httpError = HttpError.fromDatabaseError(error);
   } else {
     const statusCode = error.statusCode ?? 500;
-    httpError = HttpError.createError(statusCode, error.message || 'Internal Server Error');
+    httpError = HttpError.createFromStatusCode(statusCode, error.message || 'Internal Server Error');
   }
   
   fastify.log.error(httpError.toLog());

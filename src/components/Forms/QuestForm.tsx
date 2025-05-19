@@ -1,25 +1,52 @@
-import { useState, useEffect } from "react";
 import "./QuestForm.scss";
 import { Dropdown } from "./Dropdown";
 import QuestionForm from "./QuestionForm";
-import { FaPlus } from "react-icons/fa";
+import { useRef } from "react";
+import { FaPlus, FaImage, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { CATEGORIES as QUEST_CATEGORIES, QUESTS_URL as URL } from "@/constants/questConstants";
-import { Question, Answer } from "@/types/quest";
+import { QUESTS_URL as URL } from "@/constants/questConstants";
 import { convertImage } from "@/utils/fileHandling";
-
+import { QuestFormProvider } from "@/contexts/QuestFormProvider";
+import { useQuestFormContext } from "@/contexts/QuestFormContext";
+import { useQuestContext } from "@/contexts/QuestContext";
 
 const QuestForm = () => {
-  const [image, setImage] = useState<string>("");
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [category, setCategory] = useState<string>("");
-  const [time, setTime] = useState<number>(-1);
-  const [showTimeControls, setShowTimeControls] = useState<boolean>(false);
-  const [questions, setQuestions] = useState<Question[]>([{ order: 0, value: "", image: "", points: 1 ,answers: [{ order: 0, value: "", isCorrect: false }] }]);
-  const [totalPoints, setTotalPoints] = useState<number>(1);
+  return (
+    <QuestFormProvider>
+      <QuestFormContent />
+    </QuestFormProvider>
+  );
+};
+
+const QuestFormContent = () => {
+  const {
+    //Question state
+    questions,
+    totalPoints,
+    addQuestion,
+
+    //useStates
+    image,
+    setImage,
+    title,
+    setTitle,
+    description,
+    setDescription,
+    category,
+    setCategory,
+    time,
+    setTime,
+    showTimeControls,
+    setShowTimeControls,
+
+    clearSavedData,
+  } = useQuestFormContext();
+
+  const { fetchAllQuests } = useQuestContext();
 
   const navigate = useNavigate();
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleToggle = () => {
     const newState = !showTimeControls;
@@ -28,7 +55,7 @@ const QuestForm = () => {
     else setTime(30);
   };
 
-  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const convertedImage = await convertImage(e);
     setImage(convertedImage);
   };
@@ -38,12 +65,14 @@ const QuestForm = () => {
     e.preventDefault();
     try {
       const userData = sessionStorage.getItem("userData");
-      const author = userData ? JSON.parse(userData).name || "Anonymous" : "Anonymous";
+      const author = userData
+        ? JSON.parse(userData).name || "Anonymous"
+        : "Anonymous";
       await fetch(`${URL}/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
           title,
@@ -55,55 +84,13 @@ const QuestForm = () => {
           image,
         }),
       });
+      await fetchAllQuests();
     } catch (err) {
       console.error("Error submitting the quest:", err);
     }
+
+    clearSavedData();
     navigate("/");
-  };
-
-  useEffect(() => {
-    setQuestions((prev) => prev.map((q, index) => ({ ...q, order: index })));
-  }, [questions.length]);
-
-  const addQuestion = () => {
-    if (questions.length >= 20) return; 
-    setQuestions((prev) => [
-      ...prev,
-      {
-        order: prev.length,
-        value: "",
-        image: "",
-        points: 1,
-        answers: [{ order: 0, value: "", isCorrect: false }],
-      },
-    ]);
-  };
-
-  const removeQuestion = (order: number) => {
-    if (questions.length <= 1) return; 
-    setQuestions((prev) => {
-      const filtered = prev.filter((q) => q.order !== order);
-      return filtered.map((q, index) => ({
-        ...q,
-        order: index,
-      }));
-    });
-  };
-
-  const updateQuestion = (
-    order: number,
-    value: string,
-    image: string,
-    points: number,
-    answers: Answer[]
-  ) => {
-    setQuestions((prev) =>
-      prev.map((q) => (q.order === order ? { ...q, value, image, points, answers } : q))
-    );
-    setTotalPoints(() => {
-      const newPoints = questions.reduce((acc, q) => acc + q.points, 0);
-      return newPoints;
-    });
   };
 
   return (
@@ -115,7 +102,31 @@ const QuestForm = () => {
 
         <div className="quest-form__group">
           <h3>Image</h3>
-          <input type="file" accept="image/*" onChange={handleImageChange} />
+          <div className="image-upload-container">
+            <div className={`icon-container ${image ? "has-image" : ""}`}>
+              {image ? (
+                <>
+                  <FaTimes className="icon" onClick={() => setImage("")} />
+                  <div className="image-badge"></div>
+                </>
+              ) : (
+                <FaImage
+                  className="icon"
+                  onClick={() => fileInputRef.current?.click()}
+                />
+              )}
+            </div>
+            <span className="image-label">
+              {image ? "Image added" : "Add quest image"}
+            </span>
+            <input
+              type="file"
+              ref={fileInputRef}
+              accept="image/*"
+              onChange={handleImageUpload}
+              style={{ display: "none" }}
+            />
+          </div>
         </div>
 
         <div className="quest-form__group">
@@ -143,7 +154,6 @@ const QuestForm = () => {
           <h3>Category</h3>
           <Dropdown
             buttonText="Select a category"
-            content={QUEST_CATEGORIES}
             onSelect={(category) => {
               setCategory(category);
             }}
@@ -196,19 +206,19 @@ const QuestForm = () => {
         )}
 
         <div className="quest-form__group">
-          <div className="header-info"><h3>Questions</h3><span>(Total {totalPoints} points)</span></div>
+          <div className="header-info">
+            <h3>Questions</h3>
+            <span>(Total {totalPoints} points)</span>
+          </div>
+
           {questions.map((question) => (
             <QuestionForm
               key={question.order}
+              questionOrder={question.order}
               questionNumber={question.order + 1}
-              onDelete={() => removeQuestion(question.order)}
-              onChange={(q, image, points, a) => updateQuestion(question.order, q, image, points, a)}
-              updateValue={question.value}
-              updateImage={question.image}
-              updatePoints={question.points}
-              updateAnswers={question.answers}
             />
           ))}
+
           <button
             className="add-question-btn"
             type="button"

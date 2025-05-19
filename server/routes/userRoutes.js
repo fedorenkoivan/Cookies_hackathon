@@ -1,9 +1,10 @@
 import { 
   validateLoginInput, validateCredentails,
-  sendEmail,
+  // sendEmail,
   createRefreshToken,
   handleTokens, clearRefreshTokenCookie, verifyJwtToken,
 } from "../utils/authUtils.js";
+import { sendEmail } from "../utils/sendEmailProxy.js";
 
 import argon2 from "argon2";
 

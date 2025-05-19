@@ -71,7 +71,6 @@ export const sendEmail = async (options) => {
 };
 
 export const createAccessToken = (userId) => {
-  // so we have a string representation of the ObjectId
   const idStr = userId.toString();
   return jwt.sign(
     {
@@ -87,7 +86,6 @@ export const createAccessToken = (userId) => {
 };
 
 export const createRefreshToken = (userId) => {
-  // Ensure we have a string representation of the ObjectId
   const idStr = userId.toString();
   return jwt.sign(
     {

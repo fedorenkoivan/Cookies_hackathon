@@ -26,10 +26,9 @@ $secondary-color: #7b7b7b;
         justify-content: center;
         align-items: center;
         overflow: hidden;
-        padding-left: 40px;   // <--- add horizontal padding
-        padding-right: 40px;  // <--- add horizontal padding
+        padding-left: 40px;
+        padding-right: 40px;
 
-        // Gradient background
         &::before {
             content: "";
             position: absolute;

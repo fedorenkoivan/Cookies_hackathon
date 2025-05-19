@@ -22,56 +22,52 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    // Update your fetchUserProfile function to handle the error better
-const fetchUserProfile = async () => {
-  try {
-    const accessToken = localStorage.getItem('accessToken');
+    const fetchUserProfile = async () => {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
 
-    if (!accessToken) {
-      navigate('/log-in');
-      return;
-    }
-
-
-    const response = await fetch('http://localhost:5000/users/profile', {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`
-      },
-    });
-
-    const data = await response.json();
-    
-    if (data.status === 'success') {
-      setUserData(data.data.user);
-    } else {
-      // Handle specific error cases
-      if (data.message === 'Invalid ID format' || 
-          data.message === 'Invalid user identification. Please log in again.' ||
-          data.message?.toLowerCase().includes('invalid')) {
-        console.error('Token contains invalid ID, logging out');
-        // Clear token and redirect to login
-        localStorage.removeItem('accessToken');
-        
-        // Redirect without toast since it's not imported or configured
-        navigate('/log-in', { 
-          state: { message: 'Your session is invalid. Please log in again.' }
-        });
+      if (!accessToken) {
+        navigate('/log-in');
         return;
       }
+
+
+      const response = await fetch('http://localhost:5000/users/profile', {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+      });
+
+      const data = await response.json();
       
-      setError(data.message || 'Помилка отримання даних користувача');
-      if (response.status === 401) {
-        localStorage.removeItem('accessToken');
-        navigate('/log-in');
+      if (data.status === 'success') {
+        setUserData(data.data.user);
+      } else {
+        if (data.message === 'Invalid ID format' || 
+            data.message === 'Invalid user identification. Please log in again.' ||
+            data.message?.toLowerCase().includes('invalid')) {
+          console.error('Token contains invalid ID, logging out');
+          localStorage.removeItem('accessToken');
+          
+          navigate('/log-in', { 
+            state: { message: 'Your session is invalid. Please log in again.' }
+          });
+          return;
+        }
+        
+        setError(data.message || 'Помилка отримання даних користувача');
+        if (response.status === 401) {
+          localStorage.removeItem('accessToken');
+          navigate('/log-in');
+        }
       }
+    } catch (err) {
+      setError('Помилка конекту з сервером');
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    setError('Помилка конекту з сервером');
-    console.error(err);
-  } finally {
-    setLoading(false);
-  }
-    };
+      };
 
     fetchUserProfile();
   }, [navigate]);

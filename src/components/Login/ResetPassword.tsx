@@ -20,7 +20,7 @@ const validationSchema = Yup.object({
 
 const ResetPassword = () => {
   const navigate = useNavigate();
-  const { resetToken } = useParams(); // Отримуємо токен з URL
+  const { resetToken } = useParams();
   const [tokenValid, setTokenValid] = useState(true);
 
   useEffect(() => {

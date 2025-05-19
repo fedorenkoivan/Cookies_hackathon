@@ -94,7 +94,7 @@ const QuestFormContent = () => {
   };
 
   return (
-    <>
+    <div className="quest-form__background">
       <form className="quest-form" onSubmit={handleSubmit}>
         <div className="hero-section">
           <h1>Ready to launch your own quest?</h1>
@@ -235,7 +235,7 @@ const QuestFormContent = () => {
           Submit Quest
         </button>
       </form>
-    </>
+    </div>
   );
 };
 

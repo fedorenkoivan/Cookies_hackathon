@@ -40,28 +40,6 @@ const DefaultErrorMessages = {
   GATEWAY_TIMEOUT: 'Gateway Timeout'
 };
 
-function createHttpError(type, message, metadata = {}) {
-  if (!ERROR_TYPES[type]) {
-    type = 'INTERNAL_SERVER_ERROR';
-  }
-  
-  const errorMessage = message || DefaultErrorMessages[type] || type.replace(/_/g, ' ');
-  const fastifyError = new FastifyErrors[type](errorMessage);
-  
-  const error = new HttpError(
-    fastifyError.statusCode,
-    fastifyError.message,
-    metadata
-  );
-  
-  Object.assign(error, {
-    code: fastifyError.code,
-    name: fastifyError.name
-  });
-  
-  return error;
-}
-
 class HttpError extends Error {
   constructor(statusCode, message, metadata = {}) {
     super(message);
@@ -97,6 +75,28 @@ class HttpError extends Error {
   }
 }
 
+function createHttpError(type, message, metadata = {}) {
+  if (!ERROR_TYPES[type]) {
+    type = 'INTERNAL_SERVER_ERROR';
+  }
+  
+  const errorMessage = message || DefaultErrorMessages[type] || type.replace(/_/g, ' ');
+  const fastifyError = new FastifyErrors[type](errorMessage);
+  
+  const error = new HttpError(
+    fastifyError.statusCode,
+    fastifyError.message,
+    metadata
+  );
+  
+  Object.assign(error, {
+    code: fastifyError.code,
+    name: fastifyError.name
+  });
+  
+  return error;
+}
+
 function fromDatabaseError(error) {
   if (error.name === 'DocumentNotFoundError' || error.message === 'User not found') {
     return createHttpError('NOT_FOUND', 'Resource not found');
@@ -113,7 +113,7 @@ function fromDatabaseError(error) {
   return createHttpError('INTERNAL_SERVER_ERROR', 'Database error occurred');
 }
 
-const HttpError = Object.assign(createHttpError, {
+const errorFactory = Object.assign(createHttpError, {
   fromDatabaseError,
   
   createFromStatusCode(statusCode, message, metadata = {}) {
@@ -124,4 +124,7 @@ const HttpError = Object.assign(createHttpError, {
   }
 });
 
-export { HttpError, ERROR_TYPES as ErrorType, FastifyErrors };
+export { errorFactory as HttpError, 
+  ERROR_TYPES as ErrorType, 
+  FastifyErrors,
+createHttpError as createError };

@@ -6,6 +6,7 @@ import { useQuestContext } from "@/contexts/QuestContext";
 import { Quest } from "@/types/quest";
 import QuestCard from "../Home/QuestCard";
 import "@/components/Home/QuestCard.scss";
+import { BidirectionalPriorityQueue } from "@/utils/BidirectionalPriorityQueue";
 interface UserData {
   id: string;
   name: string;
@@ -34,8 +35,6 @@ const Profile = () => {
       }
     });
   }, [allQuests, activeNavItem]);
-
-  console.log(filteredQuests);
 
   const navigate = useNavigate();
 
@@ -101,6 +100,32 @@ const Profile = () => {
 
     fetchUserProfile();
   }, [navigate]);
+
+  //test
+  useEffect(() => {
+    type QuestForTest = { title: string; score: number };
+    const questQueue = new BidirectionalPriorityQueue<QuestForTest>();
+    questQueue.enqueue({ title: "Quest A", score: 50 }, 0.5);
+    questQueue.enqueue({ title: "Quest B", score: 80 }, 7 / 11);
+    questQueue.enqueue({ title: "Quest C", score: 60 }, 6 / 9);
+    questQueue.enqueue({ title: "Quest D", score: 50 }, 0.5);
+    questQueue.enqueue({ title: "Quest E", score: 60 }, 3 / 8);
+    questQueue.enqueue({ title: "Quest F", score: 30 }, 1 / 5);
+    questQueue.enqueue({ title: "Quest G", score: 30 }, 1);
+    console.log(JSON.stringify(questQueue.peekMax(), null, 2));
+    console.log(JSON.stringify(questQueue.peekMin(), null, 2));
+    console.log(questQueue.getSize());
+    console.log(JSON.stringify(questQueue.dequeueMin(), null, 2));
+    console.log(JSON.stringify(questQueue.dequeueMax(), null, 2));
+    console.log(JSON.stringify(questQueue.dequeueMax(), null, 2));
+    console.log(JSON.stringify(questQueue.dequeueMax(), null, 2));
+    console.log(JSON.stringify(questQueue.dequeueMax(), null, 2));
+    console.log(JSON.stringify(questQueue.dequeueMax(), null, 2));
+    console.log(JSON.stringify(questQueue.dequeueMax(), null, 2));
+    console.log(JSON.stringify(questQueue.dequeueMax(), null, 2));
+    console.log(questQueue.isEmpty());
+  }, []);
+  //
 
   if (loading) {
     return <div className="profile__container">Завантаження...</div>;

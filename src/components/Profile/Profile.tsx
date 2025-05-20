@@ -112,18 +112,25 @@ const Profile = () => {
     questQueue.enqueue({ title: "Quest E", score: 60 }, 3 / 8);
     questQueue.enqueue({ title: "Quest F", score: 30 }, 1 / 5);
     questQueue.enqueue({ title: "Quest G", score: 30 }, 1);
-    console.log(JSON.stringify(questQueue.peekMax(), null, 2));
-    console.log(JSON.stringify(questQueue.peekMin(), null, 2));
-    console.log(questQueue.getSize());
-    console.log(JSON.stringify(questQueue.dequeueMin(), null, 2));
-    console.log(JSON.stringify(questQueue.dequeueMax(), null, 2));
-    console.log(JSON.stringify(questQueue.dequeueMax(), null, 2));
-    console.log(JSON.stringify(questQueue.dequeueMax(), null, 2));
-    console.log(JSON.stringify(questQueue.dequeueMax(), null, 2));
-    console.log(JSON.stringify(questQueue.dequeueMax(), null, 2));
-    console.log(JSON.stringify(questQueue.dequeueMax(), null, 2));
-    console.log(JSON.stringify(questQueue.dequeueMax(), null, 2));
-    console.log(questQueue.isEmpty());
+
+    console.group("BidirectionalPriorityQueue Tests");
+
+    console.dir({ peekMax: questQueue.peek("max") }, { depth: 3 });
+    console.dir({ peekMin: questQueue.peek("min") }, { depth: 3 });
+    console.log("Initial size:", questQueue.getSize());
+
+    console.dir({ dequeueMin: questQueue.dequeue("min") }, { depth: 3 });
+    console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
+    console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
+    console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
+    console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
+    console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
+    console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
+    console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
+
+    console.log("Is empty after removals:", questQueue.isEmpty());
+
+    console.groupEnd();
   }, []);
   //
 

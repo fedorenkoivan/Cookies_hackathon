@@ -10,42 +10,36 @@ export class BidirectionalPriorityQueue<T> {
     this.items.push({ item, priority });
   }
 
-  dequeueMin(): QueueItem<T> | undefined {
+  dequeue(direction: "min" | "max"): QueueItem<T> | undefined {
     if (this.items.length === 0) return;
-    let minIndex = 0;
+    let index = 0;
     for (let i = 1; i < this.items.length; i++) {
-      if (this.items[i].priority < this.items[minIndex].priority) {
-        minIndex = i;
+      if (direction === "max") {
+        if (this.items[i].priority > this.items[index].priority) {
+          index = i;
+        }
+      } else {
+        if (this.items[i].priority < this.items[index].priority) {
+          index = i;
+        }
       }
     }
-    return this.items.splice(minIndex, 1)[0];
+    return this.items.splice(index, 1)[0];
   }
 
-  dequeueMax(): QueueItem<T> | undefined {
+  peek(direction: "min" | "max"): QueueItem<T> | undefined {
     if (this.items.length === 0) return;
-    let maxIndex = 0;
-    for (let i = 1; i < this.items.length; i++) {
-      if (this.items[i].priority > this.items[maxIndex].priority) {
-        maxIndex = i;
-      }
+    if (direction === "max") {
+      return this.items.reduce(
+        (min, curr) => (curr.priority < min.priority ? curr : min),
+        this.items[0]
+      );
+    } else {
+      return this.items.reduce(
+        (max, curr) => (curr.priority > max.priority ? curr : max),
+        this.items[0]
+      );
     }
-    return this.items.splice(maxIndex, 1)[0];
-  }
-
-  peekMin(): QueueItem<T> | undefined {
-    if (this.items.length === 0) return;
-    return this.items.reduce(
-      (min, curr) => (curr.priority < min.priority ? curr : min),
-      this.items[0]
-    );
-  }
-
-  peekMax(): QueueItem<T> | undefined {
-    if (this.items.length === 0) return;
-    return this.items.reduce(
-      (max, curr) => (curr.priority > max.priority ? curr : max),
-      this.items[0]
-    );
   }
 
   getSize(): number {

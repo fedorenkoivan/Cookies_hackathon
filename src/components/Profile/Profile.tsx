@@ -27,6 +27,8 @@ const Profile = () => {
         const authorName = JSON.parse(sessionStorage.userData).name;
         return quest.author === authorName;
       } else if (activeNavItem === "Saved") {
+        if (!localStorage.savedQuests)
+          localStorage.setItem("savedQuests", "[]");
         const savedQuests = JSON.parse(localStorage.savedQuests);
         return savedQuests.includes(quest._id);
       } else {

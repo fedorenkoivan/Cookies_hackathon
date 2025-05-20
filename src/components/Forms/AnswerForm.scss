@@ -1,5 +1,11 @@
 $primary-color: #c8c7c7;
 $secondary-color: #7b7b7b;
+$honey: #ffcc00;
+$light-purple: #bbb6d5;
+$purple: #8e2de2;
+$soft-purple: #6a5acd;
+$blue-purple: #4a00e0;
+$dark-purple: #482e86;
 
 .answer-group {
   width: 100%;
@@ -11,13 +17,14 @@ $secondary-color: #7b7b7b;
 
   input {
     min-height: 100%;
-    background-color: white;
+    background-color: transparent;
+    color: white;
     border: none;
-    border-bottom: 1px solid $secondary-color;
+    border-bottom: 1px solid #ffffffb8;
     transition: 0s ease-in-out;
 
     &:focus {
-      border: 1px $secondary-color solid;
+      border: 1px solid #ffffffb8;
       border-radius: 5px;
     }
   }
@@ -30,28 +37,24 @@ $secondary-color: #7b7b7b;
     justify-content: center;
     align-items: center;
     border-radius: 10%;
-    color: white;
     cursor: pointer;
 
     .icon {
       width: 25px;
       height: 25px;
       padding: 0px;
+      margin-left: 5px;
       color: white;
-      background-color: $primary-color;
+      background-color: transparent;
     }
 
     .correct {
-      color: $secondary-color;
-      background-color: white;
+      color: $honey;
     }
 
     &:hover {
-      color: $primary-color;
-
       .icon {
-        color: $primary-color;
-        background-color: white;
+        color: $honey;
       }
     }
   }
@@ -59,11 +62,13 @@ $secondary-color: #7b7b7b;
   .cancel-icon {
     margin-left: 10px;
     border-radius: 50%;
-    color: $primary-color;
+    color: $light-purple;
     cursor: pointer;
+    width: 16px;
+    height: 16px;
 
     &:hover {
-      color: $secondary-color;
+      color: $honey;
     }
   }
 }

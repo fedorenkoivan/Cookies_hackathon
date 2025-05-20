@@ -92,7 +92,11 @@ const QuestionsForm: React.FC<QuestionProps> = ({
                 placeholder="Points"
                 value={question.points}
                 onChange={(e) => {
-                  updateQuestionPoints(questionOrder, parseInt(e.target.value));
+                  if (e.target.value) {
+                    updateQuestionPoints(questionOrder, parseInt(e.target.value));
+                  } else {
+                    updateQuestionPoints(questionOrder, 0);
+                  }
                 }}
               />
             </div>
@@ -117,7 +121,6 @@ const QuestionsForm: React.FC<QuestionProps> = ({
             </div>
           </>
         )}
-        <div className="question-group"></div>
       </div>
     </>
   );

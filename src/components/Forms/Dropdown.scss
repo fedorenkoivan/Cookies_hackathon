@@ -1,5 +1,11 @@
 $primary-color: #c8c7c7;
 $secondary-color: #7b7b7b;
+$honey: #ffcc00;
+$light-purple: #B3A4F9;
+$purple: #8e2de2;
+$soft-purple: #6a5acd;
+$blue-purple: #4a00e0;
+$dark-purple: #482E86;
 
 .dropdown-btn {
   width: 100%;
@@ -7,27 +13,36 @@ $secondary-color: #7b7b7b;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: $primary-color;
+  background-color: #A59BD9;
   border-radius: 10px;
   box-shadow: 0px 6px 3.5px -6px rgba(85, 85, 85, 1);
-  color: $secondary-color;
+  color: $dark-purple;
+  font-size: 19px;
+  font-weight: normal;
   transition: 0.3s ease-in-out;
   cursor: pointer;
 
-  &:hover {
-    box-shadow: 3px 6px 3.5px -4px rgba(85, 85, 85, 1);
-  }
-
   .icon {
     margin-top: 4px;
+    color: $honey;
+    svg {
+      width: 17px;
+      height: 17px;
+    }
+  }
+
+  &:focus {
+    outline: $honey solid 1px;
   }
 }
 
 .open {
   border-radius: 10px 10px 0px 0px;
 }
+
 .selected {
-  color: black;
+  color: $honey;
+  background-color: $soft-purple;
 }
 
 .dropdown-content {
@@ -35,23 +50,25 @@ $secondary-color: #7b7b7b;
   max-height: 23vh;
   display: flex;
   flex-direction: column;
-  background-color: $primary-color;
+  background-color: #A59BD9;
   border-radius: 0px 0px 10px 10px;
   box-shadow: 0px 6px 3.5px -6px rgba(85, 85, 85, 1);
   z-index: 1;
   overflow-y: scroll;
   scrollbar-width: thin;
-  scrollbar-color: $secondary-color;
+  scrollbar-color: $dark-purple;
+  font-size: 19px;
 }
 
 .dropdown-element {
   padding: 10px;
-  color: $secondary-color;
+  color: #FFFFFF;
+  font-weight: normal;
   transition: 0.1s ease-in-out;
   cursor: pointer;
 
   &:hover {
-    background-color: rgb(218, 218, 218);
-    color: black;
+    background-color: $soft-purple;
+    color: $honey;
   }
 }

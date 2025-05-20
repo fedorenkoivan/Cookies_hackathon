@@ -1,15 +1,30 @@
 $primary-color: #c8c7c7;
 $secondary-color: #7b7b7b;
+$honey: #ffcc00;
+$light-purple: #bbb6d5;
+$purple: #8e2de2;
+$soft-purple: #6a5acd;
+$blue-purple: #4a00e0;
+$dark-purple: #482e86;
 
 .question-form {
   width: 100%;
-  border-bottom: 2px solid $secondary-color;
+  border-bottom: 2px solid #ffffffb8;
 
   input {
     min-height: 100%;
-    background-color: white;
+    background-color: transparent;
     border-radius: 0px;
     box-shadow: 0px 6px 28px -90px rgba(85, 85, 85, 1);
+    color: white;
+    font-size: 19px;
+    font-weight: normal;
+
+    &::placeholder {
+      color: $light-purple;
+      font-size: 19px;
+      font-weight: normal;
+    }
 
     &:focus {
       box-shadow: 0px 7px 5px -60px rgba(77, 77, 77, 0.64);
@@ -21,42 +36,20 @@ $secondary-color: #7b7b7b;
   }
 
   .question-number {
-    min-width: 36px;
-    height: 36px;
+    min-width: 42px;
+    height: 42px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: $primary-color;
+    background-color: $soft-purple;
+    outline: $honey solid 1px;
     border-radius: 50%;
-    border: 2px;
-    border-color: $secondary-color;
-  }
-
-  .icons-wrapper {
-    width: 20vw;
-    height: auto;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
-  }
-
-  .icon {
-    width: 40px;
-    height: 40px;
-    padding: 9px;
-    background-color: white;
-    border-radius: 20%;
-    color: $secondary-color;
-
-    &:hover {
-      color: white;
-      background-color: $secondary-color;
-    }
+    font-size: 17px;
+    font-weight: 450;
   }
 
   .question-wrapper {
-    margin: 5px 0;
+    margin: 8px 0;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -70,6 +63,33 @@ $secondary-color: #7b7b7b;
     justify-content: start;
     align-items: start;
   }
+
+  .icons-wrapper {
+    width: 24vw;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+
+    .icon {
+      width: 43px;
+      height: 43px;
+      padding: 9px;
+      background-color: $soft-purple;
+      border-radius: 20%;
+      color: white;
+      cursor: pointer;
+      outline: $honey solid 1px;
+
+      &:hover {
+        color: $soft-purple;
+        background-color: $honey;
+        outline: $soft-purple solid 1px;
+      }
+    }
+  }
+
   .icon-container {
     position: relative;
     display: flex;
@@ -78,9 +98,9 @@ $secondary-color: #7b7b7b;
 
     .image-badge {
       position: absolute;
-      width: 8px;
-      height: 8px;
-      background-color: #4caf50;
+      width: 9px;
+      height: 9px;
+      background-color: $honey;
       border-radius: 50%;
       top: 0;
       right: 0;
@@ -96,7 +116,9 @@ $secondary-color: #7b7b7b;
 
     p {
       margin-left: 15px;
-      font-size: 16px;
+      font-size: 17px;
+      color: $honey;
+      font-weight: normal;
     }
 
     input {
@@ -111,10 +133,6 @@ $secondary-color: #7b7b7b;
       text-align: center;
       font-size: 16px;
       font-weight: normal;
-
-      &:focus {
-        box-shadow: 0px 7px 5px -6px rgba(77, 77, 77, 0.64);
-      }
     }
   }
 }
@@ -124,21 +142,29 @@ $secondary-color: #7b7b7b;
   min-width: auto;
   max-width: fit-content;
   margin-top: 10px;
-  padding-right: 15px;
-  background-color: #fff;
+  padding: 0 0 10px 0;
+  background-color: transparent;
+  box-shadow: none;
   border: none;
   border-radius: 10px;
   font: 700 14px/1 sans-serif;
   letter-spacing: 0;
-  color: #112000;
+  color: white;
+  opacity: 0.5;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
 
+  p {
+    font-size: 18px;
+    font-weight: 400;
+    color: white;
+  }
+
   .icon {
-    width: 30px;
-    height: 30px;
+    width: 36px;
+    height: 36px;
     margin-right: 7px;
     border-radius: 50%;
     display: flex;
@@ -147,13 +173,20 @@ $secondary-color: #7b7b7b;
   }
 
   &:hover {
+    color: $honey;
+    background-color: transparent;
+    opacity: 1;
     cursor: pointer;
-    text-decoration: underline;
-    color: $secondary-color;
+
+    p {
+      color: $honey;
+      opacity: 1;
+    }
 
     .icon {
-      background-color: $secondary-color;
-      color: white;
+      background-color: $honey;
+      color: $dark-purple;
+      opacity: 1;
     }
   }
 }

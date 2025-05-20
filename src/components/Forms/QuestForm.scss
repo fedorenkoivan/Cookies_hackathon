@@ -1,17 +1,23 @@
 $primary-color: #c8c7c7;
 $secondary-color: #7b7b7b;
-$light-purple: #B3A4F9;
+$honey: #ffcc00;
+$light-purple: #a59bd9;
 $purple: #8e2de2;
 $soft-purple: #6a5acd;
 $blue-purple: #4a00e0;
 $dark-purple: #482E86;
 
 .quest-form__background {
+  border-left: 15vw solid #2e165d;
+  border-right: 15vw solid #2e165d;
   background: linear-gradient(
     180deg,
-    #4b26a3 4%,
-    #612bbf 24%,
-    #351459 100%
+    #4d2bbe 0%,
+    #5134af 10%,
+    #5c2bbf 28%,
+    #612bbf 40%,
+    #5a27af 59%,
+    #491e86 100%
   );
 }
 
@@ -20,12 +26,12 @@ $dark-purple: #482E86;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  color: #FFFFFF;
+  color: #ffffff;
 
   .hero-section {
-    min-width: min(800px, 80%);
+    min-width: min(850px, 85%);
     max-width: 80%;
-    min-height: 20vh;
+    min-height: 20vh; 
     margin-top: 40px;
     padding: 40px;
     display: flex;
@@ -34,29 +40,30 @@ $dark-purple: #482E86;
     align-items: center;
     background: $dark-purple;
     border-radius: 40px;
-    box-shadow: 0px 6px 3.5px -6px rgba(85, 85, 85, 1);
-    outline: $light-purple solid 3px;
+    box-shadow: 0px 6px 3.5px -6px black;
+    outline: #b3a4f9 solid 3px;
 
     h1 {
-      max-width: 70%;
+      max-width: 75%;
       min-width: 200px;
       text-align: center;
-      font-size: 30px;
-      color: #DBDBFE;
+      font-size: 36px;
+      font-weight: 600;
+      color: #dbdbfe;
     }
   }
 
   &__group {
-    min-width: min(800px, 80%);
-    margin: 45px 15px 0px 15px;
+    min-width: min(850px, 85%);
+    margin: 35px 15px 0px 15px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
 
     h3 {
       margin-bottom: 10px;
-      font-weight: 350;
-      font-size: 18px;
+      font-weight: 400;
+      font-size: 21px;
       text-transform: none;
     }
 
@@ -74,12 +81,13 @@ $dark-purple: #482E86;
       span {
         font-size: 14px;
         font-weight: light;
-        color: $secondary-color;
+        color: white;
+        opacity: 0.5;
       }
 
       h3 {
-        font-weight: bold;
-        font-size: 16px;
+        font-weight: 400;
+        font-size: 21px;
         text-transform: none;
       }
     }
@@ -92,40 +100,39 @@ $dark-purple: #482E86;
       font-weight: 500;
       border: none;
       border-radius: 10px;
-      background-color: $primary-color;
-      box-shadow: 0px 6px 3.5px -6px rgba(85, 85, 85, 1);
+      background-color: #a59bd9;
+      box-shadow: 0px 6px 3.5px -6px black;
       outline: none;
       transition: 0.2s ease-in-out;
+      color: white;
+      font-size: 19px;
+      font-weight: normal;
 
       &::placeholder {
-        color: $secondary-color;
-        font-size: medium;
+        color: $dark-purple;
+        font-size: 19px;
         font-weight: normal;
-      }
-
-      &:focus {
-        box-shadow: 0px 7px 5px -6px rgba(77, 77, 77, 0.64);
-      }
-      &:hover,
-      &:active {
-        box-shadow: 3px 6px 3.5px -4px rgba(85, 85, 85, 1);
       }
     }
 
     textarea {
-      min-height: 75px;
+      min-height: 100px;
       resize: none;
+    }
+
+    input {
+      min-height: 50px;
     }
   }
 
   .container {
-    min-width: min(800px, 80%);
-    margin: 45px 15px 0px 15px;
+    min-width: min(850px, 85%);
+    margin: 45px 0px 0px 0px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    color: #000000;
+    color: #ffffff;
   }
 
   .text-section {
@@ -134,16 +141,19 @@ $dark-purple: #482E86;
     gap: 5px;
 
     h2 {
-      font-weight: bold;
-      font-size: 16px;
+      font-weight: 400;
+      font-size: 21px;
     }
     p {
-      font-size: 14px;
+      font-size: 18px;
       opacity: 0.8;
+      font-weight: normal;
     }
     b {
       margin-left: 35px;
-      font-size: 14px;
+      font-weight: normal;
+      font-size: 19px;
+      color: white;
     }
   }
 
@@ -161,27 +171,30 @@ $dark-purple: #482E86;
       display: flex;
       justify-content: center;
       align-items: center;
-      border: none;
+      background: transparent;
       border-radius: 8px;
+      border: none;
       text-align: center;
-      font-size: 16px;
-      font-weight: bold;
+      font-size: 19px;
+      font-weight: 600;
+      color: white;
 
-      &:focus {
-        box-shadow: 0px 7px 5px -6px rgba(77, 77, 77, 0.64);
+      &:focus,
+      &:active {
+        outline: none;
       }
     }
 
     button {
-      width: 35px;
-      height: 35px;
-      background: $primary-color;
+      width: 42px;
+      height: 42px;
+      background: $soft-purple;
       border: none;
       border-radius: 50%;
-      box-shadow: 0px 6px 3.5px -6px rgba(85, 85, 85, 1);
-      color: white;
-      font-size: 20px;
-      font-weight: bold;
+      box-shadow: 0px 6px 3.5px -6px black;
+      color: $honey;
+      font-size: 28px;
+      font-weight: 500;
       transition: 0.3s ease-in-out;
       cursor: pointer;
       display: flex;
@@ -189,44 +202,52 @@ $dark-purple: #482E86;
       align-items: center;
 
       &:hover {
-        background: $secondary-color;
+        background: $honey;
+        color: $soft-purple;
       }
     }
   }
 
   .toggle-button {
-    width: 50px;
-    height: 28px;
+    width: 55px;
+    height: 30.3px;
     position: relative;
-    background-color: $primary-color;
+    background-color: $light-purple;
     border: none;
     border-radius: 14px;
-    box-shadow: 0px 4px 3.5px -2.5px rgba(85, 85, 85, 0.64);
     transition: background-color 0.1s ease, border-color 0.2s ease;
     cursor: pointer;
 
     .thumb {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       position: absolute;
-      left: 4.5px;
+      left: 5px;
       top: 50%;
       background-color: #ffffff;
+      outline: $soft-purple solid 1.5px;
       border-radius: 50%;
       transition: left 0.2s ease;
       transform: translateY(-50%);
     }
 
     &:hover {
-      background-color: $secondary-color;
+      background-color: $honey;
+      .thumb {
+        background-color: white;
+        outline: $soft-purple solid 1.5px;
+      }
     }
 
     &.toggled {
-      background-color: $secondary-color;
+      background-color: $honey;
       border-color: $secondary-color;
+      outline: none;
 
       .thumb {
-        left: 25px;
+        left: 27.8px;
+        background-color: white;
+        outline: $soft-purple solid 1.5px;
       }
     }
   }
@@ -237,35 +258,51 @@ $dark-purple: #482E86;
     max-width: fit-content;
     margin-top: 10px;
     padding: 0 15px 0 0;
-    background-color: #fff;
+    background-color: transparent;
+    box-shadow: none;
     border: none;
     border-radius: 10px;
-    color: #112000;
-    font: 700 16px/1 sans-serif;
+    font: 700 19px/1 sans-serif;
     letter-spacing: 0;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
+    transition: 0.2 ease-in-out;
+
+    p {
+      font-size: 17px;
+      font-weight: 400;
+      color: white;
+      opacity: 0.5;
+    }
 
     .icon {
-      width: 36px;
-      height: 36px;
-      margin-right: 10px;
+      width: 42px;
+      height: 42px;
+      margin-right: 5px;
       border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
+      color: white;
+      opacity: 0.5;
     }
 
     &:hover {
-      color: $secondary-color;
-      text-decoration: underline;
+      color: $honey;
+      opacity: 1;
       cursor: pointer;
 
+      p {
+        color: $honey;
+        opacity: 1;
+      }
+
       .icon {
-        background-color: $secondary-color;
-        color: white;
+        background-color: $honey;
+        color: $dark-purple;
+        opacity: 1;
       }
     }
   }
@@ -273,19 +310,18 @@ $dark-purple: #482E86;
   .next-btn {
     margin: 20px 20px 40px;
     padding: 10px 20px;
-    background-color: $primary-color;
+    background-color: $soft-purple;
     border: none;
-    border-radius: 25px;
-    box-shadow: 0px 4px 3.5px -2.5px rgba(85, 85, 85, 0.64);
-    color: $secondary-color;
-    font-size: 16px;
-    font-weight: bold;
+    border-radius: 15px;
+    color: $honey;
+    font-size: 19px;
+    font-weight: medium;
     transition: 0.2s;
     cursor: pointer;
 
     &:hover {
-      color: white;
-      background-color: $secondary-color;
+      color: $soft-purple;
+      background-color: $honey;
     }
   }
 }
@@ -303,9 +339,9 @@ $dark-purple: #482E86;
 
     .image-badge {
       position: absolute;
-      width: 8px;
-      height: 8px;
-      background-color: #4caf50;
+      width: 9px;
+      height: 9px;
+      background-color: $honey;
       border-radius: 50%;
       top: 0;
       right: 0;
@@ -314,27 +350,27 @@ $dark-purple: #482E86;
   }
 
   .icon {
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     padding: 9px;
-    background-color: white;
+    background-color: $soft-purple;
     border-radius: 20%;
-    color: $secondary-color;
+    color: white;
     cursor: pointer;
+    outline: $honey solid 1px;
 
     &:hover {
-      color: white;
-      background-color: $secondary-color;
+      color: $soft-purple;
+      background-color: $honey;
+      outline: $soft-purple solid 1px;
     }
   }
 
   .image-label {
     margin-left: 10px;
-    font-size: 14px;
-    color: $secondary-color;
+    font-size: 18px;
+    font-weight: 400;
+    color: white;
   }
 }
 
-.quest-form__group .image-upload-container .icon-container.has-image .icon {
-  background-color: $primary-color;
-}

@@ -163,7 +163,7 @@ const QuestFormContent = () => {
         <div className="container">
           <div className="text-section">
             <h2>Time</h2>
-            <p>Set the maximum time to finish the quest.</p>
+            <p>Sets the time limit for completing your quest</p>
           </div>
           <button
             className={`toggle-button ${showTimeControls ? "toggled" : ""}`}

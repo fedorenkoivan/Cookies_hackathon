@@ -182,7 +182,7 @@ const QuestFormContent = () => {
             <div className="controls">
               <button
                 type="button"
-                onClick={() => setTime((prev) => Math.max(30, prev - 1))}
+                onClick={() => setTime((prev) => Math.max(1, prev - 1))}
               >
                 -
               </button>

@@ -103,47 +103,51 @@ const Profile = () => {
   }, [navigate]);
 
   if (loading) {
-    return <div className="profile__container">Завантаження...</div>;
+    return <div className="profile__container">Loading...</div>;
   }
 
   if (error) {
-    return <div className="profile__container">Помилка: {error}</div>;
+    return <div className="profile__container">Error: {error}</div>;
   }
 
   return (
     <div className="profile__container">
-      <div className="profile__header">
-        <div className="profile__avatar">
-          <img src="./src/assets/default_avatar.svg" alt="Avatar"></img>
-        </div>
-        <div className="profile__user-info">
-          <h2>{userData?.name || "USERNAME"}</h2>
-          <p>{userData?.email}</p>
-          <div className="profile__rating">
-            <StarRatingAuto rating={3.5} />
+      <div className="profile__top_container">
+        <div className="profile__header">
+          <div className="profile__avatar">
+            <div className="image">
+              <img src="./src/assets/img1.png" alt="Avatar" />
+            </div>
+          </div>
+          <div className="profile__user-info">
+            <h1>{userData?.name || "USERNAME"}</h1>
+            <p>{userData?.email}</p>
+            <div className="profile__rating">
+              <StarRatingAuto rating={3.5} />
+            </div>
+          </div>
+          <div className="profile__actions">
+            <button className="profile__edit-btn">
+              <img src="./src/assets/edit-3-svgrepo-com.svg" alt="Edit"></img>
+            </button>
+            <button className="profile__share-btn">
+              <img src="./src/assets/share-svgrepo-com.svg" alt="Share"></img>
+            </button>
           </div>
         </div>
-        <div className="profile__actions">
-          <button className="profile__edit-btn">
-            <img src="./src/assets/edit-3-svgrepo-com.svg" alt="Edit"></img>
-          </button>
-          <button className="profile__share-btn">
-            <img src="./src/assets/share-svgrepo-com.svg" alt="Share"></img>
-          </button>
+        <div className="profile__nav">
+          {["Saved", "Quests", "History"].map((item) => (
+            <span
+              key={item}
+              className={`profile__nav-item ${
+                activeNavItem === item ? "active" : ""
+              }`}
+              onClick={() => handleNavItemClick(item)}
+            >
+              {item}
+            </span>
+          ))}
         </div>
-      </div>
-      <div className="profile__nav">
-        {["Saved", "Quests", "History"].map((item) => (
-          <span
-            key={item}
-            className={`profile__nav-item ${
-              activeNavItem === item ? "active" : ""
-            }`}
-            onClick={() => handleNavItemClick(item)}
-          >
-            {item}
-          </span>
-        ))}
       </div>
       <div className="profile__quests">
         <div className="quests">

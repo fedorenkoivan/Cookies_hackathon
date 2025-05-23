@@ -1,20 +1,23 @@
 import { 
   validateLoginInput, validateCredentails,
-  sendEmail,
+  // sendEmail,
   createRefreshToken,
   handleTokens, clearRefreshTokenCookie, verifyJwtToken,
 } from "../utils/authUtils.js";
+import { sendEmail } from "../utils/sendEmailProxy.js";
 
 import argon2 from "argon2";
 
 import { getProfile } from "../controllers/userController.js";
 import { verifyToken } from "../middleware/authMiddleWare.js";
+import { logRoute } from "../middleware/loggerMiddleware.js";
 import { User } from "../models/userModel.js";
 
+
 export default async function userRoutes(fastify) {
-  fastify.post("/signup", async (request, reply) => {
+  fastify.post("/signup", { preHandler: logRoute("register") },
+  async (request, reply) => {
     const { name, email, password } = request.body;
-    console.log(request.body);
 
     const newUser = await User.create({
       name,
@@ -33,7 +36,9 @@ export default async function userRoutes(fastify) {
     });
   });
 
-  fastify.post("/login", async (request, reply) => {
+
+  fastify.post("/login", { preHandler: logRoute("login") }, 
+  async (request, reply) => {
     const { isInputValid, inputErrorMsg, inputCode } = validateLoginInput(
       request.body,
     );
@@ -57,7 +62,9 @@ export default async function userRoutes(fastify) {
     reply.code(200).send({ status: "success", accessToken });
   });
 
-  fastify.post("/logout", async (request, reply) => {
+
+  fastify.post("/logout", { preHandler: logRoute("logout") }, 
+  async (request, reply) => {
     const refreshToken = request.cookies.refreshToken;
 
     clearRefreshTokenCookie(reply);
@@ -78,11 +85,13 @@ export default async function userRoutes(fastify) {
       .send({ status: "success", message: "Logged out successfully" });
   });
 
+
   fastify.get(
     "/profile",
     {
       preHandler: async (request, reply) => {
         await verifyToken(request, reply);
+        await logRoute("profile")(request, reply);
       },
     },
     async (request, reply) => {
@@ -90,7 +99,9 @@ export default async function userRoutes(fastify) {
     },
   );
 
-  fastify.post("/forgot-password", async (request, reply) => {
+
+  fastify.post("/forgot-password", { preHandler: logRoute("forgot_password") },
+  async (request, reply) => {
         const { email } = request.body;
 
         if (!email) {
@@ -119,7 +130,7 @@ export default async function userRoutes(fastify) {
           If you didn't forget your password, please ignore this email.
         `;
 
-        const html = `
+const html = `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <h2 style="color: #1d2671;">Password Reset</h2>
             <p>Hello ${user.name},</p>
@@ -152,7 +163,9 @@ export default async function userRoutes(fastify) {
     }
   });
 
-  fastify.post("/reset-password/:resetToken", async (request, reply) => {
+
+  fastify.post("/reset-password/:resetToken", { preHandler: logRoute("reset_password") },
+  async (request, reply) => {
         const { resetToken } = request.params;
         const { password, passwordConfirm } = request.body;
 
@@ -206,9 +219,11 @@ export default async function userRoutes(fastify) {
         });
 
         reply.code(200).send({ status: "success", accessToken });
-  });
+    });
+  
 
-  fastify.post("/refresh", async (request, reply) => {
+  fastify.post("/refresh", { preHandler: logRoute("token_refresh") },
+  async (request, reply) => {
     const refreshToken = request.cookies.refreshToken;
 
     let decoded;

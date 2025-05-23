@@ -6,6 +6,7 @@ import { useQuestContext } from "@/contexts/QuestContext";
 import { Quest } from "@/types/quest";
 import QuestCard from "../Home/QuestCard";
 import "@/components/Home/QuestCard.scss";
+import { BidirectionalPriorityQueue } from "@/utils/BidirectionalPriorityQueue";
 interface UserData {
   id: string;
   name: string;
@@ -26,6 +27,8 @@ const Profile = () => {
         const authorName = JSON.parse(sessionStorage.userData).name;
         return quest.author === authorName;
       } else if (activeNavItem === "Saved") {
+        if (!localStorage.savedQuests)
+          localStorage.setItem("savedQuests", "[]");
         const savedQuests = JSON.parse(localStorage.savedQuests);
         return savedQuests.includes(quest._id);
       } else {
@@ -34,8 +37,6 @@ const Profile = () => {
       }
     });
   }, [allQuests, activeNavItem]);
-
-  console.log(filteredQuests);
 
   const navigate = useNavigate();
 
@@ -101,6 +102,39 @@ const Profile = () => {
 
     fetchUserProfile();
   }, [navigate]);
+
+  //test
+  useEffect(() => {
+    type QuestForTest = { title: string; score: number };
+    const questQueue = new BidirectionalPriorityQueue<QuestForTest>();
+    questQueue.enqueue({ title: "Quest A", score: 50 }, 0.5);
+    questQueue.enqueue({ title: "Quest B", score: 80 }, 7 / 11);
+    questQueue.enqueue({ title: "Quest C", score: 60 }, 6 / 9);
+    questQueue.enqueue({ title: "Quest D", score: 50 }, 0.5);
+    questQueue.enqueue({ title: "Quest E", score: 60 }, 3 / 8);
+    questQueue.enqueue({ title: "Quest F", score: 30 }, 1 / 5);
+    questQueue.enqueue({ title: "Quest G", score: 30 }, 1);
+
+    console.group("BidirectionalPriorityQueue Tests");
+
+    console.dir({ peekMax: questQueue.peek("max") }, { depth: 3 });
+    console.dir({ peekMin: questQueue.peek("min") }, { depth: 3 });
+    console.log("Initial size:", questQueue.getSize());
+
+    console.dir({ dequeueMin: questQueue.dequeue("min") }, { depth: 3 });
+    console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
+    console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
+    console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
+    console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
+    console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
+    console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
+    console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
+
+    console.log("Is empty after removals:", questQueue.isEmpty());
+
+    console.groupEnd();
+  }, []);
+  //
 
   if (loading) {
     return <div className="profile__container">Loading...</div>;

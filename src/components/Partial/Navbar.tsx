@@ -67,13 +67,6 @@ const Navbar = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const accessToken = localStorage.getItem('accessToken');
-  //   if (accessToken && !userData) {
-  //     fetchUserProfile();
-  //   }
-  // }, []);
-
   useEffect(() => {
     fetchUserProfile();
   }, [location.pathname]);

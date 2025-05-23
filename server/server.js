@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 
 import userRoutes from './routes/userRoutes.js';
 import questRoutes from './routes/questRoutes.js';
+import { ErrorType } from './utils/errorUtils.js';
 
 dotenv.config({ path: "../.env" });
 
@@ -22,35 +23,28 @@ const PORT = 5000;
 
 fastify.setErrorHandler((error, request, reply) => {
   console.error("Error handler caught:", error);
-  // викликати хттп, errorUtils must be class
-  if (error.name === 'DocumentNotFoundError' || error.message === 'User not found') {
-    return reply.code(404).send({
-      status: 'error',
-      message: 'Not found'
+  
+  let httpError;
+  
+  if (error instanceof ErrorType) {
+    httpError = error;
+  } else if (error.statusCode && error.validation) {
+    httpError = ErrorType('BAD_REQUEST', 'Validation Error', { 
+      validation: error.validation 
     });
+  } else if (error.name === 'DocumentNotFoundError' || 
+             error.name === 'CastError' || 
+             error.name === 'MongoError' || 
+             error.name === 'ValidationError') {
+    httpError = ErrorType.fromDatabaseError(error);
+  } else {
+    const statusCode = error.statusCode ?? 500;
+    httpError = ErrorType.createFromStatusCode(statusCode, error.message || 'Internal Server Error');
   }
   
-  if (error.name === 'CastError' && error.kind === 'ObjectId') {
-    return reply.code(400).send({
-      status: 'error',
-      message: 'Invalid ID format'
-    });
-  }
+  fastify.log.error(httpError.toLog());
   
-  if (error.name === 'MongoError' || error.name === 'ValidationError') {
-    return reply.code(400).send({
-      status: 'error',
-      message: error.message
-    });
-  }
-  
-  const statusCode = error.statusCode || 500;
-  
-  fastify.log.error(error);
-  return reply.code(statusCode).send({
-    status: 'error',
-    message: error.message || 'Internal Server Error'
-  });
+  return reply.code(httpError.statusCode).send(httpError.toHttp());
 });
 
 await fastify.register(fastifyCookie, {

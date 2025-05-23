@@ -1,7 +1,10 @@
 $lightgray: #e5e5e5;
 $darker-gray: #c5c5c5;
-$white: #ffffff;
-$black: #000000;
+$honey: #ffcc00;
+$light-blue: #3586ff;
+$light-purple: #8e2de2;
+$soft-purple: #6a5acd;
+$dark-purple: #4a00e0;
 
 @mixin flex-center {
   display: flex;
@@ -20,10 +23,10 @@ $black: #000000;
     &-wrapper {
       width: 80%;
       height: 100%;
-      background-color: $lightgray;
+      border: 2.5px solid $dark-purple;
       display: flex;
       align-items: center;
-      border-radius: 15px;
+      border-radius: 25px;
 
       .image-container {
         height: 40vh;
@@ -33,21 +36,21 @@ $black: #000000;
           height: 100%;
           width: 100%;
           object-fit: cover;
-          border-radius: 15px 0 0 15px;
+          border-radius: 22.5px 0 0 22.5px;
         }
         .bookmark {
           position: absolute;
-          top: -2px;
-          right: 20px;
+          top: -5px;
+          right: 45px;
           .icon {
-            width: 32px;
-            height: 32px;
+            width: 52px;
+            height: 52px;
             color: white;
             cursor: pointer;
           }
           .icon-active {
-            width: 32px;
-            height: 32px;
+            width: 52px;
+            height: 52px;
             color: gold;
             cursor: pointer;
           }
@@ -58,19 +61,36 @@ $black: #000000;
         height: 40vh;
         width: 40%;
         padding: 20px;
-        font-size: 18px;
         display: flex;
         justify-content: space-between;
         flex-direction: column;
+        background: rgb(234, 234, 234);
+        border-radius: 0 22.5px 22.5px 0;
+
+        svg {
+          width: 23px;
+          height: 23px;
+        }
 
         .top {
           display: flex;
           justify-content: space-between;
-          margin: 20px 20px 30px 0;
-          .clock,
+          margin: 20px 7px 20px 0;
+          .clock {
+            @include flex-center;
+            p {
+              font-weight: 350;
+              font-size: 21px;
+            }
+          }
           .author {
             @include flex-center;
+            p {
+              font-size: 21px;
+              font-weight: 500;
+            }
           }
+
           .icon {
             margin-right: 15px;
           }
@@ -80,28 +100,49 @@ $black: #000000;
           .title {
             font-weight: bold;
             text-transform: uppercase;
-            font-size: 20px;
-          }
+            font-size: 28px;
+            margin-bottom: 10px;          }
           .category {
             margin-top: 2vh;
+            font-weight: 400;
+            font-size: 18px;
           }
         }
 
         .rating {
           display: flex;
-          margin-top: 4vh;
-          height: 25px;
+          flex-direction: row;
+          align-items: center;
+          margin-top: 3.5vh;
+          height: 35px;
+
+          svg {
+            width: 27px;
+            height: 27px;
+          }
           .reviews {
             margin-left: 10px;
+            margin-top: 2px;
             @include flex-center;
             height: 25px;
             width: 25px;
+            color: #3d3d3d;
+            font-weight: 350;
+            font-size: 20px;
           }
         }
 
         .start {
           margin-top: 5vh;
           @include flex-center;
+          button {
+            height: inherit;
+            width: 80%;
+            @include flex-center;
+            p {
+              font-size: 21px;
+            }
+          }
         }
       }
     }

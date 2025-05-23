@@ -94,7 +94,7 @@ const QuestFormContent = () => {
   };
 
   return (
-    <>
+    <div className="quest-form__background">
       <form className="quest-form" onSubmit={handleSubmit}>
         <div className="hero-section">
           <h1>Ready to launch your own quest?</h1>
@@ -163,7 +163,7 @@ const QuestFormContent = () => {
         <div className="container">
           <div className="text-section">
             <h2>Time</h2>
-            <p>Set the maximum time to finish the quest.</p>
+            <p>Sets the time limit for completing your quest</p>
           </div>
           <button
             className={`toggle-button ${showTimeControls ? "toggled" : ""}`}
@@ -182,7 +182,7 @@ const QuestFormContent = () => {
             <div className="controls">
               <button
                 type="button"
-                onClick={() => setTime((prev) => Math.max(30, prev - 1))}
+                onClick={() => setTime((prev) => Math.max(1, prev - 1))}
               >
                 -
               </button>
@@ -235,7 +235,7 @@ const QuestFormContent = () => {
           Submit Quest
         </button>
       </form>
-    </>
+    </div>
   );
 };
 

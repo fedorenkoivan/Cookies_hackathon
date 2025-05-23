@@ -78,18 +78,16 @@ const QuestCard = ({ quests }: QuestCardProps) => {
                 </div>
               </div>
               <div className="quests__card-start">
-                {quest.time === -1 ? (
-                  <div>
-                    <p>No time limit</p>
+                <div className="clock">
+                  <div className="icon">
+                    <FaClock className="" />
                   </div>
-                ) : (
-                  <div className="clock">
-                    <div className="icon">
-                      <FaClock className="" />
-                    </div>
+                  {quest.time === -1 ? (
+                    <p>No limit</p>
+                  ) : (
                     <p>{quest.time}s</p>
-                  </div>
-                )}
+                  )}
+                </div>
                 <button
                   className="button"
                   onClick={() => navigate(`/preview-quest/${quest._id}`)}

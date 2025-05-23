@@ -1,7 +1,10 @@
 $lightgray: #e5e5e5;
 $darker-gray: #c5c5c5;
-$white: #ffffff;
-$black: #000000;
+$honey: #ffcc00;
+$light-blue: #3586ff;
+$light-purple: #8E2DE2;
+$soft-purple: #6A5ACD;
+$dark-purple: #4A00E0;
 
 * {
   box-sizing: border-box;
@@ -11,6 +14,10 @@ $black: #000000;
   font-weight: 500;
 }
 
+body {
+  background: #c9c5e1;
+}
+
 p,
 span {
   font-size: 14px;
@@ -18,14 +25,16 @@ span {
 
 button {
   cursor: pointer;
-  border: solid $black 2px;
-  border-radius: 5px;
+  border: none;
+  border-radius: 10px;
   padding: 5px 15px;
   display: flex;
   gap: 5px;
-  background-color: $lightgray;
+  background-color: $soft-purple;
+  color: white;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.25);
 }
 button:hover {
-  background-color: $darker-gray;
+  background-color: $dark-purple;
   transition: 0.3s;
 }

@@ -2,7 +2,7 @@ import { createContext, useContext } from 'react';
 import { Quest } from '@/types/quest';
 
 interface QuestContextType {
-  allQuests: Quest[]
+  allQuests: Quest[];
   quest: Quest | null;
   loading: boolean;
   error: string | null;

@@ -6,6 +6,7 @@ import { useQuestContext } from "@/contexts/QuestContext";
 import { Quest } from "@/types/quest";
 import QuestCard from "../Home/QuestCard";
 import "@/components/Home/QuestCard.scss";
+import { FaEdit, FaShareAlt } from "react-icons/fa";
 import { BidirectionalPriorityQueue } from "@/utils/BidirectionalPriorityQueue";
 interface UserData {
   id: string;
@@ -162,10 +163,10 @@ const Profile = () => {
           </div>
           <div className="profile__actions">
             <button className="profile__edit-btn">
-              <img src="./src/assets/edit-3-svgrepo-com.svg" alt="Edit"></img>
+              <FaEdit />
             </button>
             <button className="profile__share-btn">
-              <img src="./src/assets/share-svgrepo-com.svg" alt="Share"></img>
+              <FaShareAlt />
             </button>
           </div>
         </div>

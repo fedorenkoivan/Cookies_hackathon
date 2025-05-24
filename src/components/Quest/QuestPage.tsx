@@ -5,6 +5,7 @@ import "./QuestPage.scss";
 import Comments from "./Comments";
 import { useQuestContext } from "@/contexts/QuestContext";
 import logoImage from "@/assets/logo.jpg";
+import avatarImage from "@/assets/img1.png";
 
 const QuestPage = () => {
   const { id } = useParams();
@@ -31,22 +32,31 @@ const QuestPage = () => {
     <div className="quest">
       <section className="quest__info">
         <div className="description">
-          <p>{quest.category}</p>
-          <h2>{quest.title}</h2>
-          <div className="rating">
-            <StarRatingAuto rating={quest.rating} />
-            <p className="reviews">({quest.reviews})</p>
+          <div className="general">
+            <p className="category">{quest.category}</p>
+            <h2 className="title">{quest.title}</h2>
+            <div className="rating">
+              <StarRatingAuto rating={quest.rating} />
+              <div className="reviews"><p>({quest.reviews})</p></div>
+            </div>
+            <h3 className="description-title">Description</h3>
+            <p className="desc">{quest.description}</p>
+            <p className="number">
+              Number of questions: {quest.questions.length}
+            </p>
+            <p className="score">Maximum score: 12 points</p>
+            <p className="time">Time limit: {quest.time === -1 ? "no limit" : quest.time + "s"}</p>
           </div>
-          <h3>Description</h3>
-          <p>{quest.description}</p>
-          <p>Number of questions: {quest.questions.length}</p>
-          <p>Maximum score: 12 points</p>
-          <p>Time limit: {quest.time}s</p>
+          <div className="author">
+            <p>Created by</p>
+            <div className="author-image">
+              <img src={quest.author?.image || avatarImage}/>
+              <p>{quest.author}</p>
+            </div>
+          </div>
         </div>
         <div className="image">
-          <img
-            src={quest?.image || logoImage}
-          />
+          <img src={quest?.image || logoImage} />
         </div>
       </section>
       <section className="quest__start">

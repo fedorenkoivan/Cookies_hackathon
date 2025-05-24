@@ -30,17 +30,73 @@ hr {
     .description {
       display: flex;
       justify-content: space-between;
-      flex-direction: column;
+      flex-direction: row;
       width: 60%;
       height: 300px;
       padding: 20px 0 20px 0;
-      h2 {
-        text-transform: uppercase;
+      .general {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        .title {
+          text-transform: uppercase;
+          font-weight: bolder;
+          font-size: 20px;
+        }
+        .description-title {
+          font-weight: bolder;
+          font-size: 16px;
+          margin: 8px 0;
+        }
+        .category,
+        .desc,
+        .time,
+        .number,
+        .score {
+          font-weight: 350;
+        }
+        .desc {
+          margin: 5px 0 10px 0;
+        }
+
+        .reviews {
+          @include flex-center;
+          p {
+            font-weight: 350;
+          }
+        }
+      }
+      .author {
+        width: 150px;
+        height: 100px;
+        margin-right: 20px;
+
+        p {
+          font-weight: 350;
+        }
+        img {
+          border-radius: 50%;
+          width: 50px;
+        }
+        .author-image {
+          display: flex;
+          align-items: center;
+          margin-top: 10px;
+          p {
+            margin-left: 10px;
+            font-weight: 500;
+          }
+        }
+
+        .username {
+          @include flex-center
+        }
       }
       .rating {
         display: flex;
         flex-direction: row;
         gap: 15px;
+        margin: 10px 0;
         .quests__rating {
           display: flex;
           gap: 5px;
@@ -52,12 +108,16 @@ hr {
 
           .star-bg {
             color: gray;
+            width: 30px;
+            height: 30px;
           }
 
           .star-fill {
             color: gold;
             position: absolute;
             clip-path: inset(0 100% 0 0);
+            width: 30px;
+            height: 30px;
           }
         }
       }
@@ -80,7 +140,7 @@ hr {
       width: 35%;
       height: 40px;
       color: $honey;
-      background: #8B48B7;
+      background: #8b48b7;
       @include flex-center;
       font-size: 18px;
       text-transform: uppercase;

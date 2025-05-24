@@ -3,6 +3,14 @@ import jwt from "jsonwebtoken";
 import argon2 from 'argon2'
 import nodemailer from 'nodemailer';
 
+export const defaultOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    path: "/",
+    sameSite: "lax",
+  };
+
 export const validateLoginInput = (credentials) => {
   const { email, password } = credentials;
 
@@ -110,13 +118,6 @@ export const handleTokens = async (userId, reply, options = {}) => {
     { validateBeforeSave: false },
   );
 
-  const defaultOptions = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days (croissants)
-    path: "/",
-    sameSite: "lax",
-  };
   const cookieOptions = { ...defaultOptions, ...options };
 
   reply.setCookie("refreshToken", refreshToken, cookieOptions);

@@ -2,6 +2,7 @@ import {
   validateLoginInput, validateCredentails,
   createRefreshToken,
   handleTokens, clearRefreshTokenCookie, verifyJwtToken,
+  defaultOptions,
 } from "../utils/authUtils.js";
 import { sendEmail } from "../utils/sendEmailProxy.js";
 
@@ -191,13 +192,7 @@ const html = `
         user.refreshToken = refreshToken;
         await user.save({ validateBeforeSave: false });
 
-        reply.setCookie("refreshToken", refreshToken, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-          path: "/",
-          sameSite: "lax"
-        });
+        reply.setCookie("refreshToken", refreshToken, defaultOptions);
 
         reply.code(200).send({ status: "success", accessToken });
     });

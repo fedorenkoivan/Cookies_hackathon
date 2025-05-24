@@ -8,7 +8,6 @@ import { sendEmail } from "../utils/sendEmailProxy.js";
 
 import argon2 from "argon2";
 
-import { getProfile } from "../controllers/userController.js";
 import { verifyToken } from "../middleware/authMiddleWare.js";
 import { logRoute } from "../middleware/loggerMiddleware.js";
 import { User } from "../models/userModel.js";
@@ -89,7 +88,25 @@ export default async function userRoutes(fastify) {
       },
     },
     async (request, reply) => {
-      return getProfile(request, reply);
+      // return getProfile(request, reply);
+      const userId = request.user.id;
+      
+      const user = await User.findById(userId);
+      
+      if (!user) {
+        throw createError(404, 'User not found');
+      }
+      
+      return reply.code(200).send({
+        status: 'success',
+        data: {
+          user: {
+            id: user._id,
+            name: user.name,
+            email: user.email
+          }
+        }
+      });
     },
   );
 

@@ -49,7 +49,7 @@ userSchema.methods.createPasswordResetToken = async function() {
         hashLength: 32
     });
     
-    this.passwordResetExpires = Date.now() + 10 * 60 * 1000; // 10 хвилин
+    this.passwordResetExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
     
     return resetToken;
 };

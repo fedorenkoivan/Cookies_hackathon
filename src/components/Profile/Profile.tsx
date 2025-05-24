@@ -42,7 +42,6 @@ const Profile = () => {
         const savedQuests = savedQuestsStr ? JSON.parse(savedQuestsStr) : [];
         return savedQuests.includes(quest._id);
       } else {
-        //History
         return false;
       }
     });
@@ -55,7 +54,6 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    // Update your fetchUserProfile function to handle the error better
     const fetchUserProfile = async () => {
               try {
           const userDataStr = sessionStorage.getItem('userData');
@@ -85,7 +83,6 @@ const Profile = () => {
           setUserData(data.data.user);
           sessionStorage.setItem('userData', JSON.stringify(data.data.user));
         } else {
-          // Handle specific error cases
           if (
             data.message === "Invalid ID format" ||
             data.message ===
@@ -93,10 +90,8 @@ const Profile = () => {
             data.message?.toLowerCase().includes("invalid")
           ) {
             console.error("Token contains invalid ID, logging out");
-            // Clear token and redirect to login
             localStorage.removeItem("accessToken");
 
-            // Redirect without toast since it's not imported or configured
             navigate("/log-in", {
               state: {
                 message: "Your session is invalid. Please log in again.",
@@ -153,7 +148,6 @@ const Profile = () => {
 
   //   console.groupEnd();
   // }, []);
-  // //
 
   if (loading) {
     return <div className="profile__container">Loading...</div>;

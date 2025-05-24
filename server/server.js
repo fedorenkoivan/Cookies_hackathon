@@ -7,7 +7,7 @@ import dotenv from 'dotenv';
 
 import userRoutes from './routes/userRoutes.js';
 import questRoutes from './routes/questRoutes.js';
-import { ErrorType } from './utils/errorUtils.js';
+import { HttpError, ErrorType, createError } from './utils/errorUtils.js';
 
 dotenv.config({ path: "../.env" });
 
@@ -26,20 +26,20 @@ fastify.setErrorHandler((error, request, reply) => {
   
   let httpError;
   
-  if (error instanceof ErrorType) {
+  if (error.name ===  'HttpError') {
     httpError = error;
   } else if (error.statusCode && error.validation) {
-    httpError = ErrorType('BAD_REQUEST', 'Validation Error', { 
+    httpError = createError('BAD_REQUEST', 'Validation Error', { 
       validation: error.validation 
     });
   } else if (error.name === 'DocumentNotFoundError' || 
              error.name === 'CastError' || 
              error.name === 'MongoError' || 
              error.name === 'ValidationError') {
-    httpError = ErrorType.fromDatabaseError(error);
+    httpError = HttpError.fromDatabaseError(error);
   } else {
     const statusCode = error.statusCode ?? 500;
-    httpError = ErrorType.createFromStatusCode(statusCode, error.message || 'Internal Server Error');
+    httpError = HttpError.createFromStatusCode(statusCode, error.message || 'Internal Server Error');
   }
   
   fastify.log.error(httpError.toLog());

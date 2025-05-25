@@ -3,6 +3,14 @@ import jwt from "jsonwebtoken";
 import argon2 from 'argon2'
 import nodemailer from 'nodemailer';
 
+export const defaultOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    path: "/",
+    sameSite: "lax",
+  };
+
 export const validateLoginInput = (credentials) => {
   const { email, password } = credentials;
 
@@ -49,27 +57,6 @@ export const validateCredentails = async (credentials) => {
   };
 };
 
-export const sendEmail = async (options) => {
-  const transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: process.env.EMAIL_PORT,
-    auth: {
-      user: process.env.EMAIL_USERNAME,
-      pass: process.env.EMAIL_PASSWORD
-    }
-  });
-
-  const mailOptions = {
-    from: 'Cookies Reset Password <noreply@cookiesquest.com>',
-    to: options.email,
-    subject: options.subject,
-    text: options.message,
-    html: options.html
-  };
-
-  await transporter.sendMail(mailOptions);
-};
-
 export const createAccessToken = (userId) => {
   const idStr = userId.toString();
   return jwt.sign(
@@ -110,13 +97,6 @@ export const handleTokens = async (userId, reply, options = {}) => {
     { validateBeforeSave: false },
   );
 
-  const defaultOptions = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days (croissants)
-    path: "/",
-    sameSite: "lax",
-  };
   const cookieOptions = { ...defaultOptions, ...options };
 
   reply.setCookie("refreshToken", refreshToken, cookieOptions);

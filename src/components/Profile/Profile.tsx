@@ -25,9 +25,8 @@ const Profile = () => {
   const filteredQuests = useMemo(() => {
     return allQuests.filter((quest: Quest) => {
       if (activeNavItem === "Quests") {
-
         const userDataStr = sessionStorage.getItem("userData");
-        if(!userDataStr) return false;
+        if (!userDataStr) return false;
 
         try {
           const userData = JSON.parse(userDataStr);
@@ -36,9 +35,8 @@ const Profile = () => {
           console.error("Error parsing userData from sessionStorage:", error);
           return false;
         }
-
       } else if (activeNavItem === "Saved") {
-        const savedQuestsStr = localStorage.getItem('savedQuests');
+        const savedQuestsStr = localStorage.getItem("savedQuests");
         const savedQuests = savedQuestsStr ? JSON.parse(savedQuestsStr) : [];
         return savedQuests.includes(quest._id);
       } else {
@@ -55,14 +53,14 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-              try {
-          const userDataStr = sessionStorage.getItem('userData');
-          if (userDataStr) {
-            setUserData(JSON.parse(userDataStr));
-          }
-        } catch (e) {
-          console.error("Error loading userData from sessionStorage:", e);
+      try {
+        const userDataStr = sessionStorage.getItem("userData");
+        if (userDataStr) {
+          setUserData(JSON.parse(userDataStr));
         }
+      } catch (e) {
+        console.error("Error loading userData from sessionStorage:", e);
+      }
       try {
         const accessToken = localStorage.getItem("accessToken");
 
@@ -81,7 +79,7 @@ const Profile = () => {
 
         if (data.status === "success") {
           setUserData(data.data.user);
-          sessionStorage.setItem('userData', JSON.stringify(data.data.user));
+          sessionStorage.setItem("userData", JSON.stringify(data.data.user));
         } else {
           if (
             data.message === "Invalid ID format" ||
@@ -197,21 +195,15 @@ const Profile = () => {
         </div>
       </div>
       <div className="profile__quests">
-          {userData ? (
-            <div className="quests">
-              <QuestCard quests={filteredQuests} />
-            </div>
-          ) : (
-            <div className="loading-container">
-              <p>Loading user data...</p>
-            </div>
-          )
-          }
-
-
-        <div className="quests">
-          <QuestCard quests={filteredQuests} />
-        </div>
+        {userData ? (
+          <div className="quests">
+            <QuestCard quests={filteredQuests} />
+          </div>
+        ) : (
+          <div className="loading-container">
+            <p>Loading user data...</p>
+          </div>
+        )}
       </div>
     </div>
   );

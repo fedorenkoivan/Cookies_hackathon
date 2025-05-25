@@ -4,37 +4,18 @@ import { FaUser, FaClock, FaBookmark } from "react-icons/fa";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
 import StarRatingAuto from "../Rating/StarRatingAuto";
-import { QUESTS_URL as URL } from "@/constants/questConstants";
 import { Quest } from "@/types/quest";
 import "./Slider.scss";
-
-const getToday = () => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  return today.toISOString();
-};
+import { useQuestContext } from "@/contexts/QuestContext";
 
 const Slider = () => {
-  const [bestQuests, setBestQuests] = useState<Quest[]>([]);
   const [savedQuests, setSavedQuests] = useState<string[]>(() => {
     return JSON.parse(localStorage.getItem("savedQuests") || "[]");
   });
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch(
-          `${URL}?limit=5&sort=rating:desc&createdAt.gte=${getToday()}`
-        );
-        const data = await res.json();
-        setBestQuests(data.data);
-      } catch (err) {
-        console.log(err);
-      }
-    })();
-  }, []);
+  const {bestQuests} = useQuestContext();
 
   useEffect(() => {
     const handleSavedQuestsChanged = () => {

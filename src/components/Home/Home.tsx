@@ -21,7 +21,7 @@ const Home = () => {
   const [inputValue, setInputValue] = useState("");
   const [isAuthorized, setIsAuthorized] = useState(false);
 
-  const { allQuests } = useQuestContext();
+  const { allQuests, loading, error } = useQuestContext();
 
   const handleTabClick = (tab: string) => {
     setActive(tab);
@@ -72,6 +72,9 @@ const Home = () => {
     return () =>
       window.removeEventListener(userAuthorizationEvent, handleAuthStatus);
   }, []);
+
+  if (loading) return <div>Loading quests...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <section className="quest-section">

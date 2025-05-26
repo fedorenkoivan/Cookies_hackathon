@@ -88,7 +88,6 @@ export default async function userRoutes(fastify) {
       },
     },
     async (request, reply) => {
-      // return getProfile(request, reply);
       const userId = request.user.id;
       
       const user = await User.findById(userId);
@@ -96,7 +95,7 @@ export default async function userRoutes(fastify) {
       if (!user) {
         throw createError(404, 'User not found');
       }
-      
+
       return reply.code(200).send({
         status: 'success',
         data: {
@@ -106,10 +105,9 @@ export default async function userRoutes(fastify) {
             email: user.email
           }
         }
-      });
-    },
-  );
-
+      })
+    }
+  );  
 
   fastify.post("/forgot-password", { preHandler: logRoute("forgot_password") },
   async (request, reply) => {

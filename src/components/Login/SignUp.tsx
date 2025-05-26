@@ -4,13 +4,13 @@ import * as Yup from "yup";
 import { Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { userLoginEvent } from "@/utils/userData";
+import { storeTokenData } from "@/utils/authUtils";
 import { useQuestContext } from "@/contexts/QuestContext";
 
-import './SignUp.scss';
+import "./SignUp.scss";
 
 const validationSchema = Yup.object({
-  username: Yup.string()
-    .required("Please complete this required field."),
+  username: Yup.string().required("Please complete this required field."),
   email: Yup.string()
     .email("Invalid email format")
     .required("Please complete this required field."),
@@ -19,7 +19,7 @@ const validationSchema = Yup.object({
     .matches(/[a-zA-Z]/, "Password can only contain Latin letters.")
     .required("Please complete this required field."),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password')], 'Passwords must match')
+    .oneOf([Yup.ref("password")], "Passwords must match")
     .required("Please complete this required field."),
 });
 
@@ -45,32 +45,35 @@ const SignUp = () => {
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting, setStatus }) => {
           try {
-            const response = await fetch('http://localhost:5000/users/signup', {
-              method: 'POST',
+            const response = await fetch("http://localhost:5000/users/signup", {
+              method: "POST",
               headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
               },
-              credentials: 'include',
+              credentials: "include",
               body: JSON.stringify({
                 name: values.username,
                 email: values.email,
-                password: values.password
+                password: values.password,
               }),
             });
 
             const data = await response.json();
 
-            if (data.status === 'success' && data.accessToken) {
-              localStorage.setItem('accessToken', data.accessToken);
+            if (data.status === "success" && data.accessToken) {
+              localStorage.setItem("accessToken", data.accessToken);
+
+              storeTokenData(data.accessToken);
+
               window.dispatchEvent(new Event(userLoginEvent));
               await fetchAllQuests();
               navigate("/profile");
             } else {
-              setStatus(data.message || 'Помилка реєстрації');
+              setStatus(data.message || "Помилка реєстрації");
             }
           } catch (error) {
-            console.error('Error during signup:', error);
-            setStatus('Помилка з\'єднання з сервером');
+            console.error("Error during signup:", error);
+            setStatus("Помилка з'єднання з сервером");
           } finally {
             setSubmitting(false);
           }
@@ -82,7 +85,11 @@ const SignUp = () => {
               { name: "username", label: "1. Username" },
               { name: "email", label: "2. Your email" },
               { name: "password", label: "3. Your password", type: "password" },
-              { name: "confirmPassword", label: "4. Confirm your password", type: "password" },
+              {
+                name: "confirmPassword",
+                label: "4. Confirm your password",
+                type: "password",
+              },
             ].map(({ name, label, type = "text" }) => (
               <div key={name} className="form-group">
                 <label htmlFor={name}>{label} *</label>
@@ -100,12 +107,12 @@ const SignUp = () => {
                 endIcon={<SendIcon />}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Signing Up...' : 'Sign Up'}
+                {isSubmitting ? "Signing Up..." : "Sign Up"}
               </Button>
             </div>
-            <a className="account"
-              onClick={() => navigate('/log-in')}
-            >Already have an account?</a>
+            <a className="account" onClick={() => navigate("/log-in")}>
+              Already have an account?
+            </a>
           </Form>
         )}
       </Formik>

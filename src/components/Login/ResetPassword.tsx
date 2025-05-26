@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import { Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { userLoginEvent } from "@/utils/userData";
+import { storeTokenData } from "@/utils/authUtils";
 import { toast } from "react-toastify";
 import './LogIn.scss';
 
@@ -64,14 +65,15 @@ const ResetPassword = () => {
             if (!response.ok) {
               setStatus(data.message || `Error: ${response.statusText}`);
               return;
-            }            
+            }
             if (data.status === 'success' && data.accessToken) {
               try {
                 if (data.accessToken.split('.').length !== 3) {
                   throw new Error('Invalid token format');
                 }
-                
+
                 localStorage.setItem('accessToken', data.accessToken);
+                storeTokenData(data.accessToken);
                 window.dispatchEvent(new Event(userLoginEvent));
                 toast.success("Password successfully reset!");
                 navigate("/profile");

@@ -12,6 +12,7 @@ import RatingForm from "@components/Rating/RatingForm";
 import ForgotPassword from "@components/Login/ForgotPassword";
 import ResetPassword from "@components/Login/ResetPassword";
 import QuestPage from "@components/Quest/QuestPage";
+import SessionRenewalDialog from '@/modals/TokenRenewalModal';
 import ProtectedRoutes from './utils/ProtectedRoutes';
 
 import { Routes, Route } from "react-router-dom";
@@ -46,6 +47,8 @@ function App() {
         </Routes>
       </QuestProvider>
       <Footer />
+
+      <SessionRenewalDialog />
 
       <ToastContainer
         position="top-center"

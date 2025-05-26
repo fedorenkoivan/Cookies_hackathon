@@ -116,7 +116,6 @@ export default async function userRoutes(fastify) {
     }
   );  
 
-
   fastify.post("/forgot-password", { preHandler: logRoute("forgot_password") },
   async (request, reply) => {
         const { email } = request.body;

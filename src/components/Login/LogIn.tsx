@@ -4,8 +4,9 @@ import * as Yup from "yup";
 import { Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { userLoginEvent } from "@/utils/userData";
+import { storeTokenData } from "@/utils/authUtils";
 import { useQuestContext } from "@/contexts/QuestContext";
-import './LogIn.scss';
+import "./LogIn.scss";
 
 const validationSchema = Yup.object({
   companyEmail: Yup.string()
@@ -33,15 +34,15 @@ const LogIn = () => {
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting, setStatus }) => {
           try {
-            const response = await fetch('http://localhost:5000/users/login', {
-              method: 'POST',
+            const response = await fetch("http://localhost:5000/users/login", {
+              method: "POST",
               headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
               },
-              credentials: 'include',
+              credentials: "include",
               body: JSON.stringify({
                 email: values.companyEmail,
-                password: values.password
+                password: values.password,
               }),
             });
 
@@ -52,17 +53,20 @@ const LogIn = () => {
               return;
             }
 
-            if (data.status === 'success' && data.accessToken) {
-              localStorage.setItem('accessToken', data.accessToken);
-              window.dispatchEvent(new Event(userLoginEvent))
+            if (data.status === "success" && data.accessToken) {
+              localStorage.setItem("accessToken", data.accessToken);
+
+              storeTokenData(data.accessToken);
+
+              window.dispatchEvent(new Event(userLoginEvent));
               await fetchAllQuests();
               navigate("/profile");
             } else {
-              setStatus('Authentication error: Invalid server response');
+              setStatus("Authentication error: Invalid server response");
             }
           } catch (error) {
-            console.error('Error during login:', error);
-            setStatus('Connection error: Could not reach the server');
+            console.error("Error during login:", error);
+            setStatus("Connection error: Could not reach the server");
           } finally {
             setSubmitting(false);
           }
@@ -90,15 +94,15 @@ const LogIn = () => {
                 endIcon={<SendIcon />}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Logging In...' : 'Log In'}
+                {isSubmitting ? "Logging In..." : "Log In"}
               </Button>
             </div>
-            <a className="account"
-              onClick={() => navigate('/sign-up')}
-            >Don't have an account?</a>
-            <a className="account"
-              onClick={() => navigate('/forgot-password')}
-            >Forgot password?</a>
+            <a className="account" onClick={() => navigate("/sign-up")}>
+              Don't have an account?
+            </a>
+            <a className="account" onClick={() => navigate("/forgot-password")}>
+              Forgot password?
+            </a>
           </Form>
         )}
       </Formik>

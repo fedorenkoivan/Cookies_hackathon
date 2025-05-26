@@ -8,6 +8,7 @@ import QuestCard from "../Home/QuestCard";
 import "@/components/Home/QuestCard.scss";
 import { FaEdit, FaShareAlt } from "react-icons/fa";
 // import { BidirectionalPriorityQueue } from "@/utils/BidirectionalPriorityQueue";
+import Loading from "../Loading/Loading";
 interface UserData {
   id: string;
   name: string;
@@ -148,7 +149,7 @@ const Profile = () => {
   // }, []);
 
   if (loading) {
-    return <div className="profile__container">Loading...</div>;
+    return <Loading />;
   }
 
   if (error) {

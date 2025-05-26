@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { toast } from "react-toastify";
+import { USERS_URL } from "@/constants/authConstants";
 import './LogIn.scss';
 
 const validationSchema = Yup.object({
@@ -28,7 +29,7 @@ const ForgotPassword = () => {
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting, setStatus, resetForm }) => {
           try {
-            const response = await fetch('http://localhost:5000/users/forgot-password', {
+            const response = await fetch(`${USERS_URL}/forgot-password`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',

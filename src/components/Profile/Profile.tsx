@@ -7,12 +7,10 @@ import { Quest } from "@/types/quest";
 import QuestCard from "../Home/QuestCard";
 import "@/components/Home/QuestCard.scss";
 import { FaEdit, FaShareAlt } from "react-icons/fa";
+import { USERS_URL } from "@/constants/authConstants";
+import { UserData } from "@/types/user";
 // import { BidirectionalPriorityQueue } from "@/utils/BidirectionalPriorityQueue";
-interface UserData {
-  id: string;
-  name: string;
-  email: string;
-}
+
 
 const Profile = () => {
   const [activeNavItem, setActiveNavItem] = useState<string | null>("Quests");
@@ -69,7 +67,7 @@ const Profile = () => {
           return;
         }
 
-        const response = await fetch("http://localhost:5000/users/profile", {
+        const response = await fetch(`${USERS_URL}/profile`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -98,14 +96,14 @@ const Profile = () => {
             return;
           }
 
-          setError(data.message || "Помилка отримання даних користувача");
+          setError(data.message || "Error fetching user profile");
           if (response.status === 401) {
             localStorage.removeItem("accessToken");
             navigate("/log-in");
           }
         }
       } catch (err) {
-        setError("Помилка конекту з сервером");
+        setError("Error connecting to server");
         console.error(err);
       } finally {
         setLoading(false);
@@ -114,38 +112,6 @@ const Profile = () => {
 
     fetchUserProfile();
   }, [navigate]);
-
-  //test
-  // useEffect(() => {
-  //   type QuestForTest = { title: string; score: number };
-  //   const questQueue = new BidirectionalPriorityQueue<QuestForTest>();
-  //   questQueue.enqueue({ title: "Quest A", score: 50 }, 0.5);
-  //   questQueue.enqueue({ title: "Quest B", score: 80 }, 7 / 11);
-  //   questQueue.enqueue({ title: "Quest C", score: 60 }, 6 / 9);
-  //   questQueue.enqueue({ title: "Quest D", score: 50 }, 0.5);
-  //   questQueue.enqueue({ title: "Quest E", score: 60 }, 3 / 8);
-  //   questQueue.enqueue({ title: "Quest F", score: 30 }, 1 / 5);
-  //   questQueue.enqueue({ title: "Quest G", score: 30 }, 1);
-
-  //   console.group("BidirectionalPriorityQueue Tests");
-
-  //   console.dir({ peekMax: questQueue.peek("max") }, { depth: 3 });
-  //   console.dir({ peekMin: questQueue.peek("min") }, { depth: 3 });
-  //   console.log("Initial size:", questQueue.getSize());
-
-  //   console.dir({ dequeueMin: questQueue.dequeue("min") }, { depth: 3 });
-  //   console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
-  //   console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
-  //   console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
-  //   console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
-  //   console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
-  //   console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
-  //   console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
-
-  //   console.log("Is empty after removals:", questQueue.isEmpty());
-
-  //   console.groupEnd();
-  // }, []);
 
   if (loading) {
     return <div className="profile__container">Loading...</div>;

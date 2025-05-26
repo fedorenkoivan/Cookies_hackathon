@@ -12,11 +12,8 @@ import {
   userAuthorizationEvent,
 } from "@/utils/userData";
 import profileImage from "@/assets/img1.png";
-
-interface UserData {
-  name: string;
-  email: string;
-}
+import { USERS_URL } from "@/constants/authConstants";
+import { UserData } from "@/types/user";
 
 const Navbar = () => {
   const [userData, setUserData] = useState<UserData | null>(
@@ -39,7 +36,7 @@ const Navbar = () => {
         return;
       }
 
-      const response = await fetch("http://localhost:5000/users/profile", {
+      const response = await fetch(`${USERS_URL}/profile`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`
         },
@@ -110,7 +107,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch('http://localhost:5000/users/logout', {
+      const response = await fetch(`${USERS_URL}/logout`, {
         method: 'POST',
         credentials: 'include',
       });

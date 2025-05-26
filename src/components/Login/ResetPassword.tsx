@@ -7,6 +7,7 @@ import SendIcon from "@mui/icons-material/Send";
 import { userLoginEvent } from "@/utils/userData";
 import { storeTokenData } from "@/utils/authUtils";
 import { toast } from "react-toastify";
+import { USERS_URL } from "@/constants/authConstants";
 import './LogIn.scss';
 
 const validationSchema = Yup.object({
@@ -49,7 +50,7 @@ const ResetPassword = () => {
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting, setStatus }) => {
           try {
-            const response = await fetch(`http://localhost:5000/users/reset-password/${resetToken}`, {
+            const response = await fetch(`${USERS_URL}/reset-password/${resetToken}`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',

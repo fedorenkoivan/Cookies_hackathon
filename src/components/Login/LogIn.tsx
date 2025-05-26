@@ -23,7 +23,10 @@ const LogIn = () => {
   const navigate = useNavigate();
   const { fetchAllQuests } = useQuestContext();
 
-  const handleSubmit = async (values: { companyEmail: string; password: string }, { setSubmitting, setStatus }: FormikHelpers<{ companyEmail: string; password: string }>) => {
+  const handleSubmit = async (
+    values: { companyEmail: string; password: string },
+    { setSubmitting, setStatus }: FormikHelpers<{ companyEmail: string; password: string }>
+  ) => {
     try {
       const response = await fetch(`${USERS_URL}/login`, {
         method: "POST",

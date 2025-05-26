@@ -6,7 +6,7 @@ import {
   useMemo,
 } from "react";
 import { Quest } from "@/types/quest";
-import { QUESTS_URL as URL } from "@/constants/questConstants";
+import { QUESTS_URL } from "@/constants/questConstants";
 import { QuestContext } from "./QuestContext";
 
 const useFetchQuests = <T extends unknown[]>(
@@ -50,7 +50,7 @@ const useFetchQuests = <T extends unknown[]>(
 export const QuestProvider = ({ children }: PropsWithChildren) => {
   const [allQuests, setAllQuests] = useState<Quest[]>([]);
   const [bestQuests, setBestQuests] = useState<Quest[]>([]);
-  const [quest, setQuest] = useState<Quest | null>(null);
+  const [questPreview, setQuest] = useState<Quest | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -60,14 +60,14 @@ export const QuestProvider = ({ children }: PropsWithChildren) => {
     return today.toISOString();
   }, []);
 
-  const getAllQuestsUrl = useCallback(() => URL, []);
+  const getAllQuestsUrl = useCallback(() => QUESTS_URL, []);
 
   const getBestQuestsUrl = useCallback(() => {
-    return `${URL}?limit=5&sort=rating:desc&createdAt.gte=${getToday()}`;
+    return `${QUESTS_URL}?limit=5&sort=rating:desc&createdAt.gte=${getToday()}`;
   }, [getToday]);
 
   const getQuestByIdUrl = useCallback((questId: string) => {
-    return `${URL}?_id=${questId}`;
+    return `${QUESTS_URL}?_id=${questId}`;
   }, []);
 
   const setQuestFromArray = useCallback((quests: Quest[]) => {
@@ -107,7 +107,7 @@ export const QuestProvider = ({ children }: PropsWithChildren) => {
     () => ({
       allQuests,
       bestQuests,
-      quest,
+      questPreview,
       loading,
       error,
       fetchQuest,
@@ -117,7 +117,7 @@ export const QuestProvider = ({ children }: PropsWithChildren) => {
     [
       allQuests,
       bestQuests,
-      quest,
+      questPreview,
       loading,
       error,
       fetchQuest,

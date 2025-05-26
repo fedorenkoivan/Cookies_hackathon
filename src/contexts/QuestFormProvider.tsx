@@ -1,16 +1,6 @@
 import { useEffect, useState, ReactNode, useCallback } from "react";
-import { Question, Answer } from "@/types/quest";
+import { Question, Answer, SavedFormData } from "@/types/quest";
 import { QuestFormContext } from "./QuestFormContext";
-
-type SavedFormData = {
-  image: string;
-  title: string;
-  description: string;
-  category: string;
-  time: number;
-  showTimeControls: boolean;
-  questions: Question[];
-};
 
 const STORAGE_KEY = "questFormData";
 

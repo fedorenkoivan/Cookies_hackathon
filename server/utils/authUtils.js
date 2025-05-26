@@ -1,15 +1,14 @@
 import { User } from "../models/userModel.js";
 import jwt from "jsonwebtoken";
-import argon2 from 'argon2'
-import nodemailer from 'nodemailer';
+import argon2 from "argon2";
 
 export const defaultOptions = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    path: "/",
-    sameSite: "lax",
-  };
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  path: "/",
+  sameSite: "lax",
+};
 
 export const validateLoginInput = (credentials) => {
   const { email, password } = credentials;
@@ -68,7 +67,7 @@ export const createAccessToken = (userId) => {
     {
       expiresIn: process.env.JWT_ACCESS_EXPIRES_IN,
       subject: idStr,
-    },
+    }
   );
 };
 
@@ -83,7 +82,7 @@ export const createRefreshToken = (userId) => {
     {
       expiresIn: process.env.JWT_REFRESH_EXPIRES_IN,
       subject: idStr,
-    },
+    }
   );
 };
 
@@ -94,7 +93,7 @@ export const handleTokens = async (userId, reply, options = {}) => {
   await User.findByIdAndUpdate(
     userId,
     { refreshToken },
-    { validateBeforeSave: false },
+    { validateBeforeSave: false }
   );
 
   const cookieOptions = { ...defaultOptions, ...options };
@@ -131,12 +130,12 @@ export const verifyJwtToken = (token, expectedScope) => {
 };
 
 export const hashPassword = async (password) => {
-    const hashedPassword = await argon2.hash(password, {
-        type: argon2.argon2id,
-        memoryCost: 65536,
-        timeCost: 3,
-        parallelism: 1,
-        hashLength: 32
-    });
-    return hashedPassword;
+  const hashedPassword = await argon2.hash(password, {
+    type: argon2.argon2id,
+    memoryCost: 65536,
+    timeCost: 3,
+    parallelism: 1,
+    hashLength: 32,
+  });
+  return hashedPassword;
 };

@@ -1,4 +1,4 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { Button } from "@mui/material";
@@ -6,6 +6,7 @@ import SendIcon from "@mui/icons-material/Send";
 import { userLoginEvent } from "@/utils/userData";
 import { storeTokenData } from "@/utils/authUtils";
 import { useQuestContext } from "@/contexts/QuestContext";
+import { USERS_URL } from "@/constants/authConstants";
 import "./LogIn.scss";
 
 const validationSchema = Yup.object({
@@ -21,6 +22,47 @@ const validationSchema = Yup.object({
 const LogIn = () => {
   const navigate = useNavigate();
   const { fetchAllQuests } = useQuestContext();
+
+  const handleSubmit = async (values: { companyEmail: string; password: string }, { setSubmitting, setStatus }: FormikHelpers<{ companyEmail: string; password: string }>) => {
+    try {
+      const response = await fetch(`${USERS_URL}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          email: values.companyEmail,
+          password: values.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setStatus(data.message || `Error: ${response.statusText}`);
+        return;
+      }
+
+      if (data.status === "success" && data.accessToken) {
+        localStorage.setItem("accessToken", data.accessToken);
+
+        storeTokenData(data.accessToken);
+
+        window.dispatchEvent(new Event(userLoginEvent));
+        await fetchAllQuests();
+        navigate("/profile");
+      } else {
+        setStatus("Authentication error: Invalid server response");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      setStatus("Connection error: Could not reach the server");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div className="card">
       <div className="banner">
@@ -32,45 +74,7 @@ const LogIn = () => {
       <Formik
         initialValues={{ companyEmail: "", password: "" }}
         validationSchema={validationSchema}
-        onSubmit={async (values, { setSubmitting, setStatus }) => {
-          try {
-            const response = await fetch("http://localhost:5000/users/login", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              credentials: "include",
-              body: JSON.stringify({
-                email: values.companyEmail,
-                password: values.password,
-              }),
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-              setStatus(data.message || `Error: ${response.statusText}`);
-              return;
-            }
-
-            if (data.status === "success" && data.accessToken) {
-              localStorage.setItem("accessToken", data.accessToken);
-
-              storeTokenData(data.accessToken);
-
-              window.dispatchEvent(new Event(userLoginEvent));
-              await fetchAllQuests();
-              navigate("/profile");
-            } else {
-              setStatus("Authentication error: Invalid server response");
-            }
-          } catch (error) {
-            console.error("Error during login:", error);
-            setStatus("Connection error: Could not reach the server");
-          } finally {
-            setSubmitting(false);
-          }
-        }}
+        onSubmit={handleSubmit}
       >
         {({ handleSubmit, status, isSubmitting }) => (
           <Form onSubmit={handleSubmit} className="form">

@@ -1,8 +1,8 @@
 import { 
   validateLoginInput, validateCredentails,
-  // sendEmail,
   createRefreshToken,
   handleTokens, clearRefreshTokenCookie, verifyJwtToken,
+  defaultOptions,
 } from "../utils/authUtils.js";
 import { sendEmail } from "../utils/sendEmailProxy.js";
 
@@ -11,8 +11,7 @@ import argon2 from "argon2";
 import { verifyToken } from "../middleware/authMiddleWare.js";
 import { logRoute } from "../middleware/loggerMiddleware.js";
 import { User } from "../models/userModel.js";
-import { createError } from '../utils/errorUtils.js';
-
+import { HttpError, createError } from "../utils/errorUtils.js";
 
 export default async function userRoutes(fastify) {
   fastify.post("/signup", { preHandler: logRoute("register") },
@@ -43,19 +42,13 @@ export default async function userRoutes(fastify) {
       request.body,
     );
     if (!isInputValid) {
-      return reply.code(inputCode).send({
-        status: "error",
-        message: inputErrorMsg,
-      });
+      throw HttpError.createFromStatusCode(inputCode, inputErrorMsg);
     }
 
     const { isCredValid, user, credErrorMsg, credCode } =
       await validateCredentails(request.body);
     if (!isCredValid) {
-      return reply.code(credCode).send({
-        status: "error",
-        message: credErrorMsg,
-      });
+      throw HttpError.createFromStatusCode(credCode, credErrorMsg)
     }
     const accessToken = await handleTokens(user._id, reply);
 
@@ -121,19 +114,13 @@ export default async function userRoutes(fastify) {
         const { email } = request.body;
 
         if (!email) {
-          return reply.code(400).send({
-            status: "error",
-            message: "Please provide your email",
-          });
+          throw createError('BAD_REQUEST', "Please provide your email");
         }
 
         const user = await User.findOne({ email });
 
         if (!user) {
-          return reply.code(404).send({
-            status: "error",
-            message: "No user found with that email address",
-          });
+          throw createError('NOT_FOUND', "No user found with that email address");
         }
 
         const resetToken = await user.createPasswordResetToken();
@@ -172,10 +159,7 @@ const html = `
           user.passwordResetExpires = undefined;
           await user.save({ validateBeforeSave: false });
 
-          return reply.code(500).send({
-            status: "error",
-            message: "There was an error sending the email. Try again later.",
-          });
+          throw createError('INTERNAL_SERVER_ERROR', "There was an error sending the email. Try again later.");
     }
   });
 
@@ -208,10 +192,7 @@ const html = `
         }
 
         if (!user) {
-          return reply.code(400).send({
-            status: "error",
-            message: "Token is invalid or has expired",
-          });
+          throw createError("BAD_REQUEST", "Token is invalid or has expired");
         }
         
         user.password = password;
@@ -226,13 +207,7 @@ const html = `
         user.refreshToken = refreshToken;
         await user.save({ validateBeforeSave: false });
 
-        reply.setCookie("refreshToken", refreshToken, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-          path: "/",
-          sameSite: "lax"
-        });
+        reply.setCookie("refreshToken", refreshToken, defaultOptions);
 
         reply.code(200).send({ status: "success", accessToken });
     });
@@ -246,16 +221,12 @@ const html = `
     try {
       decoded = verifyJwtToken(refreshToken, "refresh_token");
     } catch (err) {
-      return reply
-        .code(401)
-        .send({ status: "error", message: "Invalid or expired token" });
+      throw createError("UNAUTHORIZED", "Invalid or expired token");
     }
 
     const user = await User.findById(decoded.id).select("+refreshToken");
     if (!user) {
-      return reply
-        .code(401)
-        .send({ status: "error", message: "User not found" });
+      throw createError("UNAUTHORIZED", "User not found");
     }
 
     const accessToken = await handleTokens(user._id, reply);

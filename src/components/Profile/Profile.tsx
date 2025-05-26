@@ -7,7 +7,7 @@ import { Quest } from "@/types/quest";
 import QuestCard from "../Home/QuestCard";
 import "@/components/Home/QuestCard.scss";
 import { FaEdit, FaShareAlt } from "react-icons/fa";
-import { BidirectionalPriorityQueue } from "@/utils/BidirectionalPriorityQueue";
+// import { BidirectionalPriorityQueue } from "@/utils/BidirectionalPriorityQueue";
 interface UserData {
   id: string;
   name: string;
@@ -25,15 +25,21 @@ const Profile = () => {
   const filteredQuests = useMemo(() => {
     return allQuests.filter((quest: Quest) => {
       if (activeNavItem === "Quests") {
-        const authorName = JSON.parse(sessionStorage.userData).name;
-        return quest.author === authorName;
+        const userDataStr = sessionStorage.getItem("userData");
+        if (!userDataStr) return false;
+
+        try {
+          const userData = JSON.parse(userDataStr);
+          return quest.author === userData.name;
+        } catch (error) {
+          console.error("Error parsing userData from sessionStorage:", error);
+          return false;
+        }
       } else if (activeNavItem === "Saved") {
-        if (!localStorage.savedQuests)
-          localStorage.setItem("savedQuests", "[]");
-        const savedQuests = JSON.parse(localStorage.savedQuests);
+        const savedQuestsStr = localStorage.getItem("savedQuests");
+        const savedQuests = savedQuestsStr ? JSON.parse(savedQuestsStr) : [];
         return savedQuests.includes(quest._id);
       } else {
-        //History
         return false;
       }
     });
@@ -46,8 +52,15 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    // Update your fetchUserProfile function to handle the error better
     const fetchUserProfile = async () => {
+      try {
+        const userDataStr = sessionStorage.getItem("userData");
+        if (userDataStr) {
+          setUserData(JSON.parse(userDataStr));
+        }
+      } catch (e) {
+        console.error("Error loading userData from sessionStorage:", e);
+      }
       try {
         const accessToken = localStorage.getItem("accessToken");
 
@@ -66,8 +79,8 @@ const Profile = () => {
 
         if (data.status === "success") {
           setUserData(data.data.user);
+          sessionStorage.setItem("userData", JSON.stringify(data.data.user));
         } else {
-          // Handle specific error cases
           if (
             data.message === "Invalid ID format" ||
             data.message ===
@@ -75,10 +88,8 @@ const Profile = () => {
             data.message?.toLowerCase().includes("invalid")
           ) {
             console.error("Token contains invalid ID, logging out");
-            // Clear token and redirect to login
             localStorage.removeItem("accessToken");
 
-            // Redirect without toast since it's not imported or configured
             navigate("/log-in", {
               state: {
                 message: "Your session is invalid. Please log in again.",
@@ -105,37 +116,36 @@ const Profile = () => {
   }, [navigate]);
 
   //test
-  useEffect(() => {
-    type QuestForTest = { title: string; score: number };
-    const questQueue = new BidirectionalPriorityQueue<QuestForTest>();
-    questQueue.enqueue({ title: "Quest A", score: 50 }, 0.5);
-    questQueue.enqueue({ title: "Quest B", score: 80 }, 7 / 11);
-    questQueue.enqueue({ title: "Quest C", score: 60 }, 6 / 9);
-    questQueue.enqueue({ title: "Quest D", score: 50 }, 0.5);
-    questQueue.enqueue({ title: "Quest E", score: 60 }, 3 / 8);
-    questQueue.enqueue({ title: "Quest F", score: 30 }, 1 / 5);
-    questQueue.enqueue({ title: "Quest G", score: 30 }, 1);
+  // useEffect(() => {
+  //   type QuestForTest = { title: string; score: number };
+  //   const questQueue = new BidirectionalPriorityQueue<QuestForTest>();
+  //   questQueue.enqueue({ title: "Quest A", score: 50 }, 0.5);
+  //   questQueue.enqueue({ title: "Quest B", score: 80 }, 7 / 11);
+  //   questQueue.enqueue({ title: "Quest C", score: 60 }, 6 / 9);
+  //   questQueue.enqueue({ title: "Quest D", score: 50 }, 0.5);
+  //   questQueue.enqueue({ title: "Quest E", score: 60 }, 3 / 8);
+  //   questQueue.enqueue({ title: "Quest F", score: 30 }, 1 / 5);
+  //   questQueue.enqueue({ title: "Quest G", score: 30 }, 1);
 
-    console.group("BidirectionalPriorityQueue Tests");
+  //   console.group("BidirectionalPriorityQueue Tests");
 
-    console.dir({ peekMax: questQueue.peek("max") }, { depth: 3 });
-    console.dir({ peekMin: questQueue.peek("min") }, { depth: 3 });
-    console.log("Initial size:", questQueue.getSize());
+  //   console.dir({ peekMax: questQueue.peek("max") }, { depth: 3 });
+  //   console.dir({ peekMin: questQueue.peek("min") }, { depth: 3 });
+  //   console.log("Initial size:", questQueue.getSize());
 
-    console.dir({ dequeueMin: questQueue.dequeue("min") }, { depth: 3 });
-    console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
-    console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
-    console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
-    console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
-    console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
-    console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
-    console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
+  //   console.dir({ dequeueMin: questQueue.dequeue("min") }, { depth: 3 });
+  //   console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
+  //   console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
+  //   console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
+  //   console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
+  //   console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
+  //   console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
+  //   console.dir({ dequeueMax: questQueue.dequeue("max") }, { depth: 3 });
 
-    console.log("Is empty after removals:", questQueue.isEmpty());
+  //   console.log("Is empty after removals:", questQueue.isEmpty());
 
-    console.groupEnd();
-  }, []);
-  //
+  //   console.groupEnd();
+  // }, []);
 
   if (loading) {
     return <div className="profile__container">Loading...</div>;
@@ -185,9 +195,15 @@ const Profile = () => {
         </div>
       </div>
       <div className="profile__quests">
-        <div className="quests">
-          <QuestCard quests={filteredQuests} />
-        </div>
+        {userData ? (
+          <div className="quests">
+            <QuestCard quests={filteredQuests} />
+          </div>
+        ) : (
+          <div className="loading-container">
+            <p>Loading user data...</p>
+          </div>
+        )}
       </div>
     </div>
   );

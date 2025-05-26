@@ -1,5 +1,6 @@
 import { verifyJwtToken } from "../utils/authUtils.js";
 import mongoose from "mongoose";
+import { createError } from "../utils/errorUtils.js";
 
 export const verifyToken = async (request, reply) => {
   try {
@@ -9,11 +10,14 @@ export const verifyToken = async (request, reply) => {
         ? authHeader.split(" ")[1]
         : null;
 
+    // if (!accessToken) {
+    //   return reply.code(401).send({
+    //     status: "error",
+    //     message: "You are not logged in. Please log in to get access.",
+    //   });
+    // }
     if (!accessToken) {
-      return reply.code(401).send({
-        status: "error",
-        message: "You are not logged in. Please log in to get access.",
-      });
+      throw createError("UNAUTHORIZED", "You are not logged in. Please log in to get access.");
     }
 
     const decoded = verifyJwtToken(accessToken, "access_token");
@@ -26,18 +30,21 @@ export const verifyToken = async (request, reply) => {
       request.user = { id: decoded.id };
     } catch (idError) {
       console.error("ID format error:", idError.message);
-      return reply.code(401).send({
-        status: "error",
-        message: "Invalid user identification. Please log in again.",
-      });
+      // return reply.code(401).send({
+      //   status: "error",
+      //   message: "Invalid user identification. Please log in again.",
+      // });
+
+      throw createError("UNAUTHORIZED", "Invalid user identification. Please log in again.");
     }
     
     return;
   } catch (err) {
     console.error("Token verification error:", err.message);
-    return reply.code(401).send({
-      status: "error",
-      message: "Invalid token or token expired",
-    });
+    // return reply.code(401).send({
+    //   status: "error",
+    //   message: "Invalid token or token expired",
+    // });
+    throw createError("UNAUTHORIZED", "Invalid token or token expired");
   }
 };

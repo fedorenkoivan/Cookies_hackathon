@@ -41,7 +41,7 @@ hr {
         .title {
           text-transform: uppercase;
           font-weight: bolder;
-          font-size: 20px;
+          font-size: 22px;
         }
         .description-title {
           font-weight: bolder;
@@ -108,16 +108,16 @@ hr {
 
           .star-bg {
             color: gray;
-            width: 30px;
-            height: 30px;
+            width: 25px;
+            height: 25px;
           }
 
           .star-fill {
             color: gold;
             position: absolute;
             clip-path: inset(0 100% 0 0);
-            width: 30px;
-            height: 30px;
+            width: 25px;
+            height: 25px;
           }
         }
       }

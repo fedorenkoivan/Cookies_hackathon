@@ -8,7 +8,7 @@ import Loading from "../Loading/Loading";
 import ProgressBar from "../Partial/ProgressBar";
 
 const QuestionPage = () => {
-  const { id, question_id } = useParams<{ id: string; question_id: string }>();
+  const { questId } = useParams<{ questId: string }>();
   const { quest, loading, error, fetchQuest } = useQuestContext();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [question, setQuestion] = useState<Question | null>(
@@ -18,10 +18,10 @@ const QuestionPage = () => {
   const [time, setTime] = useState<number | null>(quest?.time || null);
 
   useEffect(() => {
-    if (id) {
-      fetchQuest(id);
+    if (questId) {
+      fetchQuest(questId);
     }
-  }, [id, fetchQuest]);
+  }, [questId, fetchQuest]);
 
   const navigate = useNavigate();
 
@@ -50,22 +50,12 @@ const QuestionPage = () => {
       return;
     }
 
-    setCurrentQuestionIndex(
-      quest.questions.findIndex((question) => question._id === question_id)
-    );
-
-    if (currentQuestionIndex === -1) {
-      console.error("Current question not found in quest");
-      return;
-    }
-
     setSelectedAnswers([]);
 
     if (currentQuestionIndex < quest.questions.length - 1) {
       const nextIndex = currentQuestionIndex + 1;
       setCurrentQuestionIndex(nextIndex);
       setQuestion(quest.questions[nextIndex]);
-      navigate(`/complete-quest/${id}/${quest.questions[nextIndex]._id}`);
     } else {
       navigate("/rating-form");
     }

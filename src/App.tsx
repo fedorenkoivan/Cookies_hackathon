@@ -37,7 +37,7 @@ function App() {
               path="/reset-password/:resetToken"
               element={<ResetPassword />}
             />
-            <Route path="/preview-quest/:id" element={<QuestPage />} />
+            <Route path="/preview-quest/:questId" element={<QuestPage />} />
 
             <Route element={<ProtectedRoutes />}>
               <Route path="/quest-form" element={<QuestForm />} />
@@ -45,7 +45,7 @@ function App() {
           </Route>
           <Route element={<QuestLayout />}>
             <Route
-              path="/complete-quest/:id/:question_id"
+              path="/complete-quest/:questId"
               element={<QuestionPage />}
             />
           </Route>

@@ -21,7 +21,7 @@ const Profile = () => {
 
     return allQuests.filter((quest: Quest) => {
       if (activeNavItem === "Quests") {
-        return quest.author === userData.name;
+        return quest.author.authorId === userData.id;
       } else if (activeNavItem === "Saved") {
         const savedQuestsStr = localStorage.getItem("savedQuests");
         const savedQuests = savedQuestsStr ? JSON.parse(savedQuestsStr) : [];

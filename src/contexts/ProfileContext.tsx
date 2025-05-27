@@ -1,11 +1,13 @@
 import { createContext, useContext } from 'react';
-import { UserData } from '@/types/user';
+import { UserData, UserPublicData } from '@/types/user';
 
 type ProfileContextType = {
   userData: UserData | null;
+  userPublicData: UserPublicData | null;
   loading: boolean;
   error: string | null;
   fetchUserProfile: () => Promise<void>;
+  fetchUserPublicProfile: (userId: string) => Promise<void>;
   logout: () => void;
 };
 

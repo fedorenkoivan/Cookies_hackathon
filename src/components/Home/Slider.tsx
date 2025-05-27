@@ -15,7 +15,7 @@ const Slider = () => {
 
   const navigate = useNavigate();
 
-  const {bestQuests} = useQuestContext();
+  const { bestQuests } = useQuestContext();
 
   useEffect(() => {
     const handleSavedQuestsChanged = () => {
@@ -66,15 +66,19 @@ const Slider = () => {
                 <div className="top">
                   <div className="author">
                     <FaUser className="icon" />
-                    <p>{quest.author}</p>
+                    <button
+                      className="author-name-button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/public-profile/${quest.author.authorId}`);
+                      }}
+                    >
+                      {quest.author.username}
+                    </button>
                   </div>
                   <div className="clock">
                     <FaClock className="icon" />
-                    {quest.time === -1 ? (
-                      <p>No limit</p>
-                    ) : (
-                      <p>{quest.time}s</p>
-                    )}
+                    {quest.time === -1 ? <p>No limit</p> : <p>{quest.time}s</p>}
                   </div>
                 </div>
                 <div className="middle">

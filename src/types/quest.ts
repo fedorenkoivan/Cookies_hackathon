@@ -16,8 +16,13 @@ export type ExtendedQuestion = Question & {
   _id: string;
 }
 
+export type Author = {
+  username: string,
+  authorId: string,
+}
+
 export type Quest = {
-  author: string;
+  author: Author;
   _id: string;
   title: string;
   description: string;

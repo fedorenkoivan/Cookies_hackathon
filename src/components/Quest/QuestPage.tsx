@@ -53,7 +53,7 @@ const QuestPage = () => {
             <p>Created by</p>
             <div className="author-image">
               <img src={avatarImage}/>
-              <p>{quest.author}</p>
+              <p>{quest.author.username}</p>
             </div>
           </div>
         </div>

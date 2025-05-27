@@ -7,8 +7,14 @@ const questSchema = new mongoose.Schema({
     unique: true,
   },
   author: {
-    type: String,
-    required: true,
+    username: {
+      type: String,
+      required: true
+    },
+    authorId: {
+      type: String, 
+      required: true
+    },
   },
   description: {
     type: String,
@@ -43,7 +49,7 @@ const questSchema = new mongoose.Schema({
         answers: {
           type: [
             {
-              order: { type: Number, },
+              order: { type: Number },
               value: { type: String, required: true },
               isCorrect: Boolean,
             },
@@ -73,9 +79,9 @@ const questSchema = new mongoose.Schema({
   },
 });
 
-questSchema.pre('save', async function(next) {
+questSchema.pre("save", async function (next) {
   this.title = this.title.toLowerCase().trim();
   next();
-})
+});
 
 export const questModel = mongoose.model("Quest", questSchema);

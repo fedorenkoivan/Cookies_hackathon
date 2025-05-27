@@ -3,3 +3,9 @@ export type UserData = {
   name: string;
   email: string;
 }
+
+export type UserPublicData = {
+  id: string;
+  name: string;
+  // image: string;
+}

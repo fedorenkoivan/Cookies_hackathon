@@ -27,7 +27,6 @@ function App() {
     <>
       <QuestProvider>
       <ProfileProvider>
-        <Navbar />
         <Routes>
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
@@ -53,7 +52,6 @@ function App() {
             />
           </Route>
         </Routes>
-        <Footer />
       </ProfileProvider>
       </QuestProvider>
 

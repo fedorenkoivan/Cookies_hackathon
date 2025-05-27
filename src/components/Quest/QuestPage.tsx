@@ -9,13 +9,14 @@ import avatarImage from "@/assets/img1.png";
 import Loading from "../Loading/Loading";
 
 const QuestPage = () => {
-  const { id } = useParams();
+  const { questId } = useParams();
   const { questPreview: quest, loading, error, fetchQuest } = useQuestContext();
+  
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchQuest(id as string);
-  }, [id, fetchQuest]);
+    fetchQuest(questId as string);
+  }, [questId, fetchQuest]);
 
   if (loading) {
     return <Loading />;
@@ -65,7 +66,7 @@ const QuestPage = () => {
           onClick={() => {
             if (quest.questions && quest.questions.length > 0) {
               navigate(
-                `/complete-quest/${quest._id}/${quest.questions[0]._id}`
+                `/complete-quest/${quest._id}`
               );
             } else {
               alert("This quest has no questions.");

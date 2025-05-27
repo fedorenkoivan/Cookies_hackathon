@@ -5,36 +5,50 @@ import { Question } from "@/types/quest";
 import "./QuestionPage.scss";
 import logoImage from "@/assets/logo.jpg";
 import Loading from "../Loading/Loading";
+import ProgressBar from "../Partial/ProgressBar";
 
 const QuestionPage = () => {
-  const { id, question_id } = useParams<{ id: string; question_id: string }>();
+
+  const { questId } = useParams<{ questId: string }>();
   const { questPreview: quest, loading, error, fetchQuest } = useQuestContext();
+
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [question, setQuestion] = useState<Question | null>(
     quest?.questions[0] || null
   );
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
+  const [time, setTime] = useState<number | null>(quest?.time || null);
 
   useEffect(() => {
-    if (id) {
-      fetchQuest(id);
+    if (questId) {
+      fetchQuest(questId);
     }
-  }, [id, fetchQuest]);
+  }, [questId, fetchQuest]);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (time === null || time < 0) {
+      setTime(null);
+      return;
+    }
+
+    if (time === 0) {
+      console.log("You have no time left!");
+      navigate("/rating-form");
+      return;
+    }
+
+    const timerId = setTimeout(() => {
+      setTime(time - 1);
+    }, 1000);
+
+    return () => clearTimeout(timerId);
+  }, [time]);
 
   const handleNextQuestion = () => {
     if (!quest || !quest.questions) {
       console.error("Quest or questions not available");
-      return;
-    }
-
-    setCurrentQuestionIndex(
-      quest.questions.findIndex((question) => question._id === question_id)
-    );
-
-    if (currentQuestionIndex === -1) {
-      console.error("Current question not found in quest");
       return;
     }
 
@@ -44,19 +58,16 @@ const QuestionPage = () => {
       const nextIndex = currentQuestionIndex + 1;
       setCurrentQuestionIndex(nextIndex);
       setQuestion(quest.questions[nextIndex]);
-      navigate(`/complete-quest/${id}/${quest.questions[nextIndex]._id}`);
     } else {
       navigate("/rating-form");
     }
   };
 
-const handleCheckboxChange = (value: string) => {
-  setSelectedAnswers((prev) =>
-    prev.includes(value)
-      ? prev.filter((v) => v !== value)
-      : [...prev, value]
-  );
-};
+  const handleCheckboxChange = (value: string) => {
+    setSelectedAnswers((prev) =>
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+    );
+  };
 
   return (
     <>
@@ -68,6 +79,11 @@ const handleCheckboxChange = (value: string) => {
         <p>No quest found</p>
       ) : (
         <>
+          <ProgressBar
+            current={currentQuestionIndex + 1}
+            total={quest.questions.length}
+            time={time}
+          />
           <div className="question">
             <div className="question__info">
               <h1>{question?.value}</h1>
@@ -84,8 +100,12 @@ const handleCheckboxChange = (value: string) => {
                       type="checkbox"
                       name="answer"
                       value={answer.order}
-                      checked={selectedAnswers.includes(answer.order.toString())}
-                      onChange={() => handleCheckboxChange(answer.order.toString())}
+                      checked={selectedAnswers.includes(
+                        answer.order.toString()
+                      )}
+                      onChange={() =>
+                        handleCheckboxChange(answer.order.toString())
+                      }
                     />
                     <span className="custom-checkbox"></span>
                     {answer.value}

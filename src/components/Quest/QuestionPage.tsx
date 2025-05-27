@@ -8,7 +8,7 @@ import Loading from "../Loading/Loading";
 
 const QuestionPage = () => {
   const { id, question_id } = useParams<{ id: string; question_id: string }>();
-  const { quest, loading, error, fetchQuest } = useQuestContext();
+  const { questPreview: quest, loading, error, fetchQuest } = useQuestContext();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [question, setQuestion] = useState<Question | null>(
     quest?.questions[0] || null

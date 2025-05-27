@@ -1,8 +1,5 @@
 import { nameGenerator } from "../utils/nameGenerator";
-interface UserData {
-  name: string;
-  email: string;
-}
+import { UserData } from "@/types/user";
 
 export const userLoginEvent = "userLoggedIn";
 export const userLogoutEvent = "userLoggedOut";
@@ -25,7 +22,7 @@ export const setAuthStatus = (status: boolean) => {
   const accessToken = localStorage.getItem('accessToken');
   if (status) {
     sessionStorage.setItem("isAuthorized", "true");
-    if (!accessToken) cacheUserData({ name: nameGenerator.next().value, email: "" });
+    if (!accessToken) cacheUserData({ id: "", name: nameGenerator.next().value, email: "" });
   } else {
     sessionStorage.removeItem("isAuthorized");
     sessionStorage.removeItem("userData");

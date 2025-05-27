@@ -6,6 +6,7 @@ import Comments from "./Comments";
 import { useQuestContext } from "@/contexts/QuestContext";
 import logoImage from "@/assets/logo.jpg";
 import avatarImage from "@/assets/img1.png";
+import Loading from "../Loading/Loading";
 
 const QuestPage = () => {
   const { id } = useParams();
@@ -17,7 +18,7 @@ const QuestPage = () => {
   }, [id, fetchQuest]);
 
   if (loading) {
-    return <div className="quest">Loading quest data...</div>;
+    return <Loading />;
   }
 
   if (!quest) {

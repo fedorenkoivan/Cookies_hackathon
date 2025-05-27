@@ -1,0 +1,32 @@
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 70vh;
+  .loader-message {
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+  .loader {
+    display: inline-block;
+    border-style: solid;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    width: 400px;
+    height: 400px;
+    border-width: 12px;
+    border-color: #4200c6;
+    border-top-color: #ffcc00;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

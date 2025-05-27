@@ -71,7 +71,7 @@ const QuestCard = ({ quests }: QuestCardProps) => {
                   <div className="icon">
                     <FaUser className="" />
                   </div>
-                  <p>{quest.author}</p>
+                  <p>{quest.author.username}</p>
                 </div>
                 <div className="rating">
                   <StarRatingAuto rating={quest.rating} />
@@ -83,11 +83,7 @@ const QuestCard = ({ quests }: QuestCardProps) => {
                   <div className="icon">
                     <FaClock className="" />
                   </div>
-                  {quest.time === -1 ? (
-                    <p>No limit</p>
-                  ) : (
-                    <p>{quest.time}s</p>
-                  )}
+                  {quest.time === -1 ? <p>No limit</p> : <p>{quest.time}s</p>}
                 </div>
                 <button
                   className="button"

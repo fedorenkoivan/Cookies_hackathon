@@ -17,7 +17,7 @@ const PublicProfile = () => {
   const filteredQuests = useMemo(() => {
     if (!userData || !allQuests) return [];
 
-    return allQuests.filter((quest: Quest) => quest.author === userData.name);
+    return allQuests.filter((quest: Quest) => quest.author.authorId === userData.id);
   }, [allQuests, userData]);
 
   if (loading) {

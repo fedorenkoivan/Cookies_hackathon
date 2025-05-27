@@ -14,6 +14,7 @@ import { CATEGORIES as TABS } from "@/constants/questConstants";
 import { Quest } from "@/types/quest";
 import { useQuestContext } from "@/contexts/QuestContext";
 import QuestCard from "./QuestCard";
+import Loading from "@/components/Loading/Loading";
 
 const Home = () => {
   const [active, setActive] = useState("All");
@@ -73,7 +74,7 @@ const Home = () => {
       window.removeEventListener(userAuthorizationEvent, handleAuthStatus);
   }, []);
 
-  if (loading) return <div>Loading quests...</div>;
+  if (loading) return <Loading />;
   if (error) return <div>Error: {error}</div>;
 
   return (

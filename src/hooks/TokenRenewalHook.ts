@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { userLoginEvent } from "@/utils/userData";
 import { AuthResponse } from "@/types/authResponse";
-import { REFRESH_URL, LOGOUT_URL, WARNING_MS } from "@/constants/authConstants";
+import { USERS_URL, WARNING_MS } from "@/constants/authConstants";
 import {
   getTokenExpiration,
   getStoredToken,
@@ -63,7 +63,7 @@ export const useAuth = () => {
 
   const refresh = useCallback(async (): Promise<boolean> => {
     try {
-      const res = await fetch(REFRESH_URL, {
+      const res = await fetch(`${USERS_URL}/refresh`, {
         method: "POST",
         credentials: "include",
       });
@@ -90,7 +90,7 @@ export const useAuth = () => {
 
   const logout = useCallback(async () => {
     try {
-      await fetch(LOGOUT_URL, {
+      await fetch(`${USERS_URL}/logout`, {
         method: "POST",
         credentials: "include",
       });

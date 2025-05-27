@@ -21,8 +21,8 @@ const Navbar = memo(() => {
   const handleLogout = async () => {
     try {
       const response = await fetch(`${USERS_URL}/logout`, {
-        method: "POST",
-        credentials: "include",
+        method: 'POST',
+        credentials: 'include',
       });
 
       if (response.ok) {

@@ -4,6 +4,7 @@ import { useQuestContext } from "@/contexts/QuestContext";
 import { Question } from "@/types/quest";
 import "./QuestionPage.scss";
 import logoImage from "@/assets/logo.jpg";
+import Loading from "../Loading/Loading";
 
 const QuestionPage = () => {
   const { id, question_id } = useParams<{ id: string; question_id: string }>();
@@ -60,7 +61,7 @@ const handleCheckboxChange = (value: string) => {
   return (
     <>
       {loading ? (
-        <p>Loading question...</p>
+        <Loading />
       ) : error ? (
         <p>Error: {error}</p>
       ) : !quest ? (

@@ -6,22 +6,23 @@ import SendIcon from "@mui/icons-material/Send";
 import { userLoginEvent } from "@/utils/userData";
 import { storeTokenData } from "@/utils/authUtils";
 import { useQuestContext } from "@/contexts/QuestContext";
-import { USERS_URL } from "@/constants/authConstants";
+import { USERS_URL, REQUIRED_TEXT } from "@/constants/authConstants";
 
 import "./SignUp.scss";
 
 const validationSchema = Yup.object({
-  username: Yup.string().required("Please complete this required field."),
+  username: Yup.string()
+    .required(REQUIRED_TEXT),
   email: Yup.string()
     .email("Invalid email format")
-    .required("Please complete this required field."),
+    .required(REQUIRED_TEXT),
   password: Yup.string()
     .min(8, "Password is too short - should be 8 chars minimum.")
     .matches(/[a-zA-Z]/, "Password can only contain Latin letters.")
-    .required("Please complete this required field."),
+    .required(REQUIRED_TEXT),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password")], "Passwords must match")
-    .required("Please complete this required field."),
+    .required(REQUIRED_TEXT),
 });
 
 const SignUp = () => {

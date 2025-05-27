@@ -8,3 +8,4 @@ export const AUTH_STORAGE_KEYS = {
 export const USERS_URL = "http://localhost:5000/users";
 export const REFRESH_URL = "http://localhost:5000/users/refresh";
 export const LOGOUT_URL = "http://localhost:5000/users/logout";
+export const REQUIRED_TEXT = "Please complete this required field.";

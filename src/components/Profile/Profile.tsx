@@ -7,6 +7,8 @@ import QuestCard from "../Home/QuestCard";
 import "@/components/Home/QuestCard.scss";
 import { FaEdit, FaShareAlt } from "react-icons/fa";
 import { useProfileContext } from "@/contexts/ProfileContext";
+// import { BidirectionalPriorityQueue } from "@/utils/BidirectionalPriorityQueue";
+import Loading from "../Loading/Loading";
 
 const Profile = () => {
   const [activeNavItem, setActiveNavItem] = useState<string | null>("Quests");
@@ -35,7 +37,7 @@ const Profile = () => {
   };
 
   if (loading) {
-    return <div className="profile__container">Loading...</div>;
+    return <Loading />;
   }
 
   if (error) {

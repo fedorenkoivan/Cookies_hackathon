@@ -20,12 +20,14 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import QuestionPage from "./components/Quest/QuestionPage";
 import { QuestProvider } from './contexts/QuestProvider';
+import { ProfileProvider } from "./contexts/ProfileProvider";
 
 function App() {
   return (
     <>
-      <Navbar />
       <QuestProvider>
+      <ProfileProvider>
+        <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
@@ -45,8 +47,9 @@ function App() {
           </Route>
 
         </Routes>
+        <Footer />
+      </ProfileProvider>
       </QuestProvider>
-      <Footer />
 
       <SessionRenewalDialog />
 

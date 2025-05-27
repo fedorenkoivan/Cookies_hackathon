@@ -1,38 +1,25 @@
 import StarRatingAuto from "../Rating/StarRatingAuto";
-import { useState, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useMemo } from "react";
 import "./Profile.scss";
 import { useQuestContext } from "@/contexts/QuestContext";
 import { Quest } from "@/types/quest";
 import QuestCard from "../Home/QuestCard";
 import "@/components/Home/QuestCard.scss";
 import { FaEdit, FaShareAlt } from "react-icons/fa";
-import { USERS_URL } from "@/constants/authConstants";
-import { UserData } from "@/types/user";
-// import { BidirectionalPriorityQueue } from "@/utils/BidirectionalPriorityQueue";
-
+import { useProfileContext } from "@/contexts/ProfileContext";
 
 const Profile = () => {
   const [activeNavItem, setActiveNavItem] = useState<string | null>("Quests");
-  const [userData, setUserData] = useState<UserData | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
 
+  const { userData, loading, error } = useProfileContext();
   const { allQuests } = useQuestContext();
 
   const filteredQuests = useMemo(() => {
+    if (!userData || !allQuests) return [];
+
     return allQuests.filter((quest: Quest) => {
       if (activeNavItem === "Quests") {
-        const userDataStr = sessionStorage.getItem("userData");
-        if (!userDataStr) return false;
-
-        try {
-          const userData = JSON.parse(userDataStr);
-          return quest.author === userData.name;
-        } catch (error) {
-          console.error("Error parsing userData from sessionStorage:", error);
-          return false;
-        }
+        return quest.author === userData.name;
       } else if (activeNavItem === "Saved") {
         const savedQuestsStr = localStorage.getItem("savedQuests");
         const savedQuests = savedQuestsStr ? JSON.parse(savedQuestsStr) : [];
@@ -41,77 +28,11 @@ const Profile = () => {
         return false;
       }
     });
-  }, [allQuests, activeNavItem]);
-
-  const navigate = useNavigate();
+  }, [allQuests, activeNavItem, userData]);
 
   const handleNavItemClick = (item: string) => {
     setActiveNavItem(item);
   };
-
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const userDataStr = sessionStorage.getItem("userData");
-        if (userDataStr) {
-          setUserData(JSON.parse(userDataStr));
-        }
-      } catch (e) {
-        console.error("Error loading userData from sessionStorage:", e);
-      }
-      try {
-        const accessToken = localStorage.getItem("accessToken");
-
-        if (!accessToken) {
-          navigate("/log-in");
-          return;
-        }
-
-        const response = await fetch(`${USERS_URL}/profile`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-
-        const data = await response.json();
-
-        if (data.status === "success") {
-          setUserData(data.data.user);
-          sessionStorage.setItem("userData", JSON.stringify(data.data.user));
-        } else {
-          if (
-            data.message === "Invalid ID format" ||
-            data.message ===
-              "Invalid user identification. Please log in again." ||
-            data.message?.toLowerCase().includes("invalid")
-          ) {
-            console.error("Token contains invalid ID, logging out");
-            localStorage.removeItem("accessToken");
-
-            navigate("/log-in", {
-              state: {
-                message: "Your session is invalid. Please log in again.",
-              },
-            });
-            return;
-          }
-
-          setError(data.message || "Error fetching user profile");
-          if (response.status === 401) {
-            localStorage.removeItem("accessToken");
-            navigate("/log-in");
-          }
-        }
-      } catch (err) {
-        setError("Error connecting to server");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserProfile();
-  }, [navigate]);
 
   if (loading) {
     return <div className="profile__container">Loading...</div>;

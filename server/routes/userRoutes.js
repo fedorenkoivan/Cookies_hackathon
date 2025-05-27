@@ -118,6 +118,35 @@ export default async function userRoutes(fastify) {
     }
   );
 
+  fastify.get(
+    "/public-profile/:userId",
+    {
+      preHandler: async (request, reply) => {
+        await logRoute("profile")(request, reply);
+      },
+    },
+    async (request, reply) => {
+      const userId = request.params.userId;
+
+      const user = await User.findById(userId);
+
+      if (!user) {
+        throw createError(404, "User not found");
+      }
+
+      return reply.code(200).send({
+        status: "success",
+        data: {
+          user: {
+            id: user._id,
+            name: user.name,
+            // image: user.image,
+          },
+        },
+      });
+    }
+  );
+
   fastify.post(
     "/forgot-password",
     { preHandler: logRoute("forgot_password") },

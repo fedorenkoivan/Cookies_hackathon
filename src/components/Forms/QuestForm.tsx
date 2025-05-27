@@ -63,12 +63,14 @@ const QuestFormContent = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     const accessToken = localStorage.getItem("accessToken");
     e.preventDefault();
+    
     try {
       const userData = sessionStorage.getItem("userData");
-      const author = userData
-        ? JSON.parse(userData).name || "Anonymous"
-        : "Anonymous";
-      await fetch(`${URL}/create`, {
+      const username = userData ? JSON.parse(userData).name : "Anonymous";
+      const authorId = userData ? JSON.parse(userData).id : "";
+      const author = { username, authorId };
+      
+      const response = await fetch(`${URL}/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -84,13 +86,18 @@ const QuestFormContent = () => {
           image,
         }),
       });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to create quest");
+      }
+      
       await fetchAllQuests();
+      clearSavedData();
+      navigate("/");
     } catch (err) {
       console.error("Error submitting the quest:", err);
     }
-
-    clearSavedData();
-    navigate("/");
   };
 
   return (

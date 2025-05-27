@@ -3,6 +3,7 @@ import { FaUser, FaClock, FaBookmark } from "react-icons/fa";
 import StarRatingAuto from "../Rating/StarRatingAuto";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import defaultImage from "../../assets/logo.jpg";
 
 const truncateText = (text: string, limit: number) => {
   return text.length > limit ? text.slice(0, limit) + "..." : text;
@@ -50,7 +51,7 @@ const QuestCard = ({ quests }: QuestCardProps) => {
         {quests.map((quest: Quest) => (
           <div className="quests__card-container" key={quest._id}>
             <div className="quests__card-image">
-              <img src={quest.image || "src/assets/logo.jpg"} />
+              <img src={quest.image || defaultImage} />
               <div className="bookmark">
                 <FaBookmark
                   className={`icon${
@@ -70,7 +71,15 @@ const QuestCard = ({ quests }: QuestCardProps) => {
                   <div className="icon">
                     <FaUser className="" />
                   </div>
-                  <p>{quest.author}</p>
+                  <button
+                    className="author-name-button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/public-profile/${quest.author.authorId}`);
+                    }}
+                  >
+                    {quest.author.username}
+                  </button>
                 </div>
                 <div className="rating">
                   <StarRatingAuto rating={quest.rating} />
@@ -82,11 +91,7 @@ const QuestCard = ({ quests }: QuestCardProps) => {
                   <div className="icon">
                     <FaClock className="" />
                   </div>
-                  {quest.time === -1 ? (
-                    <p>No limit</p>
-                  ) : (
-                    <p>{quest.time}s</p>
-                  )}
+                  {quest.time === -1 ? <p>No limit</p> : <p>{quest.time}s</p>}
                 </div>
                 <button
                   className="button"

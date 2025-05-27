@@ -89,6 +89,14 @@ $dark-purple: #4a00e0;
               font-size: 21px;
               font-weight: 500;
             }
+            .author-name-button {
+              color: white;
+              margin-left: 5px;
+
+              &:hover {
+                color: $honey;
+              }
+            }
           }
 
           .icon {
@@ -101,7 +109,8 @@ $dark-purple: #4a00e0;
             font-weight: bold;
             text-transform: uppercase;
             font-size: 28px;
-            margin-bottom: 10px;          }
+            margin-bottom: 10px;
+          }
           .category {
             margin-top: 2vh;
             font-weight: 400;

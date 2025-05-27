@@ -10,7 +10,8 @@ import Loading from "../Loading/Loading";
 
 const QuestPage = () => {
   const { questId } = useParams();
-  const { quest, loading, error, fetchQuest } = useQuestContext();
+  const { questPreview: quest, loading, error, fetchQuest } = useQuestContext();
+  
   const navigate = useNavigate();
 
   useEffect(() => {

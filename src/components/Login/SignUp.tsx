@@ -1,4 +1,4 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { Button } from "@mui/material";
@@ -6,27 +6,69 @@ import SendIcon from "@mui/icons-material/Send";
 import { userLoginEvent } from "@/utils/userData";
 import { storeTokenData } from "@/utils/authUtils";
 import { useQuestContext } from "@/contexts/QuestContext";
+import { USERS_URL, REQUIRED_TEXT } from "@/constants/authConstants";
 
 import "./SignUp.scss";
 
 const validationSchema = Yup.object({
-  username: Yup.string().required("Please complete this required field."),
+  username: Yup.string()
+    .required(REQUIRED_TEXT),
   email: Yup.string()
     .email("Invalid email format")
-    .required("Please complete this required field."),
+    .required(REQUIRED_TEXT),
   password: Yup.string()
     .min(8, "Password is too short - should be 8 chars minimum.")
     .matches(/[a-zA-Z]/, "Password can only contain Latin letters.")
-    .required("Please complete this required field."),
+    .required(REQUIRED_TEXT),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password")], "Passwords must match")
-    .required("Please complete this required field."),
+    .required(REQUIRED_TEXT),
 });
 
 const SignUp = () => {
   const navigate = useNavigate();
 
   const { fetchAllQuests } = useQuestContext();
+
+  const handleSubmit = async (
+    values: { username: string; email: string; password: string },
+    { setSubmitting, setStatus }: FormikHelpers<{ username: string; email: string; password: string; confirmPassword: string }>
+  ) => {
+    try {
+      const response = await fetch(`${USERS_URL}/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          name: values.username,
+          email: values.email,
+          password: values.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.status === "success" && data.accessToken) {
+        localStorage.setItem("accessToken", data.accessToken);
+
+        storeTokenData(data.accessToken);
+
+        window.dispatchEvent(new Event(userLoginEvent));
+        await fetchAllQuests();
+        navigate("/profile");
+      } else {
+        setStatus(data.message || "Error during signup");
+      }
+    } catch (error) {
+      console.error("Error during signup:", error);
+      setStatus("Error connecting to the server. Please try again later.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div className="card">
       <div className="banner">
@@ -43,41 +85,7 @@ const SignUp = () => {
           confirmPassword: "",
         }}
         validationSchema={validationSchema}
-        onSubmit={async (values, { setSubmitting, setStatus }) => {
-          try {
-            const response = await fetch("http://localhost:5000/users/signup", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              credentials: "include",
-              body: JSON.stringify({
-                name: values.username,
-                email: values.email,
-                password: values.password,
-              }),
-            });
-
-            const data = await response.json();
-
-            if (data.status === "success" && data.accessToken) {
-              localStorage.setItem("accessToken", data.accessToken);
-
-              storeTokenData(data.accessToken);
-
-              window.dispatchEvent(new Event(userLoginEvent));
-              await fetchAllQuests();
-              navigate("/profile");
-            } else {
-              setStatus(data.message || "Помилка реєстрації");
-            }
-          } catch (error) {
-            console.error("Error during signup:", error);
-            setStatus("Помилка з'єднання з сервером");
-          } finally {
-            setSubmitting(false);
-          }
-        }}
+        onSubmit={handleSubmit}
       >
         {({ handleSubmit, status, isSubmitting }) => (
           <Form onSubmit={handleSubmit} className="form">

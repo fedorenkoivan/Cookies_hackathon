@@ -28,3 +28,13 @@ export type Quest = {
   reviews: number;
   questions: ExtendedQuestion[];
 };
+
+export type SavedFormData = {
+  image: string;
+  title: string;
+  description: string;
+  category: string;
+  time: number;
+  showTimeControls: boolean;
+  questions: Question[];
+};

@@ -1,130 +1,38 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useEffect, memo } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import "./Navbar.scss";
-import {
-  cacheUserData,
-  getCachedUserData,
-  setAuthStatus,
-  userLoginEvent,
-  userLogoutEvent,
-  userAuthorizationEvent,
-} from "@/utils/userData";
 import profileImage from "@/assets/img1.png";
+import { USERS_URL } from "@/constants/authConstants";
+import { useProfileContext } from "@/contexts/ProfileContext";
 
-interface UserData {
-  name: string;
-  email: string;
-}
-
-const Navbar = () => {
-  const [userData, setUserData] = useState<UserData | null>(
-    getCachedUserData()
-  );
-  const [loading, setLoading] = useState<boolean>(false);
+const Navbar = memo(() => {
+  const { userData, loading, fetchUserProfile, logout } = useProfileContext();
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const fetchUserProfile = async () => {
-    if (loading) return;
-
-    setLoading(true);
-    try {
-      const accessToken = localStorage.getItem("accessToken");
-
-      if (!accessToken) {
-        setUserData(getCachedUserData());
-        setLoading(false);
-        return;
-      }
-
-      const response = await fetch("http://localhost:5000/users/profile", {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        },
-      });
-
-      const data = await response.json();
-
-      if (data.status === "success") {
-        setUserData(data.data.user);
-        cacheUserData(data.data.user);
-        setAuthStatus(true);
-      } else {
-        if (response.status === 401) {
-          localStorage.removeItem("accessToken");
-          setAuthStatus(false);
-          setUserData(null);
-        }
-      }
-    } catch (err) {
-      console.error(err);
-      setAuthStatus(false);
-      setUserData(null);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
-    fetchUserProfile();
-  }, [location.pathname]);
-
-  useEffect(() => {
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === "accessToken") {
-        if (e.newValue) {
-          fetchUserProfile();
-        } else {
-          setUserData(null);
-        }
-      }
-    };
-
-    const handleUserLogin = () => {
+    const token = localStorage.getItem("accessToken");
+    if (token && !userData && !loading) {
       fetchUserProfile();
-    };
-
-    const handleUserLogout = () => {
-      setAuthStatus(false);
-      setTimeout(() => navigate("/"), 10);
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-    window.addEventListener(userLoginEvent, handleUserLogin);
-    window.addEventListener(userLogoutEvent, handleUserLogout);
-    window.addEventListener(userAuthorizationEvent, () => {
-      setUserData(getCachedUserData());
-    });
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-      window.removeEventListener(userLoginEvent, handleUserLogin);
-      window.removeEventListener(userLogoutEvent, handleUserLogout);
-      window.removeEventListener(userAuthorizationEvent, () => {
-        setUserData(getCachedUserData());
-      });
-    };
-  }, []);
+    }
+  }, [userData, loading, fetchUserProfile]);
 
   const handleLogout = async () => {
     try {
-      const response = await fetch('http://localhost:5000/users/logout', {
+      const response = await fetch(`${USERS_URL}/logout`, {
         method: 'POST',
         credentials: 'include',
       });
 
       if (response.ok) {
-        localStorage.removeItem('accessToken');
-        setUserData(null);
-        window.dispatchEvent(new Event(userLogoutEvent));
-        navigate('/');
+        logout();
+        navigate("/");
       } else {
-        console.error('Failed to logout: Server returned', response.status);
+        console.error("Failed to logout: Server returned", response.status);
       }
     } catch (error) {
-      console.error('Error during logout:', error);
+      console.error("Error during logout:", error);
     }
   };
 
@@ -193,6 +101,6 @@ const Navbar = () => {
       </div>
     </nav>
   );
-};
+});
 
 export default Navbar;

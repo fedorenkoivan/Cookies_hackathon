@@ -8,8 +8,10 @@ import Loading from "../Loading/Loading";
 import ProgressBar from "../Partial/ProgressBar";
 
 const QuestionPage = () => {
+
   const { questId } = useParams<{ questId: string }>();
-  const { quest, loading, error, fetchQuest } = useQuestContext();
+  const { questPreview: quest, loading, error, fetchQuest } = useQuestContext();
+
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [question, setQuestion] = useState<Question | null>(
     quest?.questions[0] || null

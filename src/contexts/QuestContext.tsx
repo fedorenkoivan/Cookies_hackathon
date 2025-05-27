@@ -1,10 +1,10 @@
 import { createContext, useContext } from 'react';
 import { Quest } from '@/types/quest';
 
-interface QuestContextType {
+type QuestContextType = {
   allQuests: Quest[];
   bestQuests: Quest[];
-  quest: Quest | null;
+  questPreview: Quest | null;
   loading: boolean;
   error: string | null;
   fetchQuest: (questId: string) => Promise<void>;
@@ -12,15 +12,12 @@ interface QuestContextType {
   fetchBestQuests: () => Promise<void>;
 }
 
-export const QuestContext = createContext<QuestContextType>({
-  allQuests: [],
-  bestQuests: [],
-  quest: null,
-  loading: false,
-  error: null,
-  fetchQuest: async () => {},
-  fetchAllQuests: async () => {},
-  fetchBestQuests: async () => {},
-});
+export const QuestContext = createContext<QuestContextType | undefined>(undefined);
 
-export const useQuestContext = () => useContext(QuestContext);
+export const useQuestContext = () => {
+  const context = useContext(QuestContext);
+  if (!context) {
+    throw new Error('useQuestContext must be used within a QuestProvider');
+  }
+  return context;
+};

@@ -7,16 +7,17 @@ import SendIcon from "@mui/icons-material/Send";
 import { userLoginEvent } from "@/utils/userData";
 import { storeTokenData } from "@/utils/authUtils";
 import { toast } from "react-toastify";
+import { USERS_URL, REQUIRED_TEXT } from "@/constants/authConstants";
 import './LogIn.scss';
 
 const validationSchema = Yup.object({
   password: Yup.string()
     .min(8, "Password is too short - should be 8 chars minimum.")
     .matches(/[a-zA-Z]/, "Password can only contain Latin letters.")
-    .required("Please complete this required field."),
+    .required(REQUIRED_TEXT),
   passwordConfirm: Yup.string()
     .oneOf([Yup.ref('password')], 'Passwords must match')
-    .required("Please complete this required field."),
+    .required(REQUIRED_TEXT),
 });
 
 const ResetPassword = () => {
@@ -49,7 +50,7 @@ const ResetPassword = () => {
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting, setStatus }) => {
           try {
-            const response = await fetch(`http://localhost:5000/users/reset-password/${resetToken}`, {
+            const response = await fetch(`${USERS_URL}/reset-password/${resetToken}`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',

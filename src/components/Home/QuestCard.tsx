@@ -3,6 +3,7 @@ import { FaUser, FaClock, FaBookmark } from "react-icons/fa";
 import StarRatingAuto from "../Rating/StarRatingAuto";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import defaultImage from "../../assets/logo.jpg";
 
 const truncateText = (text: string, limit: number) => {
   return text.length > limit ? text.slice(0, limit) + "..." : text;
@@ -50,7 +51,7 @@ const QuestCard = ({ quests }: QuestCardProps) => {
         {quests.map((quest: Quest) => (
           <div className="quests__card-container" key={quest._id}>
             <div className="quests__card-image">
-              <img src={quest.image || "src/assets/logo.jpg"} />
+              <img src={quest.image || defaultImage} />
               <div className="bookmark">
                 <FaBookmark
                   className={`icon${

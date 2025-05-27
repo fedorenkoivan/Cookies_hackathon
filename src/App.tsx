@@ -21,6 +21,7 @@ import { QuestProvider } from "./contexts/QuestProvider";
 import { ProfileProvider } from "./contexts/ProfileProvider";
 import MainLayout from "./components/Layouts/MainLayout";
 import QuestLayout from "./components/Layouts/QuestLayout";
+import PublicProfile from "./components/Profile/PublicProfile";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/public/:userId" element={<PublicProfile />} />
             <Route path="/rating-form" element={<RatingForm />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/log-in" element={<LogIn />} />

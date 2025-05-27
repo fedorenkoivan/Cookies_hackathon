@@ -29,7 +29,6 @@ function App() {
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
-            {/* <Route path="/quest-form" element={<QuestForm />} /> */}
             <Route path="/rating-form" element={<RatingForm />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/log-in" element={<LogIn />} />
@@ -41,9 +40,7 @@ function App() {
             <Route path="/preview-quest/:id" element={<QuestPage />} />
 
             <Route element={<ProtectedRoutes />}>
-              {/* <Route path="/profile" element={<Profile />} /> */}
               <Route path="/quest-form" element={<QuestForm />} />
-              {/* <Route path="/rating-form" element={<RatingForm />} /> */}
             </Route>
           </Route>
           <Route element={<QuestLayout />}>

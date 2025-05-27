@@ -6,6 +6,7 @@ import {
   clearRefreshTokenCookie,
   verifyJwtToken,
   defaultOptions,
+  emailMarkup,
 } from "../utils/authUtils.js";
 import { sendEmail } from "../utils/sendEmailProxy.js";
 
@@ -139,22 +140,7 @@ export default async function userRoutes(fastify) {
 
       const resetURL = `${request.headers.origin}/reset-password/${resetToken}`;
 
-      const message = `
-          Forgot your password? Submit a request with your new password to: ${resetURL}.
-          If you didn't forget your password, please ignore this email.
-        `;
-
-      const html = `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2 style="color: #1d2671;">Password Reset</h2>
-            <p>Hello ${user.name},</p>
-            <p>Forgot your password? Click the button below to reset it:</p>
-            <a href="${resetURL}" style="display: inline-block; background: linear-gradient(135deg, #1d2671, #c33764); color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; margin: 20px 0;">Reset Your Password</a>
-            <p>If you didn't request a password reset, please ignore this email or contact support if you have concerns.</p>
-            <p>This link will expire in 10 minutes.</p>
-            <p>Best regards,<br>The Cookies Team 🍪</p>
-          </div>
-        `;
+      const { message, html } = emailMarkup(user.name, resetURL);
 
       try {
         await sendEmail({

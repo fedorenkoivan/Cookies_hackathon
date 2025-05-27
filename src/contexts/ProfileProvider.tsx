@@ -75,7 +75,14 @@ export const ProfileProvider = ({ children }: PropsWithChildren) => {
     }
   }, [navigate]);
 
-useEffect(() => {
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token && !userData) {
+      fetchUserProfile();
+    }
+  }, []);
+
+  useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === "accessToken") {
         if (e.newValue) {
@@ -103,7 +110,7 @@ useEffect(() => {
         setUserData(getCachedUserData());
       });
     };
-  }, []);
+  }, [fetchUserProfile]);
 
   const logout = useCallback(() => {
     localStorage.removeItem("accessToken");
@@ -127,63 +134,3 @@ useEffect(() => {
     <ProfileContext.Provider value={value}>{children}</ProfileContext.Provider>
   );
 };
-
-/* async () => {
-      try {
-        const userDataStr = sessionStorage.getItem("userData");
-        if (userDataStr) {
-          setUserData(JSON.parse(userDataStr));
-        }
-      } catch (e) {
-        console.error("Error loading userData from sessionStorage:", e);
-      }
-      try {
-        const accessToken = localStorage.getItem("accessToken");
-
-        if (!accessToken) {
-          navigate("/log-in");
-          return;
-        }
-
-        const response = await fetch(`${USERS_URL}/profile`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-
-        const data = await response.json();
-
-        if (data.status === "success") {
-          setUserData(data.data.user);
-          sessionStorage.setItem("userData", JSON.stringify(data.data.user));
-        } else {
-          if (
-            data.message === "Invalid ID format" ||
-            data.message ===
-              "Invalid user identification. Please log in again." ||
-            data.message?.toLowerCase().includes("invalid")
-          ) {
-            console.error("Token contains invalid ID, logging out");
-            localStorage.removeItem("accessToken");
-
-            navigate("/log-in", {
-              state: {
-                message: "Your session is invalid. Please log in again.",
-              },
-            });
-            return;
-          }
-
-          setError(data.message || "Error fetching user profile");
-          if (response.status === 401) {
-            localStorage.removeItem("accessToken");
-            navigate("/log-in");
-          }
-        }
-      } catch (err) {
-        setError("Error connecting to server");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    } */

@@ -142,3 +142,17 @@ $black: #000000;
     }
   }
 }
+
+.quests__card-author {
+  .author-name-button {
+    margin-left: 5px;
+    background: none;
+    border: none;
+    color: black;
+    box-shadow: none;
+
+    &:hover {
+      color: #8e2de2;
+    }
+  }
+}

@@ -66,9 +66,15 @@ const Slider = () => {
                 <div className="top">
                   <div className="author">
                     <FaUser className="icon" />
-                    <p>
+                    <button
+                      className="author-name-button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/public-profile/${quest.author.authorId}`);
+                      }}
+                    >
                       {quest.author.username}
-                    </p>
+                    </button>
                   </div>
                   <div className="clock">
                     <FaClock className="icon" />

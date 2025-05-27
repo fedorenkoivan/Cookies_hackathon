@@ -71,7 +71,15 @@ const QuestCard = ({ quests }: QuestCardProps) => {
                   <div className="icon">
                     <FaUser className="" />
                   </div>
-                  <p>{quest.author.username}</p>
+                  <button
+                    className="author-name-button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/public-profile/${quest.author.authorId}`);
+                    }}
+                  >
+                    {quest.author.username}
+                  </button>
                 </div>
                 <div className="rating">
                   <StarRatingAuto rating={quest.rating} />

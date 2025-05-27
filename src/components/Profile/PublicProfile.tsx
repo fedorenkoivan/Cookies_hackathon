@@ -1,5 +1,6 @@
+import { useEffect, useMemo } from "react";
+import { useParams } from "react-router-dom";
 import StarRatingAuto from "../Rating/StarRatingAuto";
-import { useMemo } from "react";
 import { useQuestContext } from "@/contexts/QuestContext";
 import { Quest } from "@/types/quest";
 import QuestCard from "../Home/QuestCard";
@@ -7,18 +8,29 @@ import "@/components/Home/QuestCard.scss";
 import { FaShareAlt } from "react-icons/fa";
 import { useProfileContext } from "@/contexts/ProfileContext";
 import Loading from "../Loading/Loading";
-import defaultAvatar from "../../assets/img1.png"
+import defaultAvatar from "../../assets/img1.png";
 import "./PublicProfile.scss";
 
 const PublicProfile = () => {
-  const { userData, loading, error } = useProfileContext();
+  const { userId } = useParams<{ userId: string }>();
+
+  const { userPublicData, loading, error, fetchUserPublicProfile } =
+    useProfileContext();
   const { allQuests } = useQuestContext();
 
-  const filteredQuests = useMemo(() => {
-    if (!userData || !allQuests) return [];
+  useEffect(() => {
+    if (userId) {
+      fetchUserPublicProfile(userId);
+    }
+  }, [userId, fetchUserPublicProfile]);
 
-    return allQuests.filter((quest: Quest) => quest.author.authorId === userData.id);
-  }, [allQuests, userData]);
+  const filteredQuests = useMemo(() => {
+    if (!userPublicData || !allQuests) return [];
+
+    return allQuests.filter(
+      (quest: Quest) => quest.author.authorId === userPublicData.id
+    );
+  }, [allQuests, userPublicData]);
 
   if (loading) {
     return <Loading />;
@@ -26,6 +38,10 @@ const PublicProfile = () => {
 
   if (error) {
     return <div className="public-profile__container">Error: {error}</div>;
+  }
+
+  if (!userPublicData) {
+    return <div className="public-profile__container">User not found</div>;
   }
 
   return (
@@ -38,8 +54,7 @@ const PublicProfile = () => {
             </div>
           </div>
           <div className="public-profile__user-info">
-            <h1>{userData?.name || "USERNAME"}</h1>
-            <p>{userData?.email}</p>
+            <h1>{userPublicData.name || "USERNAME"}</h1>
             <div className="public-profile__rating">
               <StarRatingAuto rating={3.5} />
             </div>
@@ -51,19 +66,17 @@ const PublicProfile = () => {
           </div>
         </div>
         <div className="public-profile__nav">
-          <span key="Quests" className="public-profile__nav-item active">
-            Quests
-          </span>
+          <span className="public-profile__nav-item active">Quests</span>
         </div>
       </div>
       <div className="public-profile__quests">
-        {userData ? (
+        {filteredQuests.length > 0 ? (
           <div className="quests">
             <QuestCard quests={filteredQuests} />
           </div>
         ) : (
-          <div className="loading-container">
-            <p>Loading user data...</p>
+          <div className="no-quests">
+            <p>This user hasn't created any quests yet.</p>
           </div>
         )}
       </div>

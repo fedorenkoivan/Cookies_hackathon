@@ -1,7 +1,6 @@
 import { PropsWithChildren, useEffect } from "react";
 import { useState, useMemo, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
-import { UserData } from "@/types/user";
+import { UserData, UserPublicData } from "@/types/user";
 import { ProfileContext } from "./ProfileContext";
 import { USERS_URL } from "@/constants/authConstants";
 import {
@@ -15,12 +14,13 @@ export const ProfileProvider = ({ children }: PropsWithChildren) => {
   const [userData, setUserData] = useState<UserData | null>(
     getCachedUserData()
   );
+  const [userPublicData, setUserPublicData] = useState<UserPublicData | null>(
+    null
+  );
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
 
   const fetchUserProfile = useCallback(async () => {
-
     setLoading(true);
     try {
       const userDataStr = sessionStorage.getItem("userData");
@@ -73,7 +73,24 @@ export const ProfileProvider = ({ children }: PropsWithChildren) => {
     } finally {
       setLoading(false);
     }
-  }, [navigate]);
+  }, []);
+
+  const fetchUserPublicProfile = useCallback(async (userId: string) => {
+    setLoading(true);
+    try {
+      const response = await fetch(`${USERS_URL}/public-profile/${userId}`);
+      const data = await response.json();
+
+      if (data.status === "success") {
+        setUserPublicData(data.data.user);
+      }
+    } catch (err) {
+      setError("An error occurred while fetching user's public profile");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -122,12 +139,22 @@ export const ProfileProvider = ({ children }: PropsWithChildren) => {
   const value = useMemo(
     () => ({
       userData,
+      userPublicData,
       loading,
       error,
       fetchUserProfile,
+      fetchUserPublicProfile,
       logout,
     }),
-    [userData, loading, error, fetchUserProfile, logout]
+    [
+      userData,
+      userPublicData,
+      loading,
+      error,
+      fetchUserProfile,
+      fetchUserPublicProfile,
+      logout,
+    ]
   );
 
   return (

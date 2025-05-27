@@ -11,6 +11,7 @@ import {
   userLogoutEvent,
   userAuthorizationEvent,
 } from "@/utils/userData";
+import { USERS_URL } from "@/constants/authConstants";
 import profileImage from "@/assets/img1.png";
 
 interface UserData {
@@ -39,7 +40,7 @@ const Navbar = () => {
         return;
       }
 
-      const response = await fetch("http://localhost:5000/users/profile", {
+      const response = await fetch(`${USERS_URL}/profile`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`
         },
@@ -110,7 +111,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch('http://localhost:5000/users/logout', {
+      const response = await fetch(`${USERS_URL}/logout`, {
         method: 'POST',
         credentials: 'include',
       });

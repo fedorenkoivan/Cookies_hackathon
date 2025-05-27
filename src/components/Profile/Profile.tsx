@@ -7,6 +7,7 @@ import { Quest } from "@/types/quest";
 import QuestCard from "../Home/QuestCard";
 import "@/components/Home/QuestCard.scss";
 import { FaEdit, FaShareAlt } from "react-icons/fa";
+import { USERS_URL } from "@/constants/authConstants";
 // import { BidirectionalPriorityQueue } from "@/utils/BidirectionalPriorityQueue";
 interface UserData {
   id: string;
@@ -69,7 +70,7 @@ const Profile = () => {
           return;
         }
 
-        const response = await fetch("http://localhost:5000/users/profile", {
+        const response = await fetch(`${USERS_URL}/profile`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },

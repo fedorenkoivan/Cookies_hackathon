@@ -70,7 +70,6 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
     background-color: rgba(255, 255, 255, 0.1);
-    color: white;
     font-size: 1rem;
     
     &:focus {
@@ -83,6 +82,16 @@
       color: rgba(255, 255, 255, 0.5);
     }
   }
+}
+
+.password-toggle {
+  margin-top: 10px;
+}
+
+.password-fields {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 20px;
+  animation: fadeIn 0.3s ease-out;
 }
 
 .btn {
@@ -116,5 +125,27 @@
     &:hover:not(:disabled) {
       background-color: rgba(255, 255, 255, 0.1);
     }
+  }
+  
+  &-toggle {
+    background-color: transparent;
+    border: 1px solid #ffcc00;
+    color: #ffcc00;
+    align-self: flex-start;
+    
+    &:hover {
+      background-color: rgba(255, 204, 0, 0.1);
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

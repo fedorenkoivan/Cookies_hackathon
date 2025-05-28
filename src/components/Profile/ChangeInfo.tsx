@@ -12,16 +12,21 @@ const ChangeInfo = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPasswordFields, setShowPasswordFields] = useState(false);
   
   useEffect(() => {
     if (userData) {
-      setFormData({
+      setFormData(prev => ({
+        ...prev,
         name: userData.name || "",
         email: userData.email || "",
-      });
+      }));
     }
   }, [userData]);
   
@@ -36,7 +41,6 @@ const ChangeInfo = () => {
   const saveChanges = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Basic validation
     if (!formData.name || !formData.email) {
       toast.error("Name and email cannot be empty");
       return;
@@ -45,6 +49,23 @@ const ChangeInfo = () => {
     if (!validateEmail(formData.email)) {
       toast.error("Please enter a valid email address");
       return;
+    }
+    
+    if (showPasswordFields) {
+      if (!formData.currentPassword) {
+        toast.error("Current password is required to change password");
+        return;
+      }
+      
+      if (formData.newPassword !== formData.confirmPassword) {
+        toast.error("New passwords do not match");
+        return;
+      }
+      
+      if (formData.newPassword && formData.newPassword.length < 8) {
+        toast.error("Password must be at least 8 characters long");
+        return;
+      }
     }
     
     try {
@@ -57,16 +78,23 @@ const ChangeInfo = () => {
         return;
       }
       
+      const requestBody: any = {
+        name: formData.name,
+        email: formData.email
+      };
+      
+      if (showPasswordFields && formData.currentPassword && formData.newPassword) {
+        requestBody.currentPassword = formData.currentPassword;
+        requestBody.newPassword = formData.newPassword;
+      }
+      
       const response = await fetch(`${USERS_URL}/update-profile`, {
-        method: "PATCH",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${accessToken}`
         },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email
-        }),
+        body: JSON.stringify(requestBody),
       });
       
       const data = await response.json();
@@ -93,6 +121,18 @@ const ChangeInfo = () => {
   
   const cancelChanges = () => {
     navigate("/profile");
+  };
+
+  const togglePasswordFields = () => {
+    setShowPasswordFields(!showPasswordFields);
+    if (showPasswordFields) {
+      setFormData(prev => ({
+        ...prev,
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: ""
+      }));
+    }
   };
 
   return (
@@ -132,6 +172,56 @@ const ChangeInfo = () => {
               required
             />
           </div>
+          
+          <div className="form-group password-toggle">
+            <button 
+              type="button" 
+              className="btn btn-toggle" 
+              onClick={togglePasswordFields}
+            >
+              {showPasswordFields ? "Cancel Password Change" : "Change Password"}
+            </button>
+          </div>
+          
+          {showPasswordFields && (
+            <div className="password-fields">
+              <div className="form-group">
+                <label htmlFor="currentPassword">Current Password</label>
+                <input
+                  type="password"
+                  id="currentPassword"
+                  name="currentPassword"
+                  value={formData.currentPassword}
+                  onChange={handleChange}
+                  placeholder="Enter your current password"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="newPassword">New Password</label>
+                <input
+                  type="password"
+                  id="newPassword"
+                  name="newPassword"
+                  value={formData.newPassword}
+                  onChange={handleChange}
+                  placeholder="Enter your new password"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="confirmPassword">Confirm New Password</label>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  placeholder="Confirm your new password"
+                />
+              </div>
+            </div>
+          )}
           
           <div className="change-info__actions">
             <button

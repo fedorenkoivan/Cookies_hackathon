@@ -7,6 +7,8 @@ import QuestCard from "../Home/QuestCard";
 import "@/components/Home/QuestCard.scss";
 import { FaEdit, FaShareAlt } from "react-icons/fa";
 import { useProfileContext } from "@/contexts/ProfileContext";
+
+import { useNavigate } from "react-router-dom";
 // import { BidirectionalPriorityQueue } from "@/utils/BidirectionalPriorityQueue";
 import Loading from "../Loading/Loading";
 
@@ -15,6 +17,8 @@ const Profile = () => {
 
   const { userData, loading, error } = useProfileContext();
   const { allQuests } = useQuestContext();
+
+  const navigate = useNavigate();
 
   const filteredQuests = useMemo(() => {
     if (!userData || !allQuests) return [];
@@ -61,7 +65,9 @@ const Profile = () => {
             </div>
           </div>
           <div className="profile__actions">
-            <button className="profile__edit-btn">
+            <button className="profile__edit-btn"
+              onClick={() => navigate("change-info")}
+            >
               <FaEdit />
             </button>
             <button className="profile__share-btn">

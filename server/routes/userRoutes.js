@@ -268,4 +268,84 @@ export default async function userRoutes(fastify) {
       reply.code(200).send({ status: "success", accessToken });
     }
   );
+
+  fastify.post(
+    "/update-profile",
+    { preHandler: verifyToken },
+    async (request, reply) => {
+      try {
+        const userId = request.user.id;
+        const { name, email, currentPassword, newPassword } = request.body;
+
+        const user = await User.findById(userId).select("+password");
+
+        if (!user) {
+          throw createError("NOT_FOUND", "User not found");
+        }
+
+        if(!validator.isEmail(email)) {
+          throw createError("BAD_REQUEST", "Please provide a valid email address");
+        }
+
+        if(email !== user.email) {
+          const existingUser = await User.findOne({ email });
+
+          if(existingUser) {
+            throw createError("CONFLICT", "Email address is already in use");
+          }
+        }
+
+        if (currentPassword && newPassword) {
+          const isPasswordCorrect = await user.correctPassword(
+            currentPassword,
+            user.password
+          );
+
+          if (!isPasswordCorrect) {
+            throw createError("UNAUTHORIZED", "Current password is incorrect");
+          }
+
+          if (newPassword.length < 8) {
+            throw createError(
+              "BAD_REQUEST",
+              "Password must be at least 8 characters long"
+            );
+          }
+
+          user.password = newPassword;
+        }
+
+        user.name = name;
+        user.email = email;
+
+        await user.save();
+
+        return reply.send({
+          status: "success",
+          message: "Profile updated successfully",
+          data: {
+            user: {
+              id: user._id,
+              name: user.name,
+              email: user.email,
+            },
+          },
+        });
+      } catch (error) {
+        console.error("Profile update error:", error);
+
+        if (error.code === 11000) {
+          return reply.code(409).send({
+            status: "error",
+            message: "Email address is already in use",
+          });
+        }
+
+        reply.code(error.statusCode || 500).send({
+          status: "error",
+          message: error.message || "An error occurred while updating profile",
+        });
+      }
+    }
+  );
 }

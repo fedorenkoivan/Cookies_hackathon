@@ -16,6 +16,7 @@ import { verifyToken } from "../middleware/authMiddleWare.js";
 import { logRoute } from "../middleware/loggerMiddleware.js";
 import { User } from "../models/userModel.js";
 import { HttpError, createError } from "../utils/errorUtils.js";
+import validator from "validator";
 
 export default async function userRoutes(fastify) {
   fastify.post(
@@ -283,14 +284,17 @@ export default async function userRoutes(fastify) {
           throw createError("NOT_FOUND", "User not found");
         }
 
-        if(!validator.isEmail(email)) {
-          throw createError("BAD_REQUEST", "Please provide a valid email address");
+        if (!validator.isEmail(email)) {
+          throw createError(
+            "BAD_REQUEST",
+            "Please provide a valid email address"
+          );
         }
 
-        if(email !== user.email) {
+        if (email !== user.email) {
           const existingUser = await User.findOne({ email });
 
-          if(existingUser) {
+          if (existingUser) {
             throw createError("CONFLICT", "Email address is already in use");
           }
         }
@@ -338,6 +342,17 @@ export default async function userRoutes(fastify) {
           return reply.code(409).send({
             status: "error",
             message: "Email address is already in use",
+          });
+        }
+
+        if (error.name === "ValidationError") {
+          return reply.code(400).send({
+            status: "error",
+            message:
+              "Validation failed: " +
+              Object.values(error.errors)
+                .map((err) => err.message)
+                .join(", "),
           });
         }
 

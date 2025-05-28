@@ -1,70 +1,18 @@
 import {
   PropsWithChildren,
   useCallback,
-  useEffect,
   useState,
   useMemo,
 } from "react";
 import { Quest } from "@/types/quest";
 import { QUESTS_URL } from "@/constants/questConstants";
 import { QuestContext } from "./QuestContext";
-
-const useFetchQuests = <T extends unknown[]>(
-  errMsg: string,
-  getURL: (...params: T) => string,
-  onSuccess: (quests: Quest[]) => void,
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-  setError: React.Dispatch<React.SetStateAction<string | null>>
-) => {
-  return useCallback(
-    async (...params: T) => {
-      try {
-        setLoading(true);
-        setError(null);
-        const res = await fetch(getURL(...params));
-
-        if (!res.ok) {
-          throw new Error(`API error: ${res.status}`);
-        }
-
-        const data = await res.json();
-        const quests = data.data;
-
-        if (quests && quests.length > 0) {
-          onSuccess(quests);
-        } else {
-          onSuccess([]);
-          setError(errMsg);
-        }
-      } catch (err) {
-        console.error("Error fetching quest:", err);
-        setError(errMsg);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [getURL, onSuccess, errMsg, setLoading, setError]
-  );
-};
+import { useFetchQuests } from "@/hooks/useFetchQuests";
 
 export const QuestProvider = ({ children }: PropsWithChildren) => {
-  const [allQuests, setAllQuests] = useState<Quest[]>([]);
-  const [bestQuests, setBestQuests] = useState<Quest[]>([]);
   const [questPreview, setQuest] = useState<Quest | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const getToday = useCallback(() => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return today.toISOString();
-  }, []);
-
-  const getAllQuestsUrl = useCallback(() => QUESTS_URL, []);
-
-  const getBestQuestsUrl = useCallback(() => {
-    return `${QUESTS_URL}?limit=5&sort=rating:desc&createdAt.gte=${getToday()}`;
-  }, [getToday]);
 
   const getQuestByIdUrl = useCallback((questId: string) => {
     return `${QUESTS_URL}?_id=${questId}`;
@@ -74,22 +22,6 @@ export const QuestProvider = ({ children }: PropsWithChildren) => {
     setQuest(quests[0] || null);
   }, []);
 
-  const fetchAllQuests = useFetchQuests(
-    "No quests available",
-    getAllQuestsUrl,
-    setAllQuests,
-    setLoading,
-    setError
-  );
-
-  const fetchBestQuests = useFetchQuests(
-    "No quests available",
-    getBestQuestsUrl,
-    setBestQuests,
-    setLoading,
-    setError
-  );
-
   const fetchQuest = useFetchQuests(
     "Quest not found",
     getQuestByIdUrl,
@@ -98,31 +30,18 @@ export const QuestProvider = ({ children }: PropsWithChildren) => {
     setError
   );
 
-  useEffect(() => {
-    fetchAllQuests();
-    fetchBestQuests();
-  }, [fetchAllQuests, fetchBestQuests]);
-
   const value = useMemo(
     () => ({
-      allQuests,
-      bestQuests,
       questPreview,
       loading,
       error,
       fetchQuest,
-      fetchAllQuests,
-      fetchBestQuests,
     }),
     [
-      allQuests,
-      bestQuests,
       questPreview,
       loading,
       error,
-      fetchQuest,
-      fetchAllQuests,
-      fetchBestQuests,
+      fetchQuest
     ]
   );
 

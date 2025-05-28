@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import StarRatingAuto from "../Rating/StarRatingAuto";
-import { useQuestContext } from "@/contexts/QuestContext";
+import { useAppContext } from "@/contexts/AppContext";
 import { Quest } from "@/types/quest";
 import QuestCard from "../Home/QuestCard";
 import "@/components/Home/QuestCard.scss";
@@ -16,7 +16,7 @@ const PublicProfile = () => {
 
   const { userPublicData, loading, error, fetchUserPublicProfile } =
     useProfileContext();
-  const { allQuests } = useQuestContext();
+  const { allQuests } = useAppContext();
 
   useEffect(() => {
     if (userId) {

@@ -6,7 +6,7 @@ import "swiper/swiper-bundle.css";
 import StarRatingAuto from "../Rating/StarRatingAuto";
 import { Quest } from "@/types/quest";
 import "./Slider.scss";
-import { useQuestContext } from "@/contexts/QuestContext";
+import { useAppContext } from "@/contexts/AppContext";
 
 const Slider = () => {
   const [savedQuests, setSavedQuests] = useState<string[]>(() => {
@@ -15,7 +15,7 @@ const Slider = () => {
 
   const navigate = useNavigate();
 
-  const { bestQuests } = useQuestContext();
+  const { bestQuests } = useAppContext();
 
   useEffect(() => {
     const handleSavedQuestsChanged = () => {

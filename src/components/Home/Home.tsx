@@ -12,7 +12,7 @@ import "./Home.scss";
 import { userAuthorizationEvent } from "@/utils/userData";
 import { CATEGORIES as TABS } from "@/constants/questConstants";
 import { Quest } from "@/types/quest";
-import { useQuestContext } from "@/contexts/QuestContext";
+import { useAppContext } from "@/contexts/AppContext";
 import QuestCard from "./QuestCard";
 import Loading from "@/components/Loading/Loading";
 
@@ -22,7 +22,7 @@ const Home = () => {
   const [inputValue, setInputValue] = useState("");
   const [isAuthorized, setIsAuthorized] = useState(false);
 
-  const { allQuests, loading, error } = useQuestContext();
+  const { allQuests, loading, error } = useAppContext();
 
   const handleTabClick = (tab: string) => {
     setActive(tab);

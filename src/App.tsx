@@ -19,6 +19,7 @@ import "react-toastify/dist/ReactToastify.css";
 import QuestionPage from "./components/Quest/QuestionPage";
 import { QuestProvider } from "./contexts/QuestProvider";
 import { ProfileProvider } from "./contexts/ProfileProvider";
+import { AppProvider } from "./contexts/AppProvider";
 import MainLayout from "./components/Layouts/MainLayout";
 import QuestLayout from "./components/Layouts/QuestLayout";
 import PublicProfile from "./components/Profile/PublicProfile";
@@ -26,39 +27,43 @@ import PublicProfile from "./components/Profile/PublicProfile";
 function App() {
   return (
     <>
-      <QuestProvider>
-      <ProfileProvider>
-        <Routes>
-          <Route element={<MainLayout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/public-profile/:userId" element={<PublicProfile />} />
-            <Route path="/rating-form" element={<RatingForm />} />
-            <Route path="/sign-up" element={<SignUp />} />
-            <Route path="/log-in" element={<LogIn />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route
-              path="/reset-password/:resetToken"
-              element={<ResetPassword />}
-            />
-            <Route path="/preview-quest/:questId" element={<QuestPage />} />
+      <AppProvider>
+        <QuestProvider>
+          <ProfileProvider>
+            <Routes>
+              <Route element={<MainLayout />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route
+                  path="/public-profile/:userId"
+                  element={<PublicProfile />}
+                />
+                <Route path="/rating-form" element={<RatingForm />} />
+                <Route path="/sign-up" element={<SignUp />} />
+                <Route path="/log-in" element={<LogIn />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route
+                  path="/reset-password/:resetToken"
+                  element={<ResetPassword />}
+                />
+                <Route path="/preview-quest/:questId" element={<QuestPage />} />
 
-            <Route element={<ProtectedRoutes />}>
-              <Route path="/quest-form" element={<QuestForm />} />
-            </Route>
-          </Route>
-          <Route element={<QuestLayout />}>
-            <Route
-              path="/complete-quest/:questId"
-              element={<QuestionPage />}
-            />
-          </Route>
-        </Routes>
-      </ProfileProvider>
-      </QuestProvider>
-
+                <Route element={<ProtectedRoutes />}>
+                  <Route path="/quest-form" element={<QuestForm />} />
+                </Route>
+              </Route>
+              <Route element={<QuestLayout />}>
+                <Route
+                  path="/complete-quest/:questId"
+                  element={<QuestionPage />}
+                />
+              </Route>
+            </Routes>
+          </ProfileProvider>
+        </QuestProvider>
+      </AppProvider>
+      
       <SessionRenewalDialog />
-
       <ToastContainer
         position="top-center"
         autoClose={3000}

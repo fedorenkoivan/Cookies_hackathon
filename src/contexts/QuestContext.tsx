@@ -2,14 +2,14 @@ import { createContext, useContext } from 'react';
 import { Quest } from '@/types/quest';
 
 type QuestContextType = {
-  allQuests: Quest[];
-  bestQuests: Quest[];
+  // allQuests: Quest[];
+  // bestQuests: Quest[];
   questPreview: Quest | null;
   loading: boolean;
   error: string | null;
   fetchQuest: (questId: string) => Promise<void>;
-  fetchAllQuests: () => Promise<void>;
-  fetchBestQuests: () => Promise<void>;
+  // fetchAllQuests: () => Promise<void>;
+  // fetchBestQuests: () => Promise<void>;
 }
 
 export const QuestContext = createContext<QuestContextType | undefined>(undefined);

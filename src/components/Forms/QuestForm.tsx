@@ -8,7 +8,7 @@ import { QUESTS_URL as URL } from "@/constants/questConstants";
 import { convertImage } from "@/utils/fileHandling";
 import { QuestFormProvider } from "@/contexts/QuestFormProvider";
 import { useQuestFormContext } from "@/contexts/QuestFormContext";
-import { useQuestContext } from "@/contexts/QuestContext";
+import { useAppContext } from "@/contexts/AppContext";
 
 const QuestForm = () => {
   return (
@@ -42,7 +42,7 @@ const QuestFormContent = () => {
     clearSavedData,
   } = useQuestFormContext();
 
-  const { fetchAllQuests } = useQuestContext();
+  const { fetchAllQuests } = useAppContext();
 
   const navigate = useNavigate();
 

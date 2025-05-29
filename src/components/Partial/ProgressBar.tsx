@@ -11,7 +11,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ current, total, time }) => {
   const percentage = (100 * current) / total;
 
   const transformTime = (time: number | null | undefined): string => {
-    if (!time) return "No time limit";
+    if (!time || time < 0) return "No time limit";
     const minutes = Math.trunc(time / 60);
     const seconds = time % 60;
 

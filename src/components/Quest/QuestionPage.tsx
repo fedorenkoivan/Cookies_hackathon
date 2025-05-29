@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useQuestContext } from "@/contexts/QuestContext";
 import { Question } from "@/types/quest";
 import "./QuestionPage.scss";
@@ -8,7 +8,6 @@ import Loading from "../Loading/Loading";
 import ProgressBar from "../Partial/ProgressBar";
 
 const QuestionPage = () => {
-
   const { questId } = useParams<{ questId: string }>();
   const { questPreview: quest, loading, error, fetchQuest } = useQuestContext();
 
@@ -17,7 +16,10 @@ const QuestionPage = () => {
     quest?.questions[0] || null
   );
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
-  const [time, setTime] = useState<number | null>(quest?.time || null);
+  const [time, setTime] = useState<number | null>(
+    quest?.time !== undefined ? quest.time : null
+  );
+  const isNavigatingRef = useRef(false);
 
   useEffect(() => {
     if (questId) {
@@ -29,13 +31,19 @@ const QuestionPage = () => {
 
   useEffect(() => {
     if (time === null || time < 0) {
-      setTime(null);
       return;
     }
 
     if (time === 0) {
       console.log("You have no time left!");
-      navigate("/rating-form");
+
+      isNavigatingRef.current = true;
+
+      setTimeout(() => {
+        localStorage.removeItem(`quest_progress_${questId}`);
+        navigate("/rating-form");
+      }, 0);
+
       return;
     }
 
@@ -44,7 +52,47 @@ const QuestionPage = () => {
     }, 1000);
 
     return () => clearTimeout(timerId);
-  }, [time]);
+  }, [time, navigate, questId]);
+
+  useEffect(() => {
+    if (quest && quest.questions && quest.questions.length > 0) {
+      const savedProgress = JSON.parse(
+        localStorage.getItem(`quest_progress_${questId}`) || "null"
+      );
+
+      if (savedProgress) {
+        setCurrentQuestionIndex(savedProgress.currentQuestionIndex);
+        setSelectedAnswers(savedProgress.selectedAnswers);
+        setTime(savedProgress.timeRemaining);
+        setQuestion(quest.questions[savedProgress.currentQuestionIndex]);
+      } else {
+        setQuestion(quest.questions[0]);
+        setTime(quest.time);
+      }
+    }
+  }, [quest, questId]);
+
+  const handleFinishQuest = () => {
+    isNavigatingRef.current = true;
+    localStorage.removeItem(`quest_progress_${questId}`);
+    navigate("/rating-form");
+  };
+
+  useEffect(() => {
+    if (quest && questId && !isNavigatingRef.current) {
+      const progressData = {
+        questId,
+        currentQuestionIndex,
+        selectedAnswers,
+        timeRemaining: time,
+      };
+
+      localStorage.setItem(
+        `quest_progress_${questId}`,
+        JSON.stringify(progressData)
+      );
+    }
+  }, [questId, currentQuestionIndex, selectedAnswers, time, quest]);
 
   const handleNextQuestion = () => {
     if (!quest || !quest.questions) {
@@ -59,7 +107,7 @@ const QuestionPage = () => {
       setCurrentQuestionIndex(nextIndex);
       setQuestion(quest.questions[nextIndex]);
     } else {
-      navigate("/rating-form");
+      handleFinishQuest();
     }
   };
 

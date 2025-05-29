@@ -15,11 +15,19 @@ const QuestionPage = () => {
   const [question, setQuestion] = useState<Question | null>(
     quest?.questions[0] || null
   );
-  const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
   const [time, setTime] = useState<number | null>(
     quest?.time !== undefined ? quest.time : null
   );
+  const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
+  const [points, setPoints] = useState<number>(question?.points || 0);
+  const [score, setScore] = useState<number>(0);
   const isNavigatingRef = useRef(false);
+
+  const [correctAnswers, setCorrectAnswers] = useState<string[]>(
+    question?.answers.filter((a) => a.isCorrect).map((a) => a.value) || []
+  );
+
+  const [showAnswers, setShowAnswers] = useState(false);
 
   useEffect(() => {
     if (questId) {
@@ -62,21 +70,33 @@ const QuestionPage = () => {
 
       if (savedProgress) {
         setCurrentQuestionIndex(savedProgress.currentQuestionIndex);
+        setQuestion(quest.questions[savedProgress.currentQuestionIndex]);
         setSelectedAnswers(savedProgress.selectedAnswers);
         setTime(savedProgress.timeRemaining);
-        setQuestion(quest.questions[savedProgress.currentQuestionIndex]);
+        setPoints(
+          quest.questions[savedProgress.currentQuestionIndex].points || 0
+        );
+        setScore(savedProgress.score || 0);
+        setCorrectAnswers(
+          quest.questions[savedProgress.currentQuestionIndex].answers
+            .filter((a) => a.isCorrect)
+            .map((a) => a.value)
+        );
       } else {
-        setQuestion(quest.questions[0]);
+        setCurrentQuestionIndex(0);
+        setSelectedAnswers([]);
         setTime(quest.time);
+        setQuestion(quest.questions[0]);
+        setPoints(quest.questions[0].points);
+        setScore(0);
+        setCorrectAnswers(
+          quest.questions[0].answers
+            .filter((a) => a.isCorrect)
+            .map((a) => a.value)
+        );
       }
     }
   }, [quest, questId]);
-
-  const handleFinishQuest = () => {
-    isNavigatingRef.current = true;
-    localStorage.removeItem(`quest_progress_${questId}`);
-    navigate("/rating-form");
-  };
 
   useEffect(() => {
     if (quest && questId && !isNavigatingRef.current) {
@@ -85,6 +105,7 @@ const QuestionPage = () => {
         currentQuestionIndex,
         selectedAnswers,
         timeRemaining: time,
+        score,
       };
 
       localStorage.setItem(
@@ -92,24 +113,61 @@ const QuestionPage = () => {
         JSON.stringify(progressData)
       );
     }
-  }, [questId, currentQuestionIndex, selectedAnswers, time, quest]);
+  }, [questId, currentQuestionIndex, selectedAnswers, time, quest, score]);
+
+  const handleFinishQuest = () => {
+    isNavigatingRef.current = true;
+    localStorage.removeItem(`quest_progress_${questId}`);
+    navigate("/rating-form");
+  };
 
   const handleNextQuestion = () => {
-    if (!quest || !quest.questions) {
-      console.error("Quest or questions not available");
-      return;
-    }
+    if (!quest || !quest.questions) return;
+    if (selectedAnswers.length === 0) return;
 
-    setSelectedAnswers([]);
+    setShowAnswers(true);
 
-    if (currentQuestionIndex < quest.questions.length - 1) {
-      const nextIndex = currentQuestionIndex + 1;
-      setCurrentQuestionIndex(nextIndex);
-      setQuestion(quest.questions[nextIndex]);
-    } else {
-      handleFinishQuest();
-    }
+    setScore((prevScore) => {
+      const selectedCorrectAnswers = selectedAnswers.filter((answer) =>
+        correctAnswers.includes(answer)
+      );
+
+      const earnedScore =
+        (selectedCorrectAnswers.length / correctAnswers.length) * points;
+      if (selectedAnswers.length === correctAnswers.length) {
+        return Math.round(prevScore + earnedScore);
+      }
+
+      const calculatedScore =
+        earnedScore / (selectedAnswers.length - selectedCorrectAnswers.length);
+      return Math.round(prevScore + calculatedScore);
+    });
+
+    setTimeout(() => {
+      setShowAnswers(false);
+      setSelectedAnswers([]);
+      console.log("Selected answers:", selectedAnswers);
+      console.log("Correct answers:", correctAnswers);
+
+      if (currentQuestionIndex < quest.questions.length - 1) {
+        const nextIndex = currentQuestionIndex + 1;
+        setCurrentQuestionIndex(nextIndex);
+        setQuestion(quest.questions[nextIndex]);
+        setPoints(quest.questions[nextIndex].points || 0);
+        setCorrectAnswers(
+          quest.questions[nextIndex].answers
+            .filter((a) => a.isCorrect)
+            .map((a) => a.value)
+        );
+      } else {
+        handleFinishQuest();
+      }
+    }, 1000);
   };
+
+  useEffect(() => {
+    console.log("score:", score);
+  }, [score]);
 
   const handleCheckboxChange = (value: string) => {
     setSelectedAnswers((prev) =>
@@ -136,29 +194,35 @@ const QuestionPage = () => {
             <div className="question__info">
               <h1>{question?.value}</h1>
               <p>
-                {question?.points} {question?.points === 1 ? "point" : "points"}
+                {points} {points === 1 ? "point" : "points"}
               </p>
               <div className="question__image">
                 <img src={question?.image || logoImage} alt="Question image" />
               </div>
               <div className="question__answers">
-                {question?.answers.map((answer) => (
-                  <label className="answer" key={answer.order}>
-                    <input
-                      type="checkbox"
-                      name="answer"
-                      value={answer.order}
-                      checked={selectedAnswers.includes(
-                        answer.order.toString()
-                      )}
-                      onChange={() =>
-                        handleCheckboxChange(answer.order.toString())
-                      }
-                    />
-                    <span className="custom-checkbox"></span>
-                    {answer.value}
-                  </label>
-                ))}
+                {question?.answers.map((answer) => {
+                  let answerClass = "answer";
+                  if (showAnswers) {
+                    if (correctAnswers.includes(answer.value)) {
+                      answerClass += " correct";
+                    } else if (selectedAnswers.includes(answer.value)) {
+                      answerClass += " incorrect";
+                    }
+                  }
+                  return (
+                    <label className={answerClass} key={answer.order}>
+                      <input
+                        type="checkbox"
+                        name="answer"
+                        value={answer.order}
+                        checked={selectedAnswers.includes(answer.value)}
+                        onChange={() => handleCheckboxChange(answer.value)}
+                      />
+                      <span className="custom-checkbox"></span>
+                      {answer.value}
+                    </label>
+                  );
+                })}
               </div>
             </div>
             <div className="question__submit">

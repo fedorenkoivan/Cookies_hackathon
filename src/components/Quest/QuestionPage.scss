@@ -8,12 +8,7 @@ $dark-purple: #4a00e0;
 
 .question {
   padding-bottom: 2rem;
-  background: linear-gradient(
-    180deg,
-    #804D94 0%,
-    #250369 67%,
-    #4F3288 88%
-  );
+  background: linear-gradient(180deg, #804d94 0%, #250369 67%, #4f3288 88%);
   height: 100vh;
 
   .question__info {
@@ -25,7 +20,7 @@ $dark-purple: #4a00e0;
     h1 {
       font-size: 2rem;
       margin: 20px 0 0 0;
-      color: #EEEEEE;
+      color: #eeeeee;
     }
 
     p {
@@ -40,7 +35,7 @@ $dark-purple: #4a00e0;
       max-width: 700px;
       margin: 0 auto;
       border-radius: 19px;
-      border: solid 2px #FFEC9E;
+      border: solid 2px #ffec9e;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -86,7 +81,7 @@ $dark-purple: #4a00e0;
         position: relative;
         display: flex;
         align-items: center;
-        background: #7168A2;
+        background: #7168a2;
         border-radius: 15px;
         padding: 1.2rem 2.5rem;
         font-size: 1.6rem;
@@ -105,7 +100,7 @@ $dark-purple: #4a00e0;
           width: 22px;
           height: 22px;
           margin: 0;
-          accent-color: #8800FF;
+          accent-color: #8800ff;
           z-index: 2;
           cursor: pointer;
         }
@@ -118,14 +113,14 @@ $dark-purple: #4a00e0;
           height: 22px;
           border-radius: 50%;
           border: 3px solid #ffffff;
-          outline: 1px solid #AE87D7;
+          outline: 1px solid #ae87d7;
           background: #ffffff;
           z-index: 1;
           pointer-events: none;
         }
 
         input[type="checkbox"]:checked + .custom-checkbox {
-          background: #8800FF;
+          background: #8800ff;
           border-color: #ffffff;
         }
       }
@@ -144,7 +139,7 @@ $dark-purple: #4a00e0;
     margin: 2rem 0 0 0;
 
     button {
-      background-color: #804D94;
+      background-color: #804d94;
       color: $honey;
       font-size: 1.6rem;
       font-weight: bold;
@@ -158,5 +153,11 @@ $dark-purple: #4a00e0;
         background-color: $soft-purple;
       }
     }
+  }
+  .answer.correct {
+    border: 3px solid #4caf50;
+  }
+  .answer.incorrect {
+    border: 3px solid #f44336;
   }
 }

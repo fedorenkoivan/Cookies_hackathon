@@ -1,10 +1,4 @@
-$lightgray: #e5e5e5;
-$darker-gray: #c5c5c5;
-$honey: #ffcc00;
-$light-blue: #3586ff;
-$light-purple: #8E2DE2;
-$soft-purple: #6A5ACD;
-$dark-purple: #4A00E0;
+@use "./palette" as *;
 
 * {
   box-sizing: border-box;

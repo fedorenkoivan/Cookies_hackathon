@@ -121,27 +121,22 @@ const QuestionPage = () => {
     navigate("/rating-form");
   };
 
+  const calculateScore = (prevScore: number) => {
+    const correctCount = selectedAnswers.filter((answer) =>
+      correctAnswers.includes(answer)
+    ).length;
+
+    const score = (correctCount / correctAnswers.length * points).toFixed(1);
+    return prevScore + parseFloat(score);
+  };
+
   const handleNextQuestion = () => {
     if (!quest || !quest.questions) return;
     if (selectedAnswers.length === 0) return;
 
     setShowAnswers(true);
 
-    setScore((prevScore) => {
-      const selectedCorrectAnswers = selectedAnswers.filter((answer) =>
-        correctAnswers.includes(answer)
-      );
-
-      const earnedScore =
-        (selectedCorrectAnswers.length / correctAnswers.length) * points;
-      if (selectedAnswers.length === correctAnswers.length) {
-        return Math.round(prevScore + earnedScore);
-      }
-
-      const calculatedScore =
-        earnedScore / (selectedAnswers.length - selectedCorrectAnswers.length);
-      return Math.round(prevScore + calculatedScore);
-    });
+    setScore(calculateScore(score));
 
     setTimeout(() => {
       setShowAnswers(false);
@@ -165,15 +160,21 @@ const QuestionPage = () => {
     }, 1000);
   };
 
-  useEffect(() => {
-    console.log("score:", score);
-  }, [score]);
-
   const handleCheckboxChange = (value: string) => {
+    if (selectedAnswers.length >= correctAnswers.length) {
+      setSelectedAnswers((prev) => {
+        prev.shift();
+        return prev;
+      });
+    }
     setSelectedAnswers((prev) =>
       prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
     );
   };
+
+  useEffect(() => {
+    console.log("score changed:", score);
+  }, [score]);
 
   return (
     <>

@@ -39,7 +39,10 @@ const QuestionPage = () => {
 
   const navigate = useNavigate();
 
-  const saveProgress = async (isFinished = false, finalScore: number | null = null) => {
+  const saveProgress = async (
+    isFinished = false,
+    finalScore: number | null = null
+  ) => {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
@@ -75,7 +78,7 @@ const QuestionPage = () => {
         throw new Error("Failed to save progress");
       }
 
-      return await response.json();
+      await response.json();
     } catch (error) {
       console.error("Error saving progress:", error);
     } finally {
@@ -159,7 +162,7 @@ const QuestionPage = () => {
 
   const handleFinishQuest = async () => {
     isNavigatingRef.current = true;
-    const finalScore = calculateScore(score);
+    const finalScore = parseFloat(calculateScore(score).toFixed(1));
     setScore(finalScore);
     await saveProgress(true, finalScore);
     navigate("/rating-form");
@@ -212,11 +215,11 @@ const QuestionPage = () => {
       if (prev.includes(value)) {
         return prev.filter((v) => v !== value);
       }
-      
+
       if (prev.length >= correctAnswers.length) {
         return [...prev.slice(1), value];
       }
-      
+
       return [...prev, value];
     });
   };
@@ -230,14 +233,37 @@ const QuestionPage = () => {
     const confirmed = window.confirm(
       "Your progress will be saved and you can continue later. Exit now?"
     );
-    
+
     if (!confirmed) return;
-    
+
     setIsSubmitting(true);
     isNavigatingRef.current = true;
     await saveProgress(false);
     navigate("/");
   };
+
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (!isNavigatingRef.current && quest) {
+        const progressData = {
+          questId,
+          currentQuestionIndex,
+          selectedAnswers,
+          timeRemaining: time,
+          score,
+        };
+        localStorage.setItem(
+          `quest_progress_${questId}`,
+          JSON.stringify(progressData)
+        );
+
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [questId, currentQuestionIndex, selectedAnswers, time, score, quest]);
 
   return (
     <>
@@ -290,16 +316,25 @@ const QuestionPage = () => {
               </div>
             </div>
             <div className="question__submit">
-              {userData?.id ? <button
-                className="continue-later-button"
-                onClick={handleContinueLater}
-                disabled={isSubmitting}
-              >
-                Continue Later
-              </button> : <></>}
+              {userData?.id ? (
+                <button
+                  className="continue-later-button"
+                  onClick={handleContinueLater}
+                  disabled={isSubmitting}
+                >
+                  Continue Later
+                </button>
+              ) : (
+                <></>
+              )}
               <button
                 onClick={handleNextQuestion}
-                disabled={loading || !quest.questions || selectedAnswers.length === 0 || isSubmitting}
+                disabled={
+                  loading ||
+                  !quest.questions ||
+                  selectedAnswers.length === 0 ||
+                  isSubmitting
+                }
               >
                 {currentQuestionIndex === quest.questions.length - 1
                   ? "Finish"

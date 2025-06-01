@@ -16,14 +16,13 @@ export default async function progressRoutes(fastify) {
       questId,
       isFinished: false,
     });
-    console.log(`Progress: ${progress}`);
 
     if (progress) {
       progress.currentQuestionIndex = currentQuestionIndex;
       progress.score = score;
       progress.timeRemaining = timeRemaining;
       progress.isFinished = isFinished;
-      progress.updatedAt = Date.now();
+      progress.lastActivityDate = Date.now();
     } else {
       progress = new progressModel({
         questId,

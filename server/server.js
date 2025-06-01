@@ -8,6 +8,7 @@ import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes.js';
 import questRoutes from './routes/questRoutes.js';
 import { HttpError, ErrorType, createError } from './utils/errorUtils.js';
+import progressRoutes from './routes/progressRoutes.js';
 
 dotenv.config({ path: "../.env" });
 
@@ -63,6 +64,7 @@ await fastify.register(fastifyJwt, {
 
 fastify.register(userRoutes, { prefix: '/users' });
 fastify.register(questRoutes, { prefix: '/quests' });
+fastify.register(progressRoutes, { prefix: '/progress' });
 
 try {
   fastify.listen({ port: PORT, host: "0.0.0.0" });

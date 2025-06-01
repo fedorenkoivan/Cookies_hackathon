@@ -21,6 +21,10 @@ const progressSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  isFinished: {
+    type: Boolean,
+    required: true,
+  },
   lastActivityDate: {
     type: Date,
     default: Date.now(),

@@ -6,10 +6,13 @@ import "./QuestionPage.scss";
 import logoImage from "@/assets/logo.jpg";
 import Loading from "../Loading/Loading";
 import ProgressBar from "../Partial/ProgressBar";
+import { useProfileContext } from "@/contexts/ProfileContext";
+import { PROGRESS_URL as URL } from "@/constants/progressConstants";
 
 const QuestionPage = () => {
   const { questId } = useParams<{ questId: string }>();
   const { questPreview: quest, loading, error, fetchQuest } = useQuestContext();
+  const { userData } = useProfileContext();
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [question, setQuestion] = useState<Question | null>(
@@ -37,6 +40,44 @@ const QuestionPage = () => {
 
   const navigate = useNavigate();
 
+  const saveProgress = async (isFinished = false) => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      const userId = userData?.id;
+      if (!token || !userId) return;
+
+      const progressData = {
+        questId,
+        userId,
+        currentQuestionIndex,
+        score,
+        isFinished,
+        timeRemaining: time,
+      };
+
+      const response = await fetch(`${URL}/upsert`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(progressData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to save progress");
+      }
+
+      if (isFinished) {
+        localStorage.removeItem(`quest_progress_${questId}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Error saving progress:", error);
+    }
+  };
+
   useEffect(() => {
     if (time === null || time < 0) {
       return;
@@ -44,14 +85,10 @@ const QuestionPage = () => {
 
     if (time === 0) {
       console.log("You have no time left!");
-
       isNavigatingRef.current = true;
-
-      setTimeout(() => {
-        localStorage.removeItem(`quest_progress_${questId}`);
+      saveProgress(true).then(() => {
         navigate("/rating-form");
-      }, 0);
-
+      });
       return;
     }
 
@@ -115,9 +152,9 @@ const QuestionPage = () => {
     }
   }, [questId, currentQuestionIndex, selectedAnswers, time, quest, score]);
 
-  const handleFinishQuest = () => {
+  const handleFinishQuest = async () => {
     isNavigatingRef.current = true;
-    localStorage.removeItem(`quest_progress_${questId}`);
+    await saveProgress(true);
     navigate("/rating-form");
   };
 
@@ -126,7 +163,7 @@ const QuestionPage = () => {
       correctAnswers.includes(answer)
     ).length;
 
-    const score = (correctCount / correctAnswers.length * points).toFixed(1);
+    const score = ((correctCount / correctAnswers.length) * points).toFixed(1);
     return prevScore + parseFloat(score);
   };
 
@@ -155,6 +192,7 @@ const QuestionPage = () => {
             .map((a) => a.value)
         );
       } else {
+        isNavigatingRef.current = true;
         handleFinishQuest();
       }
     }, 1000);

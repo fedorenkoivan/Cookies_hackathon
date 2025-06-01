@@ -46,7 +46,7 @@ const QuestionPage = () => {
     if (isFinished) {
       localStorage.removeItem(`quest_progress_${questId}`);
     }
-    
+
     try {
       const token = localStorage.getItem("accessToken");
 
@@ -293,12 +293,13 @@ const QuestionPage = () => {
               {userData?.id ? <button
                 className="continue-later-button"
                 onClick={handleContinueLater}
+                disabled={isSubmitting}
               >
                 Continue Later
               </button> : <></>}
               <button
                 onClick={handleNextQuestion}
-                disabled={loading || !quest.questions || selectedAnswers.length === 0}
+                disabled={loading || !quest.questions || selectedAnswers.length === 0 || isSubmitting}
               >
                 {currentQuestionIndex === quest.questions.length - 1
                   ? "Finish"

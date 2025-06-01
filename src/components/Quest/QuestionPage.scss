@@ -9,7 +9,8 @@ $dark-purple: #4a00e0;
 .question {
   padding-bottom: 2rem;
   background: linear-gradient(180deg, #804d94 0%, #250369 67%, #4f3288 88%);
-  height: 100vh;
+  min-height: 100vh;
+  overflow-y: auto;
 
   .question__info {
     display: flex;
@@ -137,6 +138,7 @@ $dark-purple: #4a00e0;
     justify-content: center;
     align-items: center;
     margin: 2rem 0 0 0;
+    gap: 20px;
 
     button {
       background-color: #804d94;

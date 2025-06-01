@@ -40,7 +40,7 @@ const QuestionPage = () => {
 
   const navigate = useNavigate();
 
-  const saveProgress = async (isFinished = false) => {
+  const saveProgress = async (isFinished = false, finalScore : number | null = null) => {
     try {
       const token = localStorage.getItem("accessToken");
       const userId = userData?.id;
@@ -50,7 +50,7 @@ const QuestionPage = () => {
         questId,
         userId,
         currentQuestionIndex,
-        score,
+        score: finalScore !== null ? finalScore : score,
         isFinished,
         timeRemaining: time,
       };
@@ -154,7 +154,9 @@ const QuestionPage = () => {
 
   const handleFinishQuest = async () => {
     isNavigatingRef.current = true;
-    await saveProgress(true);
+    const finalScore = calculateScore(score);
+    setScore(finalScore);
+    await saveProgress(true, finalScore);
     navigate("/rating-form");
   };
 
@@ -214,6 +216,18 @@ const QuestionPage = () => {
     console.log("score changed:", score);
   }, [score]);
 
+  const handleContinueLater = async () => {
+    const confirmed = window.confirm(
+      "Your progress will be saved and you can continue later. Exit now?"
+    );
+    
+    if (!confirmed) return;
+    
+    isNavigatingRef.current = true;
+    await saveProgress(false);
+    navigate("/");
+  };
+
   return (
     <>
       {loading ? (
@@ -266,8 +280,14 @@ const QuestionPage = () => {
             </div>
             <div className="question__submit">
               <button
+                className="continue-later-button"
+                onClick={handleContinueLater}
+              >
+                Continue Later
+              </button>
+              <button
                 onClick={handleNextQuestion}
-                disabled={loading || !quest.questions}
+                disabled={loading || !quest.questions || selectedAnswers.length === 0}
               >
                 {currentQuestionIndex === quest.questions.length - 1
                   ? "Finish"

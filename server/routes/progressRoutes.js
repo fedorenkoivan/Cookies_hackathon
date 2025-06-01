@@ -11,7 +11,12 @@ export default async function progressRoutes(fastify) {
       isFinished,
     } = request.body;
 
-    let progress = await progressModel.findOne({ userId, questId });
+    let progress = await progressModel.findOne({
+      userId,
+      questId,
+      isFinished: false,
+    });
+    console.log(`Progress: ${progress}`);
 
     if (progress) {
       progress.currentQuestionIndex = currentQuestionIndex;

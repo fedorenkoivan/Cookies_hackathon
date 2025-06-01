@@ -201,15 +201,17 @@ const QuestionPage = () => {
   };
 
   const handleCheckboxChange = (value: string) => {
-    if (selectedAnswers.length >= correctAnswers.length) {
-      setSelectedAnswers((prev) => {
-        prev.shift();
-        return prev;
-      });
-    }
-    setSelectedAnswers((prev) =>
-      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
-    );
+    setSelectedAnswers((prev) => {
+      if (prev.includes(value)) {
+        return prev.filter((v) => v !== value);
+      }
+      
+      if (prev.length >= correctAnswers.length) {
+        return [...prev.slice(1), value];
+      }
+      
+      return [...prev, value];
+    });
   };
 
   useEffect(() => {

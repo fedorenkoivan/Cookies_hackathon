@@ -25,12 +25,11 @@ const QuestionPage = () => {
   const [points, setPoints] = useState<number>(question?.points || 0);
   const [score, setScore] = useState<number>(0);
   const isNavigatingRef = useRef(false);
-
   const [correctAnswers, setCorrectAnswers] = useState<string[]>(
     question?.answers.filter((a) => a.isCorrect).map((a) => a.value) || []
   );
-
   const [showAnswers, setShowAnswers] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (questId) {
@@ -40,9 +39,17 @@ const QuestionPage = () => {
 
   const navigate = useNavigate();
 
-  const saveProgress = async (isFinished = false, finalScore : number | null = null) => {
+  const saveProgress = async (isFinished = false, finalScore: number | null = null) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
+    if (isFinished) {
+      localStorage.removeItem(`quest_progress_${questId}`);
+    }
+    
     try {
       const token = localStorage.getItem("accessToken");
+
       const userId = userData?.id;
       if (!token || !userId) return;
 
@@ -68,13 +75,11 @@ const QuestionPage = () => {
         throw new Error("Failed to save progress");
       }
 
-      if (isFinished) {
-        localStorage.removeItem(`quest_progress_${questId}`);
-      }
-
       return await response.json();
     } catch (error) {
       console.error("Error saving progress:", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -172,9 +177,10 @@ const QuestionPage = () => {
   const handleNextQuestion = () => {
     if (!quest || !quest.questions) return;
     if (selectedAnswers.length === 0) return;
+    if (isSubmitting) return;
 
     setShowAnswers(true);
-
+    setIsSubmitting(true);
     setScore(calculateScore(score));
 
     setTimeout(() => {
@@ -197,6 +203,7 @@ const QuestionPage = () => {
         isNavigatingRef.current = true;
         handleFinishQuest();
       }
+      setIsSubmitting(false);
     }, 1000);
   };
 
@@ -219,12 +226,14 @@ const QuestionPage = () => {
   }, [score]);
 
   const handleContinueLater = async () => {
+    if (isSubmitting) return;
     const confirmed = window.confirm(
       "Your progress will be saved and you can continue later. Exit now?"
     );
     
     if (!confirmed) return;
     
+    setIsSubmitting(true);
     isNavigatingRef.current = true;
     await saveProgress(false);
     navigate("/");
@@ -281,12 +290,12 @@ const QuestionPage = () => {
               </div>
             </div>
             <div className="question__submit">
-              <button
+              {userData?.id ? <button
                 className="continue-later-button"
                 onClick={handleContinueLater}
               >
                 Continue Later
-              </button>
+              </button> : <></>}
               <button
                 onClick={handleNextQuestion}
                 disabled={loading || !quest.questions || selectedAnswers.length === 0}

@@ -43,3 +43,13 @@ export type SavedFormData = {
   showTimeControls: boolean;
   questions: Question[];
 };
+
+export type CompletedQuestInfo = {
+  questTitle: string,
+  questId: string,
+  userRating: number;
+  userComment: string;
+  score: number;
+  totalTime: string;
+  avgTimePerQuestion: string; 
+};

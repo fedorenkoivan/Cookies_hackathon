@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { userLoginEvent } from "@/utils/userData";
-import { AuthResponse } from "@/types/authResponse";
+import { AuthResponse } from "@/types/auth";
 import { USERS_URL, WARNING_MS } from "@/constants/authConstants";
 import {
   getTokenExpiration,

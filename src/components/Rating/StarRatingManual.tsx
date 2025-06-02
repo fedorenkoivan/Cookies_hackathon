@@ -1,14 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
+import { StarRatingProps } from "@/types/review";
 
-interface StarRatingProps {
-  totalStars?: number;
-  onRate?: (rating: number) => void;
-}
-
-const StarRatingManual = ({ totalStars = 5, onRate }: StarRatingProps) => {
+const StarRatingManual = ({
+  totalStars = 5,
+  onRate,
+  initialRating = 0,
+}: StarRatingProps) => {
   const [hovered, setHovered] = useState<number | null>(null);
-  const [selected, setSelected] = useState<number | null>(null);
+  const [selected, setSelected] = useState<number>(initialRating);
+
+  useEffect(() => {
+    setSelected(initialRating);
+  }, [initialRating]);
 
   const handleMouseEnter = (index: number) => setHovered(index);
   const handleMouseLeave = () => setHovered(null);
@@ -27,7 +31,7 @@ const StarRatingManual = ({ totalStars = 5, onRate }: StarRatingProps) => {
             className="star"
             size={30}
             color={
-              starIndex <= (hovered ?? selected ?? 0) ? "#ffc107" : "#e4e5e9"
+              starIndex <= (hovered ?? selected) ? "#ffc107" : "#e4e5e9"
             }
             onMouseEnter={() => handleMouseEnter(starIndex)}
             onMouseLeave={handleMouseLeave}

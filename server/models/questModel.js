@@ -66,8 +66,9 @@ const questSchema = new mongoose.Schema({
   },
   rating: {
     type: Number,
-    min: 1,
+    min: 0,
     max: 5,
+    default: 0,
   },
   reviews: {
     type: Number,
@@ -77,6 +78,15 @@ const questSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  userRatings: {
+    type: [{
+      userId: String,
+      rating: Number,
+      comment: String,
+      date: { type: Date, default: Date.now }
+    }],
+    default: []
+  }
 });
 
 questSchema.pre("save", async function (next) {

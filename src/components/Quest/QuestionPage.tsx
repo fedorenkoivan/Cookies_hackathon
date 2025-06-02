@@ -35,7 +35,7 @@ const QuestionPage = () => {
 
     if (time === 0) {
       console.log("You have no time left!");
-      navigate("/rating-form");
+      navigate(`/rating-form/${questId}`);
       return;
     }
 
@@ -59,7 +59,7 @@ const QuestionPage = () => {
       setCurrentQuestionIndex(nextIndex);
       setQuestion(quest.questions[nextIndex]);
     } else {
-      navigate("/rating-form");
+      navigate(`/rating-form/${questId}`);
     }
   };
 

@@ -7,10 +7,10 @@ export type ReviewData = {
   date: Date | string;
 };
 
-export type ReviewProps = Omit<ReviewData, 'userId'>
+export type ReviewProps = Omit<ReviewData, "userId">;
 
 export type StarRatingProps = {
   totalStars?: number;
   onRate?: (rating: number) => void;
   initialRating?: number;
-}
+};

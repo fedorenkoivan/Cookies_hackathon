@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import StarRatingManual from "./StarRatingManual";
-import './RatingForm.scss';
+import "./RatingForm.scss";
 import { CompletedQuestInfo } from "@/types/quest";
 import { QUESTS_URL } from "@/constants/questConstants";
 
@@ -13,7 +13,7 @@ const RatingForm = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { questId } = useParams();
   const navigate = useNavigate();
-  console.log("Extracted questId:", questId);
+
   useEffect(() => {
     if (questId) {
       const fetchQuestInfo = async () => {
@@ -28,8 +28,8 @@ const RatingForm = () => {
 
           const response = await fetch(`${QUESTS_URL}/${questId}/rating`, {
             headers: {
-              Authorization: `Bearer ${accessToken}`
-            }
+              Authorization: `Bearer ${accessToken}`,
+            },
           });
 
           if (!response.ok) {
@@ -37,9 +37,6 @@ const RatingForm = () => {
           }
 
           const data = await response.json();
-          console.log("Полученные данные:", data);
-          console.log("Название квеста:", data.questTitle);
-          console.log("Структура data:", Object.keys(data));
           setQuestInfo(data);
 
           if (data.userRating) {
@@ -48,7 +45,6 @@ const RatingForm = () => {
           }
         } catch (error) {
           console.error("Error while receiving data:", error);
-          toast.error("Failed to load quest data");
         }
       };
 
@@ -60,7 +56,7 @@ const RatingForm = () => {
     e.preventDefault();
 
     if (!questId) {
-      toast.error("Quest ID is missing");
+      console.error("Quest ID is missing");
       return;
     }
 
@@ -79,22 +75,16 @@ const RatingForm = () => {
         return;
       }
 
-      console.log("Sending rating data:", {
-        questId,
-        rating,
-        comment
-      });
-
       const response = await fetch(`${QUESTS_URL}/${questId}/rating`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
           rating: Number(rating),
           comment: comment || "",
-        })
+        }),
       });
 
       if (!response.ok) {
@@ -102,18 +92,11 @@ const RatingForm = () => {
         throw new Error(errorData.message || "Failed to save rating");
       }
 
-      const result = await response.json();
-      console.log("Rating saved successfully:", result);
-
-      toast.success(result.message || "Thank you for your rating!");
+      toast.success("Thank you for your rating!");
       navigate(`/preview-quest/${questId}`);
     } catch (error: unknown) {
       console.error("Error sending rating:", error);
-      if (error instanceof Error) {
-        toast.error(error.message || "Failed to submit rating");
-      } else {
-        toast.error("Failed to submit rating");
-      }
+      toast.error("Failed to submit rating");
     } finally {
       setLoading(false);
     }
@@ -123,24 +106,34 @@ const RatingForm = () => {
     <>
       <section className="rating-form__header">
         <div className="rating-form__content">
-          <h1 className="rating-form__title">Rate this  quest! <br /> Leave a review!</h1>
+          <h1 className="rating-form__title">
+            Rate this quest! <br /> Leave a review!
+          </h1>
         </div>
       </section>
 
       <div className="rating-form__container">
         <div className="rating-form__result-info">
           <h1 className="rating-form__title">
-            {questInfo ? `Congratulations! You have completed "${questInfo.questTitle}"` : "Congratulations! Your result:"}          </h1>
-          <h3 className="rating-form__top-text">Score: {questInfo?.score || 0}</h3>
-          <h3 className="rating-form__top-text">Total time: {questInfo?.totalTime || '0:00'}</h3>
-          <h3 className="rating-form__top-text">Time per question: {questInfo?.avgTimePerQuestion || '0:00'}</h3>
+            {questInfo
+              ? `Congratulations! You have completed "${questInfo.questTitle}"`
+              : "Congratulations! Your result:"}{" "}
+          </h1>
+          <h3 className="rating-form__top-text">
+            Score: {questInfo?.score || 0}
+          </h3>
+          <h3 className="rating-form__top-text">
+            Total time: {questInfo?.totalTime || "0:00"}
+          </h3>
+          <h3 className="rating-form__top-text">
+            Time per question: {questInfo?.avgTimePerQuestion || "0:00"}
+          </h3>
         </div>
 
         <form className="rating-form" onSubmit={handleRatingSubmit}>
           <div className="rating-form__group">
             <div className="rating-form__rate">
-              <h3>Rate this quest:
-              </h3>
+              <h3>Rate this quest:</h3>
               <StarRatingManual
                 onRate={(ratingValue) => {
                   setRating(ratingValue);
@@ -163,7 +156,11 @@ const RatingForm = () => {
               className="submit-button"
               type={rating === 0 ? "button" : "submit"}
               disabled={loading}
-              onClick={rating === 0 ? () => navigate(`/preview-quest/${questId}`) : undefined}
+              onClick={
+                rating === 0
+                  ? () => navigate(`/preview-quest/${questId}`)
+                  : undefined
+              }
             >
               {loading ? "Sending..." : "Submit"}
             </button>

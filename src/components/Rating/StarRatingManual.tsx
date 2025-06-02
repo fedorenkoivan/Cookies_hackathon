@@ -30,9 +30,7 @@ const StarRatingManual = ({
             key={starIndex}
             className="star"
             size={30}
-            color={
-              starIndex <= (hovered ?? selected) ? "#ffc107" : "#e4e5e9"
-            }
+            color={starIndex <= (hovered ?? selected) ? "#ffc107" : "#e4e5e9"}
             onMouseEnter={() => handleMouseEnter(starIndex)}
             onMouseLeave={handleMouseLeave}
             onClick={() => handleClick(starIndex)}

@@ -80,7 +80,7 @@ export default async function userRoutes(fastify) {
             await User.findByIdAndUpdate(decoded.id, { refreshToken: null });
           }
         } catch (tokenErr) {
-          console.log("Invalid token during logout:", tokenErr.message);
+          console.error("Invalid token during logout:", tokenErr.message);
         }
       }
       reply

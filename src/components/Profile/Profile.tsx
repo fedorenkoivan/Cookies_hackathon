@@ -1,9 +1,10 @@
 import StarRatingAuto from "../Rating/StarRatingAuto";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import "./Profile.scss";
 import { useAppContext } from "@/contexts/AppContext";
 import { Quest } from "@/types/quest";
 import QuestCard from "../Home/QuestCard";
+import HistoryCard from "./HistoryCard";
 import "@/components/Home/QuestCard.scss";
 import { FaEdit, FaShareAlt } from "react-icons/fa";
 import { useProfileContext } from "@/contexts/ProfileContext";
@@ -13,7 +14,7 @@ import Loading from "../Loading/Loading";
 const Profile = () => {
   const [activeNavItem, setActiveNavItem] = useState<string | null>("Quests");
 
-  const { userData, historyQuests, fetchHistoryQuests, loading, error } = useProfileContext();
+  const { userData, historyQuests, loading, error } = useProfileContext();
   const { allQuests } = useAppContext();
 
   const filteredQuests = useMemo(() => {
@@ -31,12 +32,6 @@ const Profile = () => {
       }
     });
   }, [allQuests, activeNavItem, userData]);
-
-  useEffect(() => {
-    if (activeNavItem === "History") {
-      fetchHistoryQuests();
-    }
-  }, [activeNavItem]);
 
   const handleNavItemClick = (item: string) => {
     setActiveNavItem(item);
@@ -96,20 +91,17 @@ const Profile = () => {
           </div>
         ) : activeNavItem === "History" ? (
           <div className="history-container">
-            <h2>History</h2>
             {historyQuests?.map((quest, index) => {
               const questDetails = allQuests.find((q: Quest) => q._id === quest.questId);
-
-              return (
-                <div key={index} className="history-quest-item">
-                  <p>Quest Title: {questDetails?.title || "Unknown"}</p>
-                  <p>Author: {questDetails?.author.username || "Unknown"}</p>
-                  <p>Category: {questDetails?.category || "Unknown"}</p>
-                  <p>{quest.questId}</p>
-                  <p>Score: {quest.score}</p>
-                  <p>Time Remaining: {quest.timeRemaining}</p>
-                </div>
-              );
+              return (<HistoryCard
+                key={index}
+                questDetails={questDetails}
+                questId={quest.questId}
+                currentQuestionIndex={quest.currentQuestionIndex}
+                score={quest.score}
+                timeRemaining={quest.timeRemaining}
+                isFinished={quest.isFinished}
+              />);
             })}
           </div>
         ) : (

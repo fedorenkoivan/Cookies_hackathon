@@ -97,8 +97,11 @@ export const ProfileProvider = ({ children }: PropsWithChildren) => {
   }, []);
 
   const getHistoryURL = useCallback(() => { 
+    if (!userData?.id) {
+      return "";
+    }
     return `${PROGRESS_URL}?userId=${userData?.id}`; 
-  }, [userData]);
+  }, [userData?.id]);
 
   const fetchHistoryQuests = useFetchQuests(
     "No history quests available",
@@ -116,6 +119,13 @@ export const ProfileProvider = ({ children }: PropsWithChildren) => {
     }
     
   }, []);
+
+  useEffect(() => {
+  const token = localStorage.getItem("accessToken");
+  if (token && userData?.id) {
+    fetchHistoryQuests();
+  }
+}, [userData?.id, fetchHistoryQuests]);
 
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {

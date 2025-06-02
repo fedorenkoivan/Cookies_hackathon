@@ -1,5 +1,5 @@
 import StarRatingAuto from "../Rating/StarRatingAuto";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import "./Profile.scss";
 import { useAppContext } from "@/contexts/AppContext";
 import { Quest } from "@/types/quest";
@@ -13,7 +13,7 @@ import Loading from "../Loading/Loading";
 const Profile = () => {
   const [activeNavItem, setActiveNavItem] = useState<string | null>("Quests");
 
-  const { userData, loading, error } = useProfileContext();
+  const { userData, historyQuests, fetchHistoryQuests, loading, error } = useProfileContext();
   const { allQuests } = useAppContext();
 
   const filteredQuests = useMemo(() => {
@@ -31,6 +31,12 @@ const Profile = () => {
       }
     });
   }, [allQuests, activeNavItem, userData]);
+
+  useEffect(() => {
+    if (activeNavItem === "History") {
+      fetchHistoryQuests();
+    }
+  }, [activeNavItem]);
 
   const handleNavItemClick = (item: string) => {
     setActiveNavItem(item);
@@ -84,9 +90,27 @@ const Profile = () => {
         </div>
       </div>
       <div className="profile__quests">
-        {userData ? (
+        {userData && activeNavItem !== "History" ? (
           <div className="quests">
             <QuestCard quests={filteredQuests} />
+          </div>
+        ) : activeNavItem === "History" ? (
+          <div className="history-container">
+            <h2>History</h2>
+            {historyQuests?.map((quest, index) => {
+              const questDetails = allQuests.find((q: Quest) => q._id === quest.questId);
+
+              return (
+                <div key={index} className="history-quest-item">
+                  <p>Quest Title: {questDetails?.title || "Unknown"}</p>
+                  <p>Author: {questDetails?.author.username || "Unknown"}</p>
+                  <p>Category: {questDetails?.category || "Unknown"}</p>
+                  <p>{quest.questId}</p>
+                  <p>Score: {quest.score}</p>
+                  <p>Time Remaining: {quest.timeRemaining}</p>
+                </div>
+              );
+            })}
           </div>
         ) : (
           <div className="loading-container">

@@ -1,14 +1,17 @@
 import { PropsWithChildren, useEffect } from "react";
 import { useState, useMemo, useCallback } from "react";
 import { UserData, UserPublicData } from "@/types/user";
+import { historyQuest } from "@/types/quest";
 import { ProfileContext } from "./ProfileContext";
 import { USERS_URL } from "@/constants/authConstants";
+import { PROGRESS_URL } from "@/constants/progressConstants";
 import {
   getCachedUserData,
   cacheUserData,
   setAuthStatus,
 } from "@/utils/userData";
 import { userAuthorizationEvent, userLoginEvent } from "@/utils/userData";
+import { useFetchQuests } from "@/hooks/useFetchQuests";
 
 export const ProfileProvider = ({ children }: PropsWithChildren) => {
   const [userData, setUserData] = useState<UserData | null>(
@@ -17,6 +20,7 @@ export const ProfileProvider = ({ children }: PropsWithChildren) => {
   const [userPublicData, setUserPublicData] = useState<UserPublicData | null>(
     null
   );
+  const [historyQuests, setHistoryQuests] = useState<historyQuest[] | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -92,11 +96,25 @@ export const ProfileProvider = ({ children }: PropsWithChildren) => {
     }
   }, []);
 
+  const getHistoryURL = useCallback(() => { 
+    return `${PROGRESS_URL}?userId=${userData?.id}`; 
+  }, [userData]);
+
+  const fetchHistoryQuests = useFetchQuests(
+    "No history quests available",
+    getHistoryURL,
+    setHistoryQuests,
+    setLoading,
+    setError
+  );
+
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (token && !userData) {
       fetchUserProfile();
+      fetchHistoryQuests();
     }
+    
   }, []);
 
   useEffect(() => {
@@ -140,19 +158,23 @@ export const ProfileProvider = ({ children }: PropsWithChildren) => {
     () => ({
       userData,
       userPublicData,
+      historyQuests,
       loading,
       error,
       fetchUserProfile,
       fetchUserPublicProfile,
+      fetchHistoryQuests,
       logout,
     }),
     [
       userData,
       userPublicData,
+      historyQuests,
       loading,
       error,
       fetchUserProfile,
       fetchUserPublicProfile,
+      fetchHistoryQuests,
       logout,
     ]
   );

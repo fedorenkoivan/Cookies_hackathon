@@ -163,7 +163,7 @@ const QuestionPage = () => {
   const handleFinishQuest = async () => {
     isNavigatingRef.current = true;
     const finalScore = parseFloat(calculateScore(score).toFixed(1));
-    setScore(finalScore);
+    setScore(finalScore || 0);
     await saveProgress(true, finalScore);
     navigate("/rating-form");
   };
@@ -184,7 +184,7 @@ const QuestionPage = () => {
 
     setShowAnswers(true);
     setIsSubmitting(true);
-    setScore(calculateScore(score));
+    setScore(calculateScore(score) || 0);
 
     setTimeout(() => {
       setShowAnswers(false);
@@ -265,6 +265,19 @@ const QuestionPage = () => {
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, [questId, currentQuestionIndex, selectedAnswers, time, score, quest]);
 
+  const handleExit = async () => {
+    if (isSubmitting) return;
+    const confirmed = window.confirm(
+      "Are you sure you want to exit? Your progress will not be saved."
+    );
+
+    if (!confirmed) return;
+
+    isNavigatingRef.current = true;
+    await saveProgress(true);
+    navigate("/");
+  };
+
   return (
     <>
       {loading ? (
@@ -325,7 +338,9 @@ const QuestionPage = () => {
                   Continue Later
                 </button>
               ) : (
-                <></>
+                <button onClick={handleExit} disabled={isSubmitting}>
+                  Exit
+                </button>
               )}
               <button
                 onClick={handleNextQuestion}

@@ -1,7 +1,7 @@
 import StarRatingAuto from "../Rating/StarRatingAuto";
 import { useState, useMemo } from "react";
 import "./Profile.scss";
-import { useQuestContext } from "@/contexts/QuestContext";
+import { useAppContext } from "@/contexts/AppContext";
 import { Quest } from "@/types/quest";
 import QuestCard from "../Home/QuestCard";
 import "@/components/Home/QuestCard.scss";
@@ -9,14 +9,14 @@ import { FaEdit, FaShareAlt } from "react-icons/fa";
 import { useProfileContext } from "@/contexts/ProfileContext";
 
 import { useNavigate } from "react-router-dom";
-// import { BidirectionalPriorityQueue } from "@/utils/BidirectionalPriorityQueue";
+import { BidirectionalPriorityQueue } from "@/utils/BidirectionalPriorityQueue";
 import Loading from "../Loading/Loading";
 
 const Profile = () => {
   const [activeNavItem, setActiveNavItem] = useState<string | null>("Quests");
 
   const { userData, loading, error } = useProfileContext();
-  const { allQuests } = useQuestContext();
+  const { allQuests } = useAppContext();
 
   const navigate = useNavigate();
 

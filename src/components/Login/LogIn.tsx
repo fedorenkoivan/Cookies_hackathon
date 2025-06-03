@@ -5,7 +5,7 @@ import { Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { userLoginEvent } from "@/utils/userData";
 import { storeTokenData } from "@/utils/authUtils";
-import { useQuestContext } from "@/contexts/QuestContext";
+import { useAppContext } from "@/contexts/AppContext";
 import { USERS_URL, REQUIRED_TEXT } from "@/constants/authConstants";
 import "./LogIn.scss";
 
@@ -22,7 +22,7 @@ const validationSchema = Yup.object({
 
 const LogIn = () => {
   const navigate = useNavigate();
-  const { fetchAllQuests } = useQuestContext();
+  const { fetchAllQuests } = useAppContext();
 
   const handleSubmit = async (
     values: { companyEmail: string; password: string },

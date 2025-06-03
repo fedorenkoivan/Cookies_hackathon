@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useAuth } from "../hooks/TokenRenewalHook";
+import { useAuth } from "../hooks/TokenRenewal";
 import "./TokenRenewalModal.scss";
 
 const SessionRenewalDialog: React.FC = () => {

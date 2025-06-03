@@ -1,5 +1,5 @@
-$honey: #ffcc00;
-$light-blue: #3586ff;
+@use "../../palette" as *;
+
 $gradient-start: #8e2de2;
 $gradient-mid: #6a5acd;
 $gradient-end: #4a00e0;

@@ -1,10 +1,9 @@
 import { useCallback } from "react";
-import { Quest } from "@/types/quest";
 
-export const useFetchQuests = <T extends unknown[]>(
+export const useFetchQuests = <T extends unknown[], R>(
   errMsg: string,
   getURL: (...params: T) => string,
-  onSuccess: (quests: Quest[]) => void,
+  onSuccess: (quests: R) => void,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setError: React.Dispatch<React.SetStateAction<string | null>>
 ) => {
@@ -25,7 +24,7 @@ export const useFetchQuests = <T extends unknown[]>(
         if (quests && quests.length > 0) {
           onSuccess(quests);
         } else {
-          onSuccess([]);
+          onSuccess([] as unknown as R);
           setError(errMsg);
         }
       } catch (err) {

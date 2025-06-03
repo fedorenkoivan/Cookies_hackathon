@@ -1,11 +1,4 @@
-$primary-color: #c8c7c7;
-$secondary-color: #7b7b7b;
-$honey: #ffcc00;
-$light-purple: #bbb6d5;
-$purple: #8e2de2;
-$soft-purple: #6a5acd;
-$blue-purple: #4a00e0;
-$dark-purple: #482e86;
+@use "../../palette" as *;
 
 .answer-group {
   width: 100%;
@@ -44,7 +37,7 @@ $dark-purple: #482e86;
       height: 25px;
       padding: 0px;
       margin-left: 5px;
-      color: white;
+      color: rgba(255, 255, 255, 0.438);
       background-color: transparent;
     }
 
@@ -62,7 +55,7 @@ $dark-purple: #482e86;
   .cancel-icon {
     margin-left: 10px;
     border-radius: 50%;
-    color: $light-purple;
+    color: $white-purple;
     cursor: pointer;
     width: 16px;
     height: 16px;

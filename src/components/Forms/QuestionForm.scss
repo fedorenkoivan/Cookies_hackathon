@@ -1,11 +1,6 @@
-$primary-color: #c8c7c7;
-$secondary-color: #7b7b7b;
-$honey: #ffcc00;
-$light-purple: #bbb6d5;
+@use "../../palette" as *;
+
 $purple: #8e2de2;
-$soft-purple: #6a5acd;
-$blue-purple: #4a00e0;
-$dark-purple: #482e86;
 
 .question-form {
   width: 100%;
@@ -21,7 +16,7 @@ $dark-purple: #482e86;
     font-weight: normal;
 
     &::placeholder {
-      color: $light-purple;
+      color: $white-purple;
       font-size: 19px;
       font-weight: normal;
     }

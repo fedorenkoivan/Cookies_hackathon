@@ -4,10 +4,7 @@ import StarRatingAuto from "../Rating/StarRatingAuto";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import defaultImage from "../../assets/logo.jpg";
-
-const truncateText = (text: string, limit: number) => {
-  return text.length > limit ? text.slice(0, limit) + "..." : text;
-};
+import { truncateText } from "@/utils/text.ts";
 
 interface QuestCardProps {
   quests: Quest[];

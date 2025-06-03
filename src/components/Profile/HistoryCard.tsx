@@ -2,6 +2,7 @@ import React from "react";
 import "./HistoryCard.scss";
 import { Quest } from "@/types/quest";
 import { useNavigate } from "react-router-dom";
+import { truncateText } from "@/utils/text.ts";
 
 type HistoryCardProps = {
   questDetails: Quest | undefined;
@@ -44,7 +45,7 @@ const HistoryCard: React.FC<HistoryCardProps> = ({
       <div className="history-card">
         <div className="text-container">
           <div className="quest-details">
-            <h2 className="history-card__title">{questDetails.title}</h2>
+            <h2 className="history-card__title">{truncateText(questDetails.title, 17)}</h2>
             <div className="quest-info">
               <button
                 className="author"

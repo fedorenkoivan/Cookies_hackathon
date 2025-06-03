@@ -26,21 +26,22 @@
     justify-content: space-between;
     height: 100px;
     width: 100%;
-    padding: 12px;
-    padding-left: 60px;
-
+    padding: 12px min(60px, 3vw);
+    overflow: hidden;
     .quest-details {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
-      margin-right: 20px;
+      margin-right: min(20px, 3vw);
       width: fit-content;
       h2 {
         text-transform: uppercase;
         font-weight: bold;
         margin-bottom: 4px;
-        font-size: 29px;
+        font-size: min(2.2vw, 29px);
+        white-space: nowrap;
+        overflow: hidden;
       }
 
       .quest-info {
@@ -48,11 +49,11 @@
         flex-direction: row;
         align-items: flex-start;
         justify-content: space-between;
-        width: 380px;
+        width: min(25vw, 380px);
 
         p{
           font-weight: 550;
-          font-size: 16px;
+          font-size: min(1.2vw, 16px);
         }
 
         button {
@@ -75,19 +76,21 @@
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
-      margin-right: 80px;
       width: fit-content;
       min-height: 100%;
 
       h3 {
-        font-size: 26px;
+        font-size: min(1.8vw, 25px);
         font-weight: 500;
+        white-space: nowrap;
+        // width: 200px;
       }
       p {
         margin-top: 8px;
-        font-size: 16px;
+        font-size: min(1.3vw, 16px);
         font-weight: 500;
         margin-bottom: 4px;
+        white-space: nowrap;
       }
     }
   }

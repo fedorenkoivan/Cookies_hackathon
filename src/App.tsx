@@ -39,7 +39,7 @@ function App() {
                   path="/public-profile/:userId"
                   element={<PublicProfile />}
                 />
-                <Route path="/rating-form" element={<RatingForm />} />
+                <Route path="/rating-form/:questId" element={<RatingForm />} />
                 <Route path="/sign-up" element={<SignUp />} />
                 <Route path="/log-in" element={<LogIn />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -63,7 +63,7 @@ function App() {
           </ProfileProvider>
         </QuestProvider>
       </AppProvider>
-      
+
       <SessionRenewalDialog />
       <ToastContainer
         position="top-center"

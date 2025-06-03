@@ -94,9 +94,10 @@ const QuestionPage = () => {
 
     if (time === 0) {
       console.log("You have no time left!");
+
       isNavigatingRef.current = true;
       saveProgress(true).then(() => {
-        navigate("/rating-form");
+        navigate("/rating-form/${questId}");
       });
       return;
     }
@@ -154,6 +155,12 @@ const QuestionPage = () => {
         score,
       };
 
+    if (currentQuestionIndex < quest.questions.length - 1) {
+      const nextIndex = currentQuestionIndex + 1;
+      setCurrentQuestionIndex(nextIndex);
+      setQuestion(quest.questions[nextIndex]);
+    } else {
+      navigate(`/rating-form/${questId}`);
       localStorage.setItem(
         `quest_progress_${questId}`,
         JSON.stringify(progressData)

@@ -44,6 +44,16 @@ export type SavedFormData = {
   questions: Question[];
 };
 
+export type CompletedQuestInfo = {
+  questTitle: string,
+  questId: string,
+  userRating: number;
+  userComment: string;
+  score: number;
+  totalTime: string;
+  avgTimePerQuestion: string; 
+};
+
 export type historyQuest = {
   _id: string;
   userId: string;

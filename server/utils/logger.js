@@ -123,7 +123,7 @@ export const writeLog = (level, message, data = null, category = null) => {
   if (process.env.NODE_ENV !== "production" && category == "SYSTEM") {
     console.log(
       `${COLORS[level]}[${timestamp}] [${level}]${category ? `[${category}]` : ""}${COLORS.RESET} ${message}`,
-      data ? `\n${formatData(data)}` : "",
+      data ? `\n${JSON.stringify(formatData(data))}` : "",
     );
   }
 };

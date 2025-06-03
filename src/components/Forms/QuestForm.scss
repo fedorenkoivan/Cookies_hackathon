@@ -1,11 +1,4 @@
-$primary-color: #c8c7c7;
-$secondary-color: #7b7b7b;
-$honey: #ffcc00;
-$light-purple: #a59bd9;
-$purple: #8e2de2;
-$soft-purple: #6a5acd;
-$blue-purple: #4a00e0;
-$dark-purple: #482E86;
+@use "../../palette" as *;
 
 .quest-form__background {
   border-left: 15vw solid #2e165d;
@@ -41,7 +34,7 @@ $dark-purple: #482E86;
     background: $dark-purple;
     border-radius: 40px;
     box-shadow: 0px 6px 3.5px -6px black;
-    outline: #b3a4f9 solid 3px;
+    outline: $light-purple solid 3px;
 
     h1 {
       max-width: 75%;
@@ -100,7 +93,7 @@ $dark-purple: #482E86;
       font-weight: 500;
       border: none;
       border-radius: 10px;
-      background-color: #a59bd9;
+      background-color: $light-purple;
       box-shadow: 0px 6px 3.5px -6px black;
       outline: none;
       transition: 0.2s ease-in-out;

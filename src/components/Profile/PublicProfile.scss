@@ -1,9 +1,4 @@
-$honey: #ffcc00;
-$light-purple: #a59bd9;
-$purple: #8e2de2;
-$soft-purple: #6a5acd;
-$blue-purple: #4a00e0;
-$dark-purple: #2c1b55;
+@use "../../palette" as *;
 
 .public-profile {
   &__container {

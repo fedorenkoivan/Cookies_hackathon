@@ -1,10 +1,7 @@
+@use "../../palette" as *;
+
 $lightgray: #e5e5e5;
 $darker-gray: #c5c5c5;
-$honey: #ffcc00;
-$light-blue: #3586ff;
-$light-purple: #8e2de2;
-$soft-purple: #6a5acd;
-$dark-purple: #4a00e0;
 
 @mixin flex-center {
   display: flex;

@@ -43,3 +43,14 @@ export type SavedFormData = {
   showTimeControls: boolean;
   questions: Question[];
 };
+
+export type historyQuest = {
+  _id: string;
+  userId: string;
+  questId: string;
+  currentQuestionIndex: number;
+  score: number;
+  timeRemaining: number;
+  isFinished: boolean;
+  lastActivityDate: Date;
+};

@@ -144,7 +144,16 @@ $dark-purple: #2c1b55;
     align-items: center;
     border-radius: 15px;
     background: linear-gradient(180deg, #4c0a73 10%, #9853cc 45%, #18096e 100%);
-    padding: 20px 0px;
+    padding: 40px 0px;
+
+    .history-container {
+      width: 85%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
   }
 }
 

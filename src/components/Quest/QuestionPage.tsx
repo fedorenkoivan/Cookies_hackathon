@@ -97,7 +97,7 @@ const QuestionPage = () => {
 
       isNavigatingRef.current = true;
       saveProgress(true).then(() => {
-        navigate("/rating-form/${questId}");
+        navigate(`/rating-form/${questId}`);
       });
       return;
     }
@@ -145,35 +145,12 @@ const QuestionPage = () => {
     }
   }, [quest, questId]);
 
-  useEffect(() => {
-    if (quest && questId && !isNavigatingRef.current) {
-      const progressData = {
-        questId,
-        currentQuestionIndex,
-        selectedAnswers,
-        timeRemaining: time,
-        score,
-      };
-
-    if (currentQuestionIndex < quest.questions.length - 1) {
-      const nextIndex = currentQuestionIndex + 1;
-      setCurrentQuestionIndex(nextIndex);
-      setQuestion(quest.questions[nextIndex]);
-    } else {
-      navigate(`/rating-form/${questId}`);
-      localStorage.setItem(
-        `quest_progress_${questId}`,
-        JSON.stringify(progressData)
-      );
-    }
-  }, [questId, currentQuestionIndex, selectedAnswers, time, quest, score]);
-
   const handleFinishQuest = async () => {
     isNavigatingRef.current = true;
     const finalScore = parseFloat(calculateScore(score).toFixed(1));
     setScore(finalScore || 0);
     await saveProgress(true, finalScore);
-    navigate("/rating-form");
+    navigate(`/rating-form/${questId}`);
   };
 
   const calculateScore = (prevScore: number) => {

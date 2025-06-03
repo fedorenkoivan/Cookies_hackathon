@@ -8,8 +8,9 @@ import HistoryCard from "./HistoryCard";
 import "@/components/Home/QuestCard.scss";
 import { FaEdit, FaShareAlt } from "react-icons/fa";
 import { useProfileContext } from "@/contexts/ProfileContext";
-// import { BidirectionalPriorityQueue } from "@/utils/BidirectionalPriorityQueue";
+import { BidirectionalPriorityQueue } from "@/utils/BidirectionalPriorityQueue";
 import Loading from "../Loading/Loading";
+import { historyQuest } from "@/types/quest";
 
 const Profile = () => {
   const [activeNavItem, setActiveNavItem] = useState<string | null>("Quests");
@@ -35,6 +36,31 @@ const Profile = () => {
 
   const handleNavItemClick = (item: string) => {
     setActiveNavItem(item);
+  };
+
+  const getSortedHistory = () => {
+    if (!historyQuests || !allQuests) return [];
+
+    const queue = new BidirectionalPriorityQueue<historyQuest>();
+
+    historyQuests.forEach((quest) => {
+      const questDetails = allQuests.find((q: Quest) => q._id === quest.questId);
+      if (!questDetails?.questions?.length) return;
+
+      let priority = 0;
+      if (!quest.isFinished) {
+        priority = quest.currentQuestionIndex / questDetails.questions.length;
+      }
+      queue.enqueue(quest, priority);
+    });
+
+    const result = [];
+    while (!queue.isEmpty()) {
+      const item = queue.dequeue("min");
+      if (item) result.push(item.item);
+    }
+
+    return result;
   };
 
   if (loading) {
@@ -91,17 +117,19 @@ const Profile = () => {
           </div>
         ) : activeNavItem === "History" ? (
           <div className="history-container">
-            {historyQuests?.map((quest, index) => {
+            {getSortedHistory().reverse().map((quest, index) => {
               const questDetails = allQuests.find((q: Quest) => q._id === quest.questId);
-              return (<HistoryCard
-                key={index}
-                questDetails={questDetails}
-                questId={quest.questId}
-                currentQuestionIndex={quest.currentQuestionIndex}
-                score={quest.score}
-                timeRemaining={quest.timeRemaining}
-                isFinished={quest.isFinished}
-              />);
+              return (
+                <HistoryCard
+                  key={index}
+                  questDetails={questDetails}
+                  questId={quest.questId}
+                  currentQuestionIndex={quest.currentQuestionIndex}
+                  score={quest.score}
+                  timeRemaining={quest.timeRemaining}
+                  isFinished={quest.isFinished}
+                />
+              );
             })}
           </div>
         ) : (

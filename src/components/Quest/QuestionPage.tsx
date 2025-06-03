@@ -12,7 +12,7 @@ import { PROGRESS_URL as URL } from "@/constants/progressConstants";
 const QuestionPage = () => {
   const { questId } = useParams<{ questId: string }>();
   const { questPreview: quest, loading, error, fetchQuest } = useQuestContext();
-  const { userData } = useProfileContext();
+  const { userData, fetchHistoryQuests } = useProfileContext();
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [question, setQuestion] = useState<Question | null>(
@@ -79,6 +79,7 @@ const QuestionPage = () => {
       }
 
       await response.json();
+      fetchHistoryQuests();
     } catch (error) {
       console.error("Error saving progress:", error);
     } finally {

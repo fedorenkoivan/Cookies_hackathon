@@ -279,7 +279,6 @@ export default async function userRoutes(fastify) {
         const { name, email, currentPassword, newPassword } = request.body;
 
         const user = await User.findById(userId).select("+password");
-
         if (!user) {
           throw createError("NOT_FOUND", "User not found");
         }

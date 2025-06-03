@@ -8,17 +8,19 @@
     width: 80%;
     margin: auto;
     margin-top: 20px;
+    margin-bottom: 20px;
     padding: 30px;
-    background: linear-gradient(90deg, #35206b 0%, #510574 100%);
+    background: white;
     border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    color: #333;
   }
   
   &__title {
     font-size: 1.8rem;
     margin-bottom: 30px;
     text-align: center;
+    color: #333;
   }
   
   &__form {
@@ -62,18 +64,21 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  text-align: left;
   
   label {
     font-size: 1rem;
     font-weight: 500;
+    color: #333;
   }
   
   input {
     padding: 12px 15px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
     font-size: 1rem;
+    color: #333;
     
     &:focus {
       outline: none;
@@ -82,7 +87,7 @@
     }
     
     &::placeholder {
-      color: rgba(255, 255, 255, 0.5);
+      color: #999;
     }
   }
 }
@@ -92,7 +97,7 @@
 }
 
 .password-fields {
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
   padding-top: 20px;
   animation: fadeIn 0.3s ease-out;
 }
@@ -112,32 +117,32 @@
   }
   
   &-primary {
-    background-color: $honey;
-    color: #35206b;
+    background-color: $soft-purple;
+    color: white;
     
     &:hover:not(:disabled) {
-      background-color: color.adjust($honey, $lightness: -10%);
+      background-color: $dark-purple;
     }
   }
   
   &-secondary {
-    background-color: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    color: white;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    color: #333;
     
     &:hover:not(:disabled) {
-      background-color: rgba(255, 255, 255, 0.1);
+      background-color: #e0e0e0;
     }
   }
   
   &-toggle {
     background-color: transparent;
-    border: 1px solid $honey;
-    color: $honey;
+    border: 1px solid $soft-purple;
+    color: $soft-purple;
     align-self: flex-start;
     
     &:hover {
-      background-color: rgba(255, 204, 0, 0.1);
+      background-color: rgba($soft-purple, 0.1);
     }
   }
 }

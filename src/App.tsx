@@ -12,7 +12,6 @@ import ResetPassword from "@components/Login/ResetPassword";
 import QuestPage from "@components/Quest/QuestPage";
 import SessionRenewalDialog from "@/modals/TokenRenewalModal";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
-import ChangeInfo from "./components/Profile/ChangeInfo";
 
 import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";

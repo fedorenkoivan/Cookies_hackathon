@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react"; // Add useState
 import { useParams } from "react-router-dom";
 import StarRatingAuto from "../Rating/StarRatingAuto";
 import { useAppContext } from "@/contexts/AppContext";
@@ -10,9 +10,12 @@ import { useProfileContext } from "@/contexts/ProfileContext";
 import Loading from "../Loading/Loading";
 import defaultAvatar from "../../assets/img1.png";
 import "./PublicProfile.scss";
+import Pagination from "../Partial/Pagination";
 
 const PublicProfile = () => {
   const { userId } = useParams<{ userId: string }>();
+  const [currentPage, setCurrentPage] = useState(1);
+  const questsPerPage = 6;
 
   const { userPublicData, loading, error, fetchUserPublicProfile } =
     useProfileContext();
@@ -31,6 +34,17 @@ const PublicProfile = () => {
       (quest: Quest) => quest.author.authorId === userPublicData.id
     );
   }, [allQuests, userPublicData]);
+
+  const paginatedQuests = useMemo(() => {
+    const startIndex = (currentPage - 1) * questsPerPage;
+    return filteredQuests.slice(startIndex, startIndex + questsPerPage);
+  }, [filteredQuests, currentPage, questsPerPage]);
+
+  const totalPages = Math.ceil(filteredQuests.length / questsPerPage);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   if (loading) {
     return <Loading />;
@@ -72,7 +86,17 @@ const PublicProfile = () => {
       <div className="public-profile__quests">
         {filteredQuests.length > 0 ? (
           <div className="quests">
-            <QuestCard quests={filteredQuests} />
+            <QuestCard quests={paginatedQuests} />
+
+            {totalPages > 1 && (
+              <div className="pagination-container">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
+              </div>
+            )}
           </div>
         ) : (
           <div className="no-quests">

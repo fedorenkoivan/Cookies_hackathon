@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import StarRatingAuto from "../Rating/StarRatingAuto";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import "./QuestPage.scss";
 import Review from "./Review";
 import { useQuestContext } from "@/contexts/QuestContext";
@@ -9,6 +9,7 @@ import avatarImage from "@/assets/img1.png";
 import Loading from "../Loading/Loading";
 import { QUESTS_URL } from "@/constants/questConstants";
 import { ReviewData } from "@/types/review";
+import Pagination from "../Partial/Pagination";
 
 const QuestPage = () => {
   const { questId } = useParams();
@@ -17,7 +18,25 @@ const QuestPage = () => {
   const [loadingReviews, setLoadingReviews] = useState<boolean>(false);
   const [reviewsError, setReviewsError] = useState<string | null>(null);
 
+  const [currentReviewPage, setCurrentReviewPage] = useState(1);
+  const reviewsPerPage = 5;
+
   const navigate = useNavigate();
+
+  const paginatedReviews = useMemo(() => {
+    const startIndex = (currentReviewPage - 1) * reviewsPerPage;
+    return reviews.slice(startIndex, startIndex + reviewsPerPage);
+  }, [reviews, currentReviewPage, reviewsPerPage]);
+
+  const totalReviewPages = Math.ceil(reviews.length / reviewsPerPage);
+
+  const handleReviewPageChange = (page: number) => {
+    setCurrentReviewPage(page);
+  };
+
+  useEffect(() => {
+    setCurrentReviewPage(1);
+  }, [reviews]);
 
   useEffect(() => {
     fetchQuest(questId as string);
@@ -132,18 +151,30 @@ const QuestPage = () => {
             <p>{reviewsError}</p>
           </div>
         ) : reviews.length > 0 ? (
-          <div className="comments-list">
-            {reviews.map((review, index) => (
-              <Review
-                key={index}
-                username={review.username}
-                avatar={review.avatar}
-                rating={review.rating}
-                comment={review.comment}
-                date={review.date}
-              />
-            ))}
-          </div>
+          <>
+            <div className="comments-list">
+              {paginatedReviews.map((review, index) => (
+                <Review
+                  key={index}
+                  username={review.username}
+                  avatar={review.avatar}
+                  rating={review.rating}
+                  comment={review.comment}
+                  date={review.date}
+                />
+              ))}
+            </div>
+
+            {totalReviewPages > 1 && (
+              <div className="pagination-container">
+                <Pagination 
+                  currentPage={currentReviewPage}
+                  totalPages={totalReviewPages}
+                  onPageChange={handleReviewPageChange}
+                />
+              </div>
+            )}
+          </>
         ) : (
           <div className="no-comments">
             <p>No reviews yet</p>

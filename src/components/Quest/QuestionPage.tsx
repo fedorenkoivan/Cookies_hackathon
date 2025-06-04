@@ -97,6 +97,7 @@ const QuestionPage = () => {
 
       isNavigatingRef.current = true;
       saveProgress(true).then(() => {
+        console.log(questId);
         navigate(`/rating-form/${questId}`);
       });
       return;

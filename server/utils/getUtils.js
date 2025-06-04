@@ -1,4 +1,4 @@
-const RESERVED_PARAMS = ["limit", "sort"];
+const RESERVED_PARAMS = ["limit", "sort", "page"];
 const OPERATOR_MAP = {
   eq: "$eq",
   lt: "$lt",

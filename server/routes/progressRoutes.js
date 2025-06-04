@@ -1,6 +1,5 @@
-import { data } from "react-router-dom";
 import { progressModel } from "../models/progressModel.js";
-import { checkFilters } from "../utils/getQuestsUtils.js";
+import { checkFilters } from "../utils/getUtils.js";
 import { log } from "../utils/logger.js";
 
 export default async function progressRoutes(fastify) {

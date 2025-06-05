@@ -11,15 +11,13 @@ import { Quest } from "@/types/quest";
 import { useAppContext } from "@/contexts/AppContext";
 import QuestCard from "./QuestCard";
 import Loading from "@/components/Loading/Loading";
-import Pagination from "../Partial/Pagination";
+import PaginatedContent from "../Partial/PaginatedContent";
 
 const Home = () => {
   const [active, setActive] = useState("All");
   const [searchText, setSearchText] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
 
   const { allQuests, loading, error } = useAppContext();
 
@@ -60,21 +58,6 @@ const Home = () => {
       return categoryMatch && searchMatch;
     });
   }, [allQuests, active, searchText]);
-
-  const paginatedQuests = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    return filteredQuests.slice(startIndex, startIndex + itemsPerPage);
-  }, [filteredQuests, currentPage, itemsPerPage]);
-
-  const totalPages = Math.ceil(filteredQuests.length / itemsPerPage);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [active, searchText]);
 
   useEffect(() => {
     const handleAuthStatus = () => {
@@ -145,17 +128,14 @@ const Home = () => {
         </div>
 
         <hr className="quests__divider" />
-        <QuestCard quests={paginatedQuests} />
-
-        {filteredQuests.length > itemsPerPage && (
-          <div className="pagination-container">
-            <Pagination 
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
-          </div>
-        )}
+        <PaginatedContent
+          items={filteredQuests}
+          itemsPerPage={9}
+          renderItems={(paginatedQuests) => (
+            <QuestCard quests={paginatedQuests} />
+          )}
+          emptyMessage="No quests found. Try changing your search or filters."
+        />
       </div>
     </section>
   );

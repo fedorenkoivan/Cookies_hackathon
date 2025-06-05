@@ -9,6 +9,7 @@ type AppContextType = {
   loading: boolean;
   fetchAllQuests: () => Promise<void>;
   fetchBestQuests: () => Promise<void>;
+  deleteQuest: (questId: string) => Promise<void>;
 };
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);

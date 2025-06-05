@@ -128,7 +128,7 @@ const Profile = () => {
                   (quest: Quest) => quest.author.authorId === userData.id
                 )}
                 itemsPerPage={6}
-                renderItems={(quests) => <QuestCard quests={quests} />}
+                renderItems={(quests) => <QuestCard quests={quests} isDeleteEnabled={true} />}
                 emptyMessage="You haven't created any quests yet."
               />
             </div>

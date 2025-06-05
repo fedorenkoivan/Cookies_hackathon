@@ -1,7 +1,6 @@
-$lightgray: #e5e5e5;
-$darker-gray: #c5c5c5;
 $white: #ffffff;
 $black: #000000;
+@use "../../palette" as *;
 
 @mixin flex-center {
   display: flex;
@@ -51,6 +50,22 @@ $black: #000000;
           height: 32px;
           color: gold;
           cursor: pointer;
+        }
+      }
+      .delete {
+        position: absolute;
+        top: 10%;
+        right: 86%;
+        .icon {
+          width: 24px;
+          height: 24px;
+          color: white;
+          cursor: pointer;
+          transition: color 0.2s ease-in-out;
+
+          &:hover {
+            color: $dark-purple;
+          }
         }
       }
     }

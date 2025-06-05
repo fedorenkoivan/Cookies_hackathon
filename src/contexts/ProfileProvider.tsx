@@ -113,8 +113,8 @@ export const ProfileProvider = ({ children }: PropsWithChildren) => {
     setError
   );
 
-  const deleteHistoryQuest = useCallback(async (_id: string)=> {
-    const result = await fetch(`${PROGRESS_URL}?id=${_id}`, { method: "DELETE" });
+  const deleteHistoryQuests = useCallback(async (_id: string, byQuest: boolean = false) => {
+    const result = await fetch(`${PROGRESS_URL}/${byQuest ? `by-quest/${_id}` : _id}`, { method: "DELETE" });
     if (result.ok) {
       setHistoryQuests((prev) =>
         prev ? prev.filter((quest) => quest._id !== _id) : null
@@ -190,7 +190,7 @@ export const ProfileProvider = ({ children }: PropsWithChildren) => {
       fetchUserProfile,
       fetchUserPublicProfile,
       fetchHistoryQuests,
-      deleteHistoryQuest,
+      deleteHistoryQuests,
       logout,
     }),
     [
@@ -202,7 +202,7 @@ export const ProfileProvider = ({ children }: PropsWithChildren) => {
       fetchUserProfile,
       fetchUserPublicProfile,
       fetchHistoryQuests,
-      deleteHistoryQuest,
+      deleteHistoryQuests,
       logout,
     ]
   );

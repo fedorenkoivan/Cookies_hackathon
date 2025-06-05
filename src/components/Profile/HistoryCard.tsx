@@ -26,7 +26,7 @@ const HistoryCard: React.FC<HistoryCardProps> = ({
   isFinished,
 }) => {
   const navigate = useNavigate();
-  const { deleteHistoryQuest } = useProfileContext();
+  const { deleteHistoryQuests } = useProfileContext();
 
   const calculatePercentage = (): number => {
     if (questDetails === undefined) return 0;
@@ -88,7 +88,7 @@ const HistoryCard: React.FC<HistoryCardProps> = ({
         </div>
         <FaTimes
           className="delete-icon"
-          onClick={() => deleteHistoryQuest(_id)}
+          onClick={() => deleteHistoryQuests(_id)}
         />
       </div>
     </div>

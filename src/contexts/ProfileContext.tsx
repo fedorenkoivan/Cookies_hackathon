@@ -11,7 +11,7 @@ type ProfileContextType = {
   fetchUserProfile: () => Promise<void>;
   fetchUserPublicProfile: (userId: string) => Promise<void>;
   fetchHistoryQuests: () => Promise<void>;
-  deleteHistoryQuest: (_id: string) => Promise<void>;
+  deleteHistoryQuests: (_id: string, byQuest?: boolean) => Promise<void>;
   logout: () => void;
 };
 

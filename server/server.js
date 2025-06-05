@@ -55,6 +55,7 @@ await fastify.register(fastifyCookie, {
 
 await fastify.register(fastifyCors, {
   origin: true,
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
   credentials: true,
 });
 

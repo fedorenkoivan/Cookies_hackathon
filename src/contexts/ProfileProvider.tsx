@@ -20,7 +20,9 @@ export const ProfileProvider = ({ children }: PropsWithChildren) => {
   const [userPublicData, setUserPublicData] = useState<UserPublicData | null>(
     null
   );
-  const [historyQuests, setHistoryQuests] = useState<historyQuest[] | null>(null);
+  const [historyQuests, setHistoryQuests] = useState<historyQuest[] | null>(
+    null
+  );
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -96,11 +98,11 @@ export const ProfileProvider = ({ children }: PropsWithChildren) => {
     }
   }, []);
 
-  const getHistoryURL = useCallback(() => { 
+  const getHistoryURL = useCallback(() => {
     if (!userData?.id) {
       return "";
     }
-    return `${PROGRESS_URL}?userId=${userData?.id}`; 
+    return `${PROGRESS_URL}?userId=${userData?.id}`;
   }, [userData?.id]);
 
   const fetchHistoryQuests = useFetchQuests(
@@ -111,21 +113,35 @@ export const ProfileProvider = ({ children }: PropsWithChildren) => {
     setError
   );
 
+  const deleteHistoryQuests = useCallback(async (_id: string, byQuest: boolean = false) => {
+    const result = await fetch(`${PROGRESS_URL}/${byQuest ? `by-quest/${_id}` : _id}`, { method: "DELETE" });
+    if (result.ok) {
+      setHistoryQuests((prev) =>
+        prev ? prev.filter((quest) => quest._id !== _id) : null
+      );
+    } else {
+      const errorData = await result.json();
+      console.error("Delete failed:", errorData);
+      return;
+    }
+
+    await fetchHistoryQuests();
+  }, [fetchHistoryQuests]);
+
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (token && !userData) {
       fetchUserProfile();
       fetchHistoryQuests();
     }
-    
-  }, []);
+  }, [userData, fetchUserProfile, fetchHistoryQuests]);
 
   useEffect(() => {
-  const token = localStorage.getItem("accessToken");
-  if (token && userData?.id) {
-    fetchHistoryQuests();
-  }
-}, [userData?.id, fetchHistoryQuests]);
+    const token = localStorage.getItem("accessToken");
+    if (token && userData?.id) {
+      fetchHistoryQuests();
+    }
+  }, [userData?.id, fetchHistoryQuests]);
 
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
@@ -174,6 +190,7 @@ export const ProfileProvider = ({ children }: PropsWithChildren) => {
       fetchUserProfile,
       fetchUserPublicProfile,
       fetchHistoryQuests,
+      deleteHistoryQuests,
       logout,
     }),
     [
@@ -185,6 +202,7 @@ export const ProfileProvider = ({ children }: PropsWithChildren) => {
       fetchUserProfile,
       fetchUserPublicProfile,
       fetchHistoryQuests,
+      deleteHistoryQuests,
       logout,
     ]
   );

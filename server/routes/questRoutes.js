@@ -173,4 +173,15 @@ export default async function questRoutes(fastify) {
     const reviews = await getFormattedReviews(quest);
     return reply.code(200).send(reviews);
   });
+
+  fastify.delete("/:questId", async (request, reply) => {
+    await deleteQuest(request.params.questId);
+    return reply.code(200).send({ success: true });
+  });
+
 }
+
+const deleteQuest = log({ category: "SYSTEM", funcName: "deleteQuest" })(
+  async (questId) =>
+    await questModel.deleteOne({ _id: questId })
+);

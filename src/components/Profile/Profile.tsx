@@ -128,7 +128,7 @@ const Profile = () => {
                   (quest: Quest) => quest.author.authorId === userData.id
                 )}
                 itemsPerPage={6}
-                renderItems={(quests) => <QuestCard quests={quests} />}
+                renderItems={(quests) => <QuestCard quests={quests} isDeleteEnabled={true} />}
                 emptyMessage="You haven't created any quests yet."
               />
             </div>
@@ -148,13 +148,14 @@ const Profile = () => {
                 itemsPerPage={7}
                 renderItems={(quests) => (
                   <>
-                    {quests.map((quest, index) => {
+                    {quests.map((quest: historyQuest, index) => {
                       const questDetails = allQuests.find(
                         (q: Quest) => q._id === quest.questId
                       );
                       return (
                         <HistoryCard
                           key={index}
+                          _id={quest._id}
                           questDetails={questDetails}
                           questId={quest.questId}
                           currentQuestionIndex={quest.currentQuestionIndex}

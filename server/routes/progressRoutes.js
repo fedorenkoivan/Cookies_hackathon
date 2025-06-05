@@ -12,16 +12,45 @@ export default async function progressRoutes(fastify) {
     const history = await getHistory(request.query);
     return reply.code(200).send({ success: true, data: history });
   });
+
+  fastify.delete("/:id", async (request, reply) => {
+    await deleteHistory(request.params.id);
+    return reply.code(200).send({ success: true });
+  });
+
+  fastify.delete("/by-quest/:questId", async (request, reply) => {
+    const result = await deleteHistoryByQuest(request.params.questId);
+    return reply.code(200).send({
+      success: true,
+      deletedCount: result,
+    });
+  });
 }
 
-const getHistory = log({ category: "SYSTEM", funcName: "getHistory" })(async (query) => {
-  const filters = checkFilters(query);
-  const history = await progressModel.find(filters);
-  return history;
-});
+const deleteHistory = log({ category: "SYSTEM", funcName: "deleteHistory" })(
+  async (id) => {
+    await progressModel.deleteOne({ _id: id });
+  }
+);
 
-const saveProgress = log({ category: "SYSTEM", funcName: "saveProgress" })(async (body) => {
-  const {
+const deleteHistoryByQuest = log({ category: "SYSTEM", funcName: "deleteHistoryByQuest" })(
+  async (questId) => {
+    const result = await progressModel.deleteMany({ questId });
+    return result.deletedCount;
+  }
+);
+
+const getHistory = log({ category: "SYSTEM", funcName: "getHistory" })(
+  async (query) => {
+    const filters = checkFilters(query);
+    const history = await progressModel.find(filters);
+    return history;
+  }
+);
+
+const saveProgress = log({ category: "SYSTEM", funcName: "saveProgress" })(
+  async (body) => {
+    const {
       questId,
       userId,
       currentQuestionIndex,
@@ -56,4 +85,5 @@ const saveProgress = log({ category: "SYSTEM", funcName: "saveProgress" })(async
 
     await progress.save();
     return progress;
-  });
+  }
+);

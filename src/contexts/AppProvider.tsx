@@ -38,6 +38,21 @@ export const AppProvider = ({ children }: PropsWithChildren) => {
     setError
   );
 
+  const deleteQuest = useCallback( async (questId: string) => {
+    setLoading(true);
+    try {
+      await fetch(`${QUESTS_URL}/${questId}`, {
+        method: "DELETE",
+      });
+      setAllQuests((prev) => prev.filter((quest) => quest._id !== questId));
+      setBestQuests((prev) => prev.filter((quest) => quest._id !== questId));
+    } catch (error) {
+      setError("Failed to delete quest: " + error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     fetchAllQuests();
     fetchBestQuests();
@@ -51,7 +66,8 @@ export const AppProvider = ({ children }: PropsWithChildren) => {
       loading,
       fetchAllQuests,
       fetchBestQuests,
+      deleteQuest,
     };
-  }, [allQuests, bestQuests, fetchAllQuests, fetchBestQuests, error, loading]);
+  }, [allQuests, bestQuests, fetchAllQuests, fetchBestQuests, deleteQuest, error, loading]);
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

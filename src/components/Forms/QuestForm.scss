@@ -34,7 +34,7 @@
     background: $dark-purple;
     border-radius: 40px;
     box-shadow: 0px 6px 3.5px -6px black;
-    outline: $light-purple solid 3px;
+    outline: $cream-purple solid 3px;
 
     h1 {
       max-width: 75%;
@@ -73,7 +73,7 @@
 
       span {
         font-size: 14px;
-        font-weight: light;
+        font-weight: white;
         color: white;
         opacity: 0.5;
       }
@@ -93,7 +93,7 @@
       font-weight: 500;
       border: none;
       border-radius: 10px;
-      background-color: $light-purple;
+      background-color: $cream-purple;
       box-shadow: 0px 6px 3.5px -6px black;
       outline: none;
       transition: 0.2s ease-in-out;
@@ -205,7 +205,7 @@
     width: 55px;
     height: 30.3px;
     position: relative;
-    background-color: $light-purple;
+    background-color: $cream-purple;
     border: none;
     border-radius: 14px;
     transition: background-color 0.1s ease, border-color 0.2s ease;

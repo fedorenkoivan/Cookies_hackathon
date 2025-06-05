@@ -148,13 +148,14 @@ const Profile = () => {
                 itemsPerPage={7}
                 renderItems={(quests) => (
                   <>
-                    {quests.map((quest, index) => {
+                    {quests.map((quest: historyQuest, index) => {
                       const questDetails = allQuests.find(
                         (q: Quest) => q._id === quest.questId
                       );
                       return (
                         <HistoryCard
                           key={index}
+                          _id={quest._id}
                           questDetails={questDetails}
                           questId={quest.questId}
                           currentQuestionIndex={quest.currentQuestionIndex}

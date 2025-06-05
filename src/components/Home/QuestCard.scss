@@ -20,6 +20,7 @@ $black: #000000;
       height: 290px;
       background-color: $white;
       border-radius: 15px;
+      transition: ease-in-out 0.2s;
       &:hover {
         transform: translateY(-5px);
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);

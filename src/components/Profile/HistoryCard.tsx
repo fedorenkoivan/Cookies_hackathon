@@ -1,10 +1,13 @@
 import React from "react";
 import "./HistoryCard.scss";
+import { FaTimes } from "react-icons/fa";
 import { Quest } from "@/types/quest";
 import { useNavigate } from "react-router-dom";
 import { truncateText } from "@/utils/text.ts";
+import { useProfileContext } from "@/contexts/ProfileContext";
 
 type HistoryCardProps = {
+  _id: string;
   questDetails: Quest | undefined;
   questId: string;
   currentQuestionIndex: number;
@@ -14,6 +17,7 @@ type HistoryCardProps = {
 };
 
 const HistoryCard: React.FC<HistoryCardProps> = ({
+  _id,
   questDetails,
   questId,
   currentQuestionIndex,
@@ -22,6 +26,7 @@ const HistoryCard: React.FC<HistoryCardProps> = ({
   isFinished,
 }) => {
   const navigate = useNavigate();
+  const { deleteHistoryQuest } = useProfileContext();
 
   const calculatePercentage = (): number => {
     if (questDetails === undefined) return 0;
@@ -38,14 +43,16 @@ const HistoryCard: React.FC<HistoryCardProps> = ({
   }
 
   return (
-    <div
-      className="history-card-container"
-      onClick={() => navigate(`/preview-quest/${questId}`)}
-    >
+    <div className="history-card-container">
       <div className="history-card">
-        <div className="text-container">
+        <div
+          className="text-container"
+          onClick={() => navigate(`/preview-quest/${questId}`)}
+        >
           <div className="quest-details">
-            <h2 className="history-card__title">{truncateText(questDetails.title, 17)}</h2>
+            <h2 className="history-card__title">
+              {truncateText(questDetails.title, 17)}
+            </h2>
             <div className="quest-info">
               <button
                 className="author"
@@ -79,6 +86,10 @@ const HistoryCard: React.FC<HistoryCardProps> = ({
             alt={questDetails.title}
           />
         </div>
+        <FaTimes
+          className="delete-icon"
+          onClick={() => deleteHistoryQuest(_id)}
+        />
       </div>
     </div>
   );

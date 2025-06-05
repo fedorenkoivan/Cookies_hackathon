@@ -12,16 +12,41 @@ export default async function progressRoutes(fastify) {
     const history = await getHistory(request.query);
     return reply.code(200).send({ success: true, data: history });
   });
+
+  fastify.delete("/", async (request, reply) => {
+    await deleteHistory(request.query);
+    return reply.code(200).send({ success: true });
+  });
 }
 
-const getHistory = log({ category: "SYSTEM", funcName: "getHistory" })(async (query) => {
-  const filters = checkFilters(query);
-  const history = await progressModel.find(filters);
-  return history;
+const deleteHistory = log({ category: "SYSTEM", funcName: "deleteHistory" })(async (query) => {
+  const { id } = query;
+  console.log("Attempting to delete ID:", id);
+
+  if (!id) {
+    return { success: false, error: "Missing id parameter" };
+  }
+
+  const result = await progressModel.deleteOne({ _id: id });
+
+  if (result.deletedCount === 0) {
+    return { success: false, error: "Progress not found" };
+  }
+
+  return { success: true };
 });
 
-const saveProgress = log({ category: "SYSTEM", funcName: "saveProgress" })(async (body) => {
-  const {
+const getHistory = log({ category: "SYSTEM", funcName: "getHistory" })(
+  async (query) => {
+    const filters = checkFilters(query);
+    const history = await progressModel.find(filters);
+    return history;
+  }
+);
+
+const saveProgress = log({ category: "SYSTEM", funcName: "saveProgress" })(
+  async (body) => {
+    const {
       questId,
       userId,
       currentQuestionIndex,
@@ -56,4 +81,5 @@ const saveProgress = log({ category: "SYSTEM", funcName: "saveProgress" })(async
 
     await progress.save();
     return progress;
-  });
+  }
+);

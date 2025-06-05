@@ -6,13 +6,16 @@
   margin-bottom: 12px;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: ease-in-out 0.2s;
 
   &:hover {
-    cursor: pointer;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
   }
 }
 
 .history-card {
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -51,7 +54,7 @@
         width: min(25vw, 380px);
         margin-right: 25px;
 
-        p{
+        p {
           font-weight: 550;
           font-size: min(1.2vw, 16px);
         }
@@ -92,6 +95,10 @@
         white-space: nowrap;
       }
     }
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   .image-container {
@@ -108,4 +115,33 @@
       object-fit: cover;
     }
   }
+
+  .delete-icon {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    color: white;
+    transition: color 0.2s ease-in-out;
+    background-color: transparent;
+    transition: ease-in-out 0.2s;
+
+    &:hover {
+      background-color: #ff5656;
+      border-radius: 50%;
+    }
+  }
+}
+
+.delete-icon {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, background-color 0.1s;
+}
+
+.history-card-container:hover .delete-icon {
+  opacity: 1;
+  pointer-events: auto;
 }

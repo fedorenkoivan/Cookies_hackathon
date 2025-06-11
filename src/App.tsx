@@ -9,6 +9,7 @@ import LogIn from "@components/Login/LogIn";
 import RatingForm from "@components/Rating/RatingForm";
 import ForgotPassword from "@components/Login/ForgotPassword";
 import ResetPassword from "@components/Login/ResetPassword";
+import ChangeInfo from "./components/Profile/ChangeInfo";
 import QuestPage from "@components/Quest/QuestPage";
 import SessionRenewalDialog from "@/modals/TokenRenewalModal";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
@@ -42,6 +43,7 @@ function App() {
                 <Route path="/sign-up" element={<SignUp />} />
                 <Route path="/log-in" element={<LogIn />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/change-info" element={<ChangeInfo />} />
                 <Route
                   path="/reset-password/:resetToken"
                   element={<ResetPassword />}

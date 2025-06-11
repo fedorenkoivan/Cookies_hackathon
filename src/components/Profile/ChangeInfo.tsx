@@ -88,7 +88,7 @@ const ChangeInfo = () => {
         requestBody.newPassword = formData.newPassword;
       }
       
-      const response = await fetch(`${USERS_URL}/update-profile`, {
+      const response = await fetch(`${USERS_URL}/change-info`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

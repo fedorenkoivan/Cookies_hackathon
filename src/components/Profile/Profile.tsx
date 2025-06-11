@@ -96,7 +96,7 @@ const Profile = () => {
           <div className="profile__actions">
             <button
               className="profile__edit-btn"
-              onClick={() => navigate("change-info")}
+              onClick={() => navigate("/change-info")}
             >
               <FaEdit />
             </button>

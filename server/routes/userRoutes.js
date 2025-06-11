@@ -271,7 +271,7 @@ export default async function userRoutes(fastify) {
   );
 
   fastify.post(
-    "/update-profile",
+    "/change-info",
     { preHandler: verifyToken },
     async (request, reply) => {
       try {

@@ -149,5 +149,14 @@ $darker-gray: #c5c5c5;
       margin: 10px 0;
       border: none;
     }
+
+    &__content {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      p {
+        color: white;
+      }
+    }
   }
 }

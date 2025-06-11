@@ -19,12 +19,11 @@ export const useFetchQuests = <T extends unknown[], R>(
         }
 
         const data = await res.json();
-        const quests = data.data;
+        const quests = data.data || [];
 
-        if (quests && quests.length > 0) {
-          onSuccess(quests);
-        } else {
-          onSuccess([] as unknown as R);
+        onSuccess(quests);
+
+        if (data.data === null || data.data === undefined) {
           setError(errMsg);
         }
       } catch (err) {

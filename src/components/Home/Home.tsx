@@ -128,14 +128,16 @@ const Home = () => {
         </div>
 
         <hr className="quests__divider" />
-        <PaginatedContent
-          items={filteredQuests}
-          itemsPerPage={9}
-          renderItems={(paginatedQuests) => (
-            <QuestCard quests={paginatedQuests} />
-          )}
-          emptyMessage="No quests found. Try changing your search or filters."
-        />
+        <div className="quests__content">
+          <PaginatedContent
+            items={filteredQuests}
+            itemsPerPage={9}
+            renderItems={(paginatedQuests) => (
+              <QuestCard quests={paginatedQuests} />
+            )}
+            emptyMessage="No quests found. Try changing your search or filters."
+          />
+        </div>
       </div>
     </section>
   );

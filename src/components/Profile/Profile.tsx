@@ -43,7 +43,7 @@ const Profile = () => {
   };
 
   const getSortedHistory = () => {
-    if (!historyQuests || !allQuests) return [];
+    if (!historyQuests || !allQuests || historyQuests.length === 0) return [];
 
     const queue = new BidirectionalPriorityQueue<historyQuest>();
 
@@ -149,9 +149,12 @@ const Profile = () => {
                 renderItems={(quests) => (
                   <>
                     {quests.map((quest: historyQuest, index) => {
+                      if (!quest) return null;
+                      
                       const questDetails = allQuests.find(
                         (q: Quest) => q._id === quest.questId
                       );
+                      
                       return (
                         <HistoryCard
                           key={index}

@@ -151,11 +151,14 @@ $darker-gray: #c5c5c5;
     }
 
     &__content {
-      display: flex;
-      justify-content: center;
-      padding: 20px;
-      p {
+      .empty-message {
         color: white;
+        font-size: 1.1rem;
+      }
+      .empty-container {
+        display: flex;
+        justify-content: center;
+        padding: 20px;
       }
     }
   }

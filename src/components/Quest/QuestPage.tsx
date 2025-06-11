@@ -80,7 +80,17 @@ const QuestPage = () => {
             <p className="number">
               Number of questions: {quest.questions.length}
             </p>
-            <p className="score">Maximum score: 12 points</p>
+            <p className="score">
+              {(() => {
+                const totalPoints = quest.questions.reduce(
+                  (total, q) => total + (q.points || 1),
+                  0
+                );
+                return `Maximum score: ${totalPoints} point${
+                  totalPoints !== 1 ? "s" : ""
+                }`;
+              })()}
+            </p>
             <p className="time">
               Time limit: {quest.time === -1 ? "no limit" : quest.time + "s"}
             </p>
@@ -116,7 +126,6 @@ const QuestPage = () => {
         <div className="comments-header">
           <h2>Reviews</h2>
           <div className="comments-stats">
-            <p>Number of completions: 0</p>
             <p>Comments: {reviews.length}</p>
           </div>
         </div>

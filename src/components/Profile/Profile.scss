@@ -146,8 +146,20 @@ $dark-purple: #2c1b55;
     background: linear-gradient(180deg, #4c0a73 10%, #9853cc 45%, #18096e 100%);
     padding: 40px 0px;
 
-    p {
-      color: white;
+    .quests {
+      .error-message {
+        color: white;
+      }
+
+      .empty-container {
+        margin: 40px 0;
+        text-align: center;
+
+        .empty-message {
+          color: white;
+          font-size: 1.1rem;
+        }
+      }
     }
 
     .history-container {
@@ -157,6 +169,16 @@ $dark-purple: #2c1b55;
       align-items: center;
       justify-content: center;
       gap: 10px;
+
+      .empty-container {
+        margin: 40px 0;
+        text-align: center;
+
+        .empty-message {
+          color: white;
+          font-size: 1.1rem;
+        }
+      }
     }
   }
 }

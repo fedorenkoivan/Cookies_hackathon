@@ -48,7 +48,9 @@ const PaginatedContent = <T,>({
           )}
         </>
       ) : (
-        <p>{emptyMessage}</p>
+        <div className="empty-container">
+          <p className="empty-message">{emptyMessage}</p>
+        </div>
       )}
     </>
   );

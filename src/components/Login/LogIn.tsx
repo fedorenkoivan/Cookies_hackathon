@@ -6,17 +6,16 @@ import SendIcon from "@mui/icons-material/Send";
 import { userLoginEvent } from "@/utils/userData";
 import { storeTokenData } from "@/utils/authUtils";
 import { useAppContext } from "@/contexts/AppContext";
-import { USERS_URL, REQUIRED_TEXT } from "@/constants/authConstants";
+import { USERS_URL, REQUIRED_TEXT, MIN_PASSWORD_LENGTH, ONLY_LATIN_LETTERS } from "@/constants/authConstants";
 import "./LogIn.scss";
 
-// react e18n 
 const validationSchema = Yup.object({
   companyEmail: Yup.string()
     .email("Invalid email format")
     .required(REQUIRED_TEXT),
   password: Yup.string()
-    .min(8, "Password is too short - should be 8 chars minimum.")
-    .matches(/[a-zA-Z]/, "Password can only contain Latin letters.")
+    .min(MIN_PASSWORD_LENGTH, "Password is too short - should be 8 chars minimum.")
+    .matches(ONLY_LATIN_LETTERS, "Password can only contain Latin letters.")
     .required(REQUIRED_TEXT),
 });
 

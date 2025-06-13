@@ -1,104 +1,133 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
+import * as Yup from "yup";
+import {
+  REQUIRED_TEXT,
+  USERS_URL,
+  MIN_PASSWORD_LENGTH,
+  ONLY_LATIN_LETTERS,
+} from "@/constants/authConstants";
 import { useProfileContext } from "@/contexts/ProfileContext";
-import { USERS_URL } from "@/constants/authConstants";
 import { toast } from "react-toastify";
+
 import "./ChangeInfo.scss";
+
+type FormValues = {
+  name: string;
+  email: string;
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+  showPasswordFields: boolean;
+};
+
+const validationSchema = Yup.object({
+  name: Yup.string().required(REQUIRED_TEXT),
+  email: Yup.string().email("Invalid email format").required(REQUIRED_TEXT),
+  currentPassword: Yup.string().when("showPasswordFields", {
+    is: true,
+    then: (schema) =>
+      schema
+        .required("Current password is required to change password")
+        .min(MIN_PASSWORD_LENGTH, "Password must be at least 8 characters long")
+        .matches(ONLY_LATIN_LETTERS, "Password can only contain Latin letters"),
+    otherwise: (schema) => schema,
+  }),
+  newPassword: Yup.string().when("showPasswordFields", {
+    is: true,
+    then: (schema) =>
+      schema
+        .min(8, "Password must be at least 8 characters long")
+        .matches(ONLY_LATIN_LETTERS, "Password can only contain Latin letters"),
+    otherwise: (schema) => schema,
+  }),
+  confirmPassword: Yup.string().when("showPasswordFields", {
+    is: true,
+    then: (schema) =>
+      schema.oneOf([Yup.ref("newPassword")], "Passwords must match"),
+    otherwise: (schema) => schema,
+  }),
+});
 
 const ChangeInfo = () => {
   const navigate = useNavigate();
   const { userData, fetchUserProfile } = useProfileContext();
-  
-  const [formData, setFormData] = useState({
+  const [showPasswordFields, setShowPasswordFields] = useState(false);
+  const [initialValues, setInitialValues] = useState({
     name: "",
     email: "",
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
+    showPasswordFields: false,
   });
-  
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showPasswordFields, setShowPasswordFields] = useState(false);
-  
+
   useEffect(() => {
     if (userData) {
-      setFormData(prev => ({
+      setInitialValues((prev) => ({
         ...prev,
         name: userData.name || "",
         email: userData.email || "",
       }));
     }
   }, [userData]);
-  
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+
+  const togglePasswordFields = (
+    setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
+  ) => {
+    const newValue = !showPasswordFields;
+    setShowPasswordFields(newValue);
+    setFieldValue("showPasswordFields", newValue);
+
+    if (!newValue) {
+      setFieldValue("currentPassword", "");
+      setFieldValue("newPassword", "");
+      setFieldValue("confirmPassword", "");
+    }
   };
-  
-  const saveChanges = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!formData.name || !formData.email) {
-      toast.error("Name and email cannot be empty");
-      return;
-    }
-    
-    if (!validateEmail(formData.email)) {
-      toast.error("Please enter a valid email address");
-      return;
-    }
-    
-    if (showPasswordFields) {
-      if (!formData.currentPassword) {
-        toast.error("Current password is required to change password");
-        return;
-      }
-      
-      if (formData.newPassword !== formData.confirmPassword) {
-        toast.error("New passwords do not match");
-        return;
-      }
-      
-      if (formData.newPassword && formData.newPassword.length < 8) {
-        toast.error("Password must be at least 8 characters long");
-        return;
-      }
-    }
-    
+
+  const saveChanges = async (
+    values: FormValues,
+    { setSubmitting }: FormikHelpers<FormValues>
+  ) => {
     try {
-      setIsSubmitting(true);
       const accessToken = localStorage.getItem("accessToken");
-      
+
       if (!accessToken) {
         toast.error("You must be logged in to update your profile");
         navigate("/log-in");
         return;
       }
-      
-      const requestBody: any = {
-        name: formData.name,
-        email: formData.email
+
+      type RequestBody = {
+        name: string;
+        email: string;
+        currentPassword?: string;
+        newPassword?: string;
       };
-      
-      if (showPasswordFields && formData.currentPassword && formData.newPassword) {
-        requestBody.currentPassword = formData.currentPassword;
-        requestBody.newPassword = formData.newPassword;
+
+      const requestBody: RequestBody = {
+        name: values.name,
+        email: values.email,
+      };
+
+      if (showPasswordFields && values.currentPassword && values.newPassword) {
+        requestBody.currentPassword = values.currentPassword;
+        requestBody.newPassword = values.newPassword;
       }
-      
+
       const response = await fetch(`${USERS_URL}/change-info`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${accessToken}`
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify(requestBody),
       });
-      
+
       const data = await response.json();
-      
+
       if (data.status === "success") {
         await fetchUserProfile();
         toast.success("Profile updated successfully!");
@@ -110,137 +139,146 @@ const ChangeInfo = () => {
       console.error("Error updating profile:", error);
       toast.error("An error occurred while updating your profile");
     } finally {
-      setIsSubmitting(false);
+      setSubmitting(false);
     }
-  };
-  
-  const validateEmail = (email: string) => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
-  };
-  
-  const cancelChanges = () => {
-    navigate("/profile");
   };
 
-  const togglePasswordFields = () => {
-    setShowPasswordFields(!showPasswordFields);
-    if (showPasswordFields) {
-      setFormData(prev => ({
-        ...prev,
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: ""
-      }));
-    }
+  const cancelChanges = () => {
+    navigate("/profile");
   };
 
   return (
     <div className="change-info">
       <div className="change-info__container">
-        <h2 className="change-info__title">Edit Profile Information</h2>
-        
-        <form onSubmit={saveChanges} className="change-info__form">
-          <div className="change-info__avatar">
-            <div className="image">
-              <img src="./src/assets/img1.png" alt="Avatar" />
-            </div>
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="name">Username</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Enter your username"
-              required
-            />
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter your email"
-              required
-            />
-          </div>
-          
-          <div className="form-group password-toggle">
-            <button 
-              type="button" 
-              className="btn btn-toggle" 
-              onClick={togglePasswordFields}
-            >
-              {showPasswordFields ? "Cancel Password Change" : "Change Password"}
-            </button>
-          </div>
-          
-          {showPasswordFields && (
-            <div className="password-fields">
+        <h2 className="change-info__title">Edit profile information</h2>
+
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={saveChanges}
+          enableReinitialize={true}
+        >
+          {({ isSubmitting, setFieldValue }) => (
+            <Form className="change-info__form">
+              <div className="change-info__avatar">
+                <div className="image">
+                  <img src="./src/assets/img1.png" alt="Avatar" />
+                </div>
+              </div>
+
               <div className="form-group">
-                <label htmlFor="currentPassword">Current Password</label>
-                <input
-                  type="password"
-                  id="currentPassword"
-                  name="currentPassword"
-                  value={formData.currentPassword}
-                  onChange={handleChange}
-                  placeholder="Enter your current password"
+                <label htmlFor="name">Username</label>
+                <Field
+                  type="text"
+                  id="name"
+                  name="name"
+                  placeholder="Enter your username"
+                />
+                <ErrorMessage
+                  name="name"
+                  component="div"
+                  className="error-message"
                 />
               </div>
-              
+
               <div className="form-group">
-                <label htmlFor="newPassword">New Password</label>
-                <input
-                  type="password"
-                  id="newPassword"
-                  name="newPassword"
-                  value={formData.newPassword}
-                  onChange={handleChange}
-                  placeholder="Enter your new password"
+                <label htmlFor="email">Email</label>
+                <Field
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="Enter your email"
+                />
+                <ErrorMessage
+                  name="email"
+                  component="div"
+                  className="error-message"
                 />
               </div>
-              
-              <div className="form-group">
-                <label htmlFor="confirmPassword">Confirm New Password</label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  placeholder="Confirm your new password"
-                />
+
+              <div className="form-group password-toggle">
+                <button
+                  type="button"
+                  className="btn btn-toggle"
+                  onClick={() => togglePasswordFields(setFieldValue)}
+                >
+                  {showPasswordFields
+                    ? "Cancel Password Change"
+                    : "Change Password"}
+                </button>
               </div>
-            </div>
+
+              {showPasswordFields && (
+                <div className="password-fields">
+                  <div className="form-group">
+                    <label htmlFor="currentPassword">Current Password</label>
+                    <Field
+                      type="password"
+                      id="currentPassword"
+                      name="currentPassword"
+                      placeholder="Enter your current password"
+                    />
+                    <ErrorMessage
+                      name="currentPassword"
+                      component="div"
+                      className="error-message"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="newPassword">New Password</label>
+                    <Field
+                      type="password"
+                      id="newPassword"
+                      name="newPassword"
+                      placeholder="Enter your new password"
+                    />
+                    <ErrorMessage
+                      name="newPassword"
+                      component="div"
+                      className="error-message"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="confirmPassword">
+                      Confirm New Password
+                    </label>
+                    <Field
+                      type="password"
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      placeholder="Confirm your new password"
+                    />
+                    <ErrorMessage
+                      name="confirmPassword"
+                      component="div"
+                      className="error-message"
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div className="change-info__actions">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={cancelChanges}
+                  disabled={isSubmitting}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Saving..." : "Save Changes"}
+                </button>
+              </div>
+            </Form>
           )}
-          
-          <div className="change-info__actions">
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={cancelChanges}
-              disabled={isSubmitting}
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Saving..." : "Save Changes"}
-            </button>
-          </div>
-        </form>
+        </Formik>
       </div>
     </div>
   );

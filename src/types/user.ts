@@ -2,6 +2,7 @@ export type UserData = {
   id: string;
   name: string;
   email: string;
+  profileImage?: string;
 }
 
 export type UserPublicData = {

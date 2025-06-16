@@ -83,7 +83,10 @@ const Profile = () => {
         <div className="profile__header">
           <div className="profile__avatar">
             <div className="image">
-              <img src="./src/assets/img1.png" alt="Avatar" />
+              <img
+                src={userData?.profileImage || "./src/assets/img1.png"}
+                alt="Avatar"
+              />
             </div>
           </div>
           <div className="profile__user-info">
@@ -128,7 +131,9 @@ const Profile = () => {
                   (quest: Quest) => quest.author.authorId === userData.id
                 )}
                 itemsPerPage={6}
-                renderItems={(quests) => <QuestCard quests={quests} isDeleteEnabled={true} />}
+                renderItems={(quests) => (
+                  <QuestCard quests={quests} isDeleteEnabled={true} />
+                )}
                 emptyMessage="You haven't created any quests yet."
               />
             </div>
@@ -150,11 +155,11 @@ const Profile = () => {
                   <>
                     {quests.map((quest: historyQuest, index) => {
                       if (!quest) return null;
-                      
+
                       const questDetails = allQuests.find(
                         (q: Quest) => q._id === quest.questId
                       );
-                      
+
                       return (
                         <HistoryCard
                           key={index}

@@ -53,7 +53,7 @@ const Navbar = memo(() => {
               <>
                 <Link to="/profile" className="navbar__profile">
                   <img
-                    src={profileImage}
+                    src={userData?.profileImage || profileImage}
                     alt="Profile"
                     className="profile-photo-circle"
                   />

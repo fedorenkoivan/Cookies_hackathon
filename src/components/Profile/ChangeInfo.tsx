@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import * as Yup from "yup";
@@ -11,6 +11,8 @@ import {
 import { useProfileContext } from "@/contexts/ProfileContext";
 import { toast } from "react-toastify";
 
+import { FaCamera, FaTimes } from "react-icons/fa";
+
 import "./ChangeInfo.scss";
 
 type FormValues = {
@@ -20,6 +22,7 @@ type FormValues = {
   newPassword: string;
   confirmPassword: string;
   showPasswordFields: boolean;
+  profileImage?: File | string;
 };
 
 const validationSchema = Yup.object({
@@ -54,14 +57,51 @@ const ChangeInfo = () => {
   const navigate = useNavigate();
   const { userData, fetchUserProfile } = useProfileContext();
   const [showPasswordFields, setShowPasswordFields] = useState(false);
-  const [initialValues, setInitialValues] = useState({
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [initialValues, setInitialValues] = useState<FormValues>({
     name: "",
     email: "",
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
     showPasswordFields: false,
+    profileImage: "",
   });
+
+  const handleImageChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    setFieldValue: (field: string, value: any) => void
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.match("image.*")) {
+      toast.error("Please select an image file");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image size must be less than 5MB");
+      return;
+    }
+
+    setFieldValue("profileImage", file);
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImagePreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const removeImage = (setFieldValue: (field: string, value: any) => void) => {
+    setFieldValue("profileImage", "");
+    setImagePreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
 
   useEffect(() => {
     if (userData) {
@@ -70,6 +110,10 @@ const ChangeInfo = () => {
         name: userData.name || "",
         email: userData.email || "",
       }));
+
+      if (userData.profileImage) {
+        setImagePreview(userData.profileImage);
+      }
     }
   }, [userData]);
 
@@ -100,30 +144,30 @@ const ChangeInfo = () => {
         return;
       }
 
-      type RequestBody = {
-        name: string;
-        email: string;
-        currentPassword?: string;
-        newPassword?: string;
-      };
+      const formData = new FormData();
+      formData.append("name", values.name);
+      formData.append("email", values.email);
 
-      const requestBody: RequestBody = {
-        name: values.name,
-        email: values.email,
-      };
+      if (values.profileImage instanceof File) {
+        console.log("Adding profile image to form", values.profileImage.name);
+        formData.append("profileImage", values.profileImage);
+      }
+
+      for (const pair of formData.entries()) {
+        console.log(`${pair[0]}: ${pair[1]}`);
+      }
 
       if (showPasswordFields && values.currentPassword && values.newPassword) {
-        requestBody.currentPassword = values.currentPassword;
-        requestBody.newPassword = values.newPassword;
+        formData.append("currentPassword", values.currentPassword);
+        formData.append("newPassword", values.newPassword);
       }
 
       const response = await fetch(`${USERS_URL}/change-info`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify(requestBody),
+        body: formData,
       });
 
       const data = await response.json();
@@ -162,7 +206,39 @@ const ChangeInfo = () => {
             <Form className="change-info__form">
               <div className="change-info__avatar">
                 <div className="image">
-                  <img src="./src/assets/img1.png" alt="Avatar" />
+                  <img
+                    src={
+                      imagePreview ||
+                      userData?.profileImage ||
+                      "./src/assets/img1.png"
+                    }
+                    alt="Avatar"
+                  />
+                  <div className="image-controls">
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      accept="image/*"
+                      style={{ display: "none" }}
+                      onChange={(e) => handleImageChange(e, setFieldValue)}
+                    />
+                    <button
+                      type="button"
+                      className="avatar-btn upload-btn"
+                      onClick={() => fileInputRef.current?.click()}
+                    >
+                      <FaCamera />
+                    </button>
+                    {imagePreview && (
+                      <button
+                        type="button"
+                        className="avatar-btn remove-btn"
+                        onClick={() => removeImage(setFieldValue)}
+                      >
+                        <FaTimes />
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
 

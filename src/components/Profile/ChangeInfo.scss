@@ -33,11 +33,13 @@
   }
   
   &__avatar {
+    position: relative;
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
     
     .image {
+      position: relative;
       width: 180px;
       height: 180px;
       border-radius: 50%;
@@ -49,6 +51,24 @@
         height: 180px;
         object-fit: cover;
       }
+
+      .image-controls {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        padding: 8px 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      &:hover .image-controls {
+        opacity: 1;
+      }
     }
   }
   
@@ -58,6 +78,32 @@
     gap: 15px;
     margin-top: 30px;
   }
+}
+
+.avatar-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &.upload-btn {
+    background-color: $soft-purple;
+    color: white;
+  }
+
+  &:hover {
+    background-color: darken(#ff3b30, 10%);
+  }
+}
+
+svg{
+  width: 16px;
+  height: 16px;
 }
 
 .form-group {

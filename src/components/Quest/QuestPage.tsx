@@ -84,7 +84,7 @@ const QuestPage = () => {
               {(() => {
                 const totalPoints = quest.questions.reduce(
                   (total, q) => total + (q.points || 1),
-                  0
+                  0,
                 );
                 return `Maximum score: ${totalPoints} point${
                   totalPoints !== 1 ? "s" : ""
@@ -98,7 +98,10 @@ const QuestPage = () => {
           <div className="author">
             <p>Created by</p>
             <div className="author-image">
-              <img src={avatarImage} />
+              <img
+                src={quest.author.profileImage || avatarImage}
+                alt={quest.author.username}
+              />
               <p>{quest.author.username}</p>
             </div>
           </div>
@@ -150,7 +153,10 @@ const QuestPage = () => {
                       <Review
                         key={index}
                         username={review.username}
-                        avatar={review.avatar}
+                        // avatar={review.avatar}
+                        reviewAuthorImage={
+                          review.reviewAuthorImage || review.avatar
+                        }
                         rating={review.rating}
                         comment={review.comment}
                         date={review.date}

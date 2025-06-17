@@ -8,7 +8,7 @@ import { userLoginEvent } from "@/utils/userData";
 import { storeTokenData } from "@/utils/authUtils";
 import { toast } from "react-toastify";
 import { USERS_URL, REQUIRED_TEXT } from "@/constants/authConstants";
-import './LogIn.scss';
+import "./LogIn.scss";
 
 const validationSchema = Yup.object({
   password: Yup.string()
@@ -16,7 +16,7 @@ const validationSchema = Yup.object({
     .matches(/[a-zA-Z]/, "Password can only contain Latin letters.")
     .required(REQUIRED_TEXT),
   passwordConfirm: Yup.string()
-    .oneOf([Yup.ref('password')], 'Passwords must match')
+    .oneOf([Yup.ref("password")], "Passwords must match")
     .required(REQUIRED_TEXT),
 });
 
@@ -29,7 +29,7 @@ const ResetPassword = () => {
     if (!resetToken) {
       setTokenValid(false);
       toast.error("Invalid reset token");
-      setTimeout(() => navigate('/forgot-password'), 2000);
+      setTimeout(() => navigate("/forgot-password"), 2000);
     }
   }, [resetToken, navigate]);
 
@@ -50,16 +50,19 @@ const ResetPassword = () => {
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting, setStatus }) => {
           try {
-            const response = await fetch(`${USERS_URL}/reset-password/${resetToken}`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
+            const response = await fetch(
+              `${USERS_URL}/reset-password/${resetToken}`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  password: values.password,
+                  passwordConfirm: values.passwordConfirm,
+                }),
               },
-              body: JSON.stringify({
-                password: values.password,
-                passwordConfirm: values.passwordConfirm
-              }),
-            });
+            );
 
             const data = await response.json();
 
@@ -67,28 +70,27 @@ const ResetPassword = () => {
               setStatus(data.message || `Error: ${response.statusText}`);
               return;
             }
-            if (data.status === 'success' && data.accessToken) {
+            if (data.status === "success" && data.accessToken) {
               try {
-                if (data.accessToken.split('.').length !== 3) {
-                  throw new Error('Invalid token format');
+                if (data.accessToken.split(".").length !== 3) {
+                  throw new Error("Invalid token format");
                 }
 
-                localStorage.setItem('accessToken', data.accessToken);
+                localStorage.setItem("accessToken", data.accessToken);
                 storeTokenData(data.accessToken);
                 window.dispatchEvent(new Event(userLoginEvent));
                 toast.success("Password successfully reset!");
                 navigate("/profile");
               } catch (tokenError) {
-                console.error('Token validation error:', tokenError);
-                setStatus('Error: Received invalid authentication token');
+                console.error("Token validation error:", tokenError);
+                setStatus("Error: Received invalid authentication token");
               }
             } else {
-              setStatus('Error: Invalid server response');
+              setStatus("Error: Invalid server response");
             }
-
           } catch (error) {
-            console.error('Error during password reset:', error);
-            setStatus('Connection error: Could not reach the server');
+            console.error("Error during password reset:", error);
+            setStatus("Connection error: Could not reach the server");
           } finally {
             setSubmitting(false);
           }
@@ -98,7 +100,11 @@ const ResetPassword = () => {
           <Form onSubmit={handleSubmit} className="form">
             {[
               { name: "password", label: "New Password", type: "password" },
-              { name: "passwordConfirm", label: "Confirm New Password", type: "password" },
+              {
+                name: "passwordConfirm",
+                label: "Confirm New Password",
+                type: "password",
+              },
             ].map(({ name, label, type }) => (
               <div key={name} className="form-group">
                 <label htmlFor={name}>{label} *</label>
@@ -116,7 +122,7 @@ const ResetPassword = () => {
                 endIcon={<SendIcon />}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Reseting password...' : 'Reset Password'}
+                {isSubmitting ? "Reseting password..." : "Reset Password"}
               </Button>
             </div>
           </Form>

@@ -102,7 +102,7 @@ export const QuestFormProvider: React.FC<{ children: ReactNode }> = ({
     (questionOrder: number): Question | undefined => {
       return questions.find((q) => q.order === questionOrder);
     },
-    [questions]
+    [questions],
   );
 
   //Question methods
@@ -128,7 +128,7 @@ export const QuestFormProvider: React.FC<{ children: ReactNode }> = ({
         return filtered.map((q, index) => ({ ...q, order: index }));
       });
     },
-    [questions.length]
+    [questions.length],
   );
 
   const updateQuestion = useCallback(
@@ -137,33 +137,33 @@ export const QuestFormProvider: React.FC<{ children: ReactNode }> = ({
       value: string,
       image: string,
       points: number,
-      answers: Answer[]
+      answers: Answer[],
     ) => {
       setQuestions((prev) =>
         prev.map((q) =>
-          q.order === order ? { ...q, value, image, points, answers } : q
-        )
+          q.order === order ? { ...q, value, image, points, answers } : q,
+        ),
       );
     },
-    []
+    [],
   );
 
   const updateQuestionValue = useCallback(
     (questionOrder: number, value: string) => {
       setQuestions((prev) =>
-        prev.map((q) => (q.order === questionOrder ? { ...q, value } : q))
+        prev.map((q) => (q.order === questionOrder ? { ...q, value } : q)),
       );
     },
-    []
+    [],
   );
 
   const updateQuestionImage = useCallback(
     (questionOrder: number, image: string) => {
       setQuestions((prev) =>
-        prev.map((q) => (q.order === questionOrder ? { ...q, image } : q))
+        prev.map((q) => (q.order === questionOrder ? { ...q, image } : q)),
       );
     },
-    []
+    [],
   );
 
   const updateQuestionPoints = useCallback(
@@ -171,11 +171,11 @@ export const QuestFormProvider: React.FC<{ children: ReactNode }> = ({
       const boundedPoints = Math.min(Math.max(0, points), 99);
       setQuestions((prev) =>
         prev.map((q) =>
-          q.order === questionOrder ? { ...q, points: boundedPoints } : q
-        )
+          q.order === questionOrder ? { ...q, points: boundedPoints } : q,
+        ),
       );
     },
-    []
+    [],
   );
 
   //Answer methods
@@ -184,21 +184,21 @@ export const QuestFormProvider: React.FC<{ children: ReactNode }> = ({
       questionOrder: number,
       order: number,
       value: string,
-      isCorrect: boolean
+      isCorrect: boolean,
     ) => {
       setQuestions((prev) =>
         prev.map((q) => {
           if (q.order !== questionOrder) return q;
 
           const updatedAnswers = q.answers.map((a) =>
-            a.order === order ? { ...a, value, isCorrect } : a
+            a.order === order ? { ...a, value, isCorrect } : a,
           );
 
           return { ...q, answers: updatedAnswers };
-        })
+        }),
       );
     },
-    []
+    [],
   );
 
   const addAnswer = useCallback((questionOrder: number) => {
@@ -209,12 +209,12 @@ export const QuestFormProvider: React.FC<{ children: ReactNode }> = ({
 
         return {
           ...q,
-					answers: [
+          answers: [
             ...q.answers,
             { order: q.answers.length, value: "", isCorrect: false },
           ],
         };
-      })
+      }),
     );
   }, []);
 
@@ -232,10 +232,10 @@ export const QuestFormProvider: React.FC<{ children: ReactNode }> = ({
           }));
 
           return { ...q, answers: reorderedAnswers };
-        })
+        }),
       );
     },
-    []
+    [],
   );
 
   return (

@@ -12,7 +12,7 @@ type QuestFormContextType = {
     value: string,
     image: string,
     points: number,
-    answers: Answer[]
+    answers: Answer[],
   ) => void;
   updateQuestionValue: (questionOrder: number, value: string) => void;
   updateQuestionImage: (questionOrder: number, image: string) => void;
@@ -21,7 +21,7 @@ type QuestFormContextType = {
     questionOrder: number,
     order: number,
     value: string,
-    isCorrect: boolean
+    isCorrect: boolean,
   ) => void;
   addAnswer: (questionOrder: number) => void;
   deleteAnswer: (questionOrder: number, answerOrder: number) => void;
@@ -44,13 +44,15 @@ type QuestFormContextType = {
   clearSavedData: () => void;
 };
 
-export const QuestFormContext = createContext<QuestFormContextType | undefined>(undefined);
+export const QuestFormContext = createContext<QuestFormContextType | undefined>(
+  undefined,
+);
 
 export const useQuestFormContext = () => {
   const context = useContext(QuestFormContext);
   if (!context) {
     throw new Error(
-      "useQuestFormContext must be used within a QuestFormProvider"
+      "useQuestFormContext must be used within a QuestFormProvider",
     );
   }
   return context;

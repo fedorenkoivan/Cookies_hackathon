@@ -9,11 +9,15 @@ const questSchema = new mongoose.Schema({
   author: {
     username: {
       type: String,
-      required: true
+      required: true,
     },
     authorId: {
-      type: String, 
-      required: true
+      type: String,
+      required: true,
+    },
+    profileImage: {
+      type: String,
+      default: "",
     },
   },
   description: {
@@ -79,14 +83,16 @@ const questSchema = new mongoose.Schema({
     default: Date.now(),
   },
   userRatings: {
-    type: [{
-      userId: String,
-      rating: Number,
-      comment: String,
-      date: { type: Date, default: Date.now }
-    }],
-    default: []
-  }
+    type: [
+      {
+        userId: String,
+        rating: Number,
+        comment: String,
+        date: { type: Date, default: Date.now },
+      },
+    ],
+    default: [],
+  },
 });
 
 questSchema.pre("save", async function (next) {

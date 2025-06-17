@@ -67,7 +67,7 @@ export const createAccessToken = (userId) => {
     {
       expiresIn: process.env.JWT_ACCESS_EXPIRES_IN,
       subject: idStr,
-    }
+    },
   );
 };
 
@@ -82,7 +82,7 @@ export const createRefreshToken = (userId) => {
     {
       expiresIn: process.env.JWT_REFRESH_EXPIRES_IN,
       subject: idStr,
-    }
+    },
   );
 };
 
@@ -93,7 +93,7 @@ export const handleTokens = async (userId, reply, options = {}) => {
   await User.findByIdAndUpdate(
     userId,
     { refreshToken },
-    { validateBeforeSave: false }
+    { validateBeforeSave: false },
   );
 
   const cookieOptions = { ...defaultOptions, ...options };

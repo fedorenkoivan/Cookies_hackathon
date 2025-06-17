@@ -1,9 +1,4 @@
-import {
-  PropsWithChildren,
-  useCallback,
-  useState,
-  useMemo,
-} from "react";
+import { PropsWithChildren, useCallback, useState, useMemo } from "react";
 import { Quest } from "@/types/quest";
 import { QUESTS_URL } from "@/constants/questConstants";
 import { QuestContext } from "./QuestContext";
@@ -27,7 +22,7 @@ export const QuestProvider = ({ children }: PropsWithChildren) => {
     getQuestByIdUrl,
     setQuestFromArray,
     setLoading,
-    setError
+    setError,
   );
 
   const value = useMemo(
@@ -37,12 +32,7 @@ export const QuestProvider = ({ children }: PropsWithChildren) => {
       error,
       fetchQuest,
     }),
-    [
-      questPreview,
-      loading,
-      error,
-      fetchQuest
-    ]
+    [questPreview, loading, error, fetchQuest],
   );
 
   return (

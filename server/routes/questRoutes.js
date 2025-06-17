@@ -1,9 +1,5 @@
 import { questModel } from "../models/questModel.js";
-import {
-  checkLimit,
-  checkFilters,
-  checkSort,
-} from "../utils/getUtils.js";
+import { checkLimit, checkFilters, checkSort } from "../utils/getUtils.js";
 import {
   generateFakeQuestResults,
   validateRatingInput,
@@ -16,15 +12,15 @@ import { asyncMap } from "../utils/asyncMap.js";
 import { compressImage } from "../utils/compressImage.js";
 import { verifyToken } from "../middleware/authMiddleWare.js";
 
-const getQuests = log({ category: "SYSTEM", funcName: "getQuests" })(
-  async (query) => {
-    const limitValue = checkLimit(query.limit);
-    const sort = checkSort(query.sort);
-    const filters = checkFilters(query);
-    const quests = await questModel.find(filters).sort(sort).limit(limitValue);
-    return quests;
-  }
-);
+const getQuests = log({ category: "SYSTEM", funcName: "getQuests" })(async (
+  query,
+) => {
+  const limitValue = checkLimit(query.limit);
+  const sort = checkSort(query.sort);
+  const filters = checkFilters(query);
+  const quests = await questModel.find(filters).sort(sort).limit(limitValue);
+  return quests;
+});
 
 const createQuest = async (body) => {
   await asyncMap(body.questions, async (question) => {
@@ -117,7 +113,7 @@ export default async function questRoutes(fastify) {
         status: "success",
         data: await createQuest(request.body),
       });
-    }
+    },
   );
 
   fastify.get(
@@ -128,7 +124,7 @@ export default async function questRoutes(fastify) {
       const questId = request.params.questId;
       const ratingInfo = await getQuestRatingInfo(questId, userId);
       return reply.code(200).send(ratingInfo);
-    }
+    },
   );
 
   fastify.post(
@@ -150,14 +146,14 @@ export default async function questRoutes(fastify) {
         questId,
         userId,
         Number(rating),
-        comment || ""
+        comment || "",
       );
 
       return reply.code(201).send({
         status: "success",
         data: result,
       });
-    }
+    },
   );
 
   fastify.get("/:questId/reviews", async (request, reply) => {
@@ -178,10 +174,8 @@ export default async function questRoutes(fastify) {
     await deleteQuest(request.params.questId);
     return reply.code(200).send({ success: true });
   });
-
 }
 
 const deleteQuest = log({ category: "SYSTEM", funcName: "deleteQuest" })(
-  async (questId) =>
-    await questModel.deleteOne({ _id: questId })
+  async (questId) => await questModel.deleteOne({ _id: questId }),
 );

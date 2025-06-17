@@ -1,5 +1,7 @@
-export const convertImage = async (e: React.ChangeEvent<HTMLInputElement>) : Promise<string> => {
-   return new Promise((resolve) => { 
+export const convertImage = async (
+  e: React.ChangeEvent<HTMLInputElement>,
+): Promise<string> => {
+  return new Promise((resolve) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();

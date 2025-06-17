@@ -7,6 +7,7 @@ import StarRatingAuto from "../Rating/StarRatingAuto";
 import { Quest } from "@/types/quest";
 import "./Slider.scss";
 import { useAppContext } from "@/contexts/AppContext";
+import defaultProfileImage from "@/assets/img1.png";
 
 const Slider = () => {
   const [savedQuests, setSavedQuests] = useState<string[]>(() => {
@@ -25,7 +26,7 @@ const Slider = () => {
     return () => {
       window.removeEventListener(
         "savedQuestsChanged",
-        handleSavedQuestsChanged
+        handleSavedQuestsChanged,
       );
     };
   }, []);
@@ -65,7 +66,19 @@ const Slider = () => {
               <div className="info-container">
                 <div className="top">
                   <div className="author">
-                    <FaUser className="icon" />
+                    {quest.author.profileImage ? (
+                      <img
+                        src={quest.author.profileImage}
+                        className="icon"
+                        alt={quest.author.username}
+                      />
+                    ) : (
+                      <img
+                        src={defaultProfileImage}
+                        className="icon"
+                        alt="default image"
+                      />
+                    )}
                     <button
                       className="author-name-button"
                       onClick={(e) => {

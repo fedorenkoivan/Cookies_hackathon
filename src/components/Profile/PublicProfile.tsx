@@ -29,7 +29,7 @@ const PublicProfile = () => {
     if (!userPublicData || !allQuests) return [];
 
     return allQuests.filter(
-      (quest: Quest) => quest.author.authorId === userPublicData.id
+      (quest: Quest) => quest.author.authorId === userPublicData.id,
     );
   }, [allQuests, userPublicData]);
 
@@ -51,7 +51,10 @@ const PublicProfile = () => {
         <div className="public-profile__header">
           <div className="public-profile__avatar">
             <div className="image">
-              <img src={defaultAvatar} alt="Avatar" />
+              <img
+                src={userPublicData.profileImage || defaultAvatar}
+                alt="Avatar"
+              />
             </div>
           </div>
           <div className="public-profile__user-info">

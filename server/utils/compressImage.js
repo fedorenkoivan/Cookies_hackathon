@@ -3,7 +3,7 @@ import sharp from "sharp";
 export const compressImage = async (base64String) => {
   if (!base64String) return "";
 
-  const idx = base64String.indexOf(',');
+  const idx = base64String.indexOf(",");
   const base64Data = idx !== -1 ? base64String.slice(idx + 1) : base64String;
 
   const buffer = Buffer.from(base64Data, "base64");

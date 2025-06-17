@@ -1,4 +1,10 @@
-import { PropsWithChildren, useMemo, useState, useCallback, useEffect } from "react";
+import {
+  PropsWithChildren,
+  useMemo,
+  useState,
+  useCallback,
+  useEffect,
+} from "react";
 import { AppContext } from "./AppContext";
 import { Quest } from "@/types/quest";
 import { QUESTS_URL } from "@/constants/questConstants";
@@ -27,7 +33,7 @@ export const AppProvider = ({ children }: PropsWithChildren) => {
     getAllQuestsUrl,
     setAllQuests,
     setLoading,
-    setError
+    setError,
   );
 
   const fetchBestQuests = useFetchQuests(
@@ -35,10 +41,10 @@ export const AppProvider = ({ children }: PropsWithChildren) => {
     getBestQuestsUrl,
     setBestQuests,
     setLoading,
-    setError
+    setError,
   );
 
-  const deleteQuest = useCallback( async (questId: string) => {
+  const deleteQuest = useCallback(async (questId: string) => {
     setLoading(true);
     try {
       await fetch(`${QUESTS_URL}/${questId}`, {
@@ -68,6 +74,14 @@ export const AppProvider = ({ children }: PropsWithChildren) => {
       fetchBestQuests,
       deleteQuest,
     };
-  }, [allQuests, bestQuests, fetchAllQuests, fetchBestQuests, deleteQuest, error, loading]);
+  }, [
+    allQuests,
+    bestQuests,
+    fetchAllQuests,
+    fetchBestQuests,
+    deleteQuest,
+    error,
+    loading,
+  ]);
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

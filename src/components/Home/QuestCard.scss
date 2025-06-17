@@ -160,13 +160,19 @@ $black: #000000;
 }
 
 .quests__card-author {
+  img.author-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+  }
   .author-name-button {
     margin-left: 5px;
     background: none;
     border: none;
     color: black;
     box-shadow: none;
-
     &:hover {
       color: #8e2de2;
     }

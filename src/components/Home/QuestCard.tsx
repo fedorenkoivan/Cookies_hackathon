@@ -36,7 +36,7 @@ const QuestCard = ({ quests, isDeleteEnabled = false }: QuestCardProps) => {
 
   const handleDeleteClick = (questId: string) => {
     const confirmed = window.confirm(
-      "Are you sure you want to delete this quest?"
+      "Are you sure you want to delete this quest?",
     );
 
     if (!confirmed) return;
@@ -47,7 +47,7 @@ const QuestCard = ({ quests, isDeleteEnabled = false }: QuestCardProps) => {
       setSavedQuests((prev) => prev.filter((id) => id !== questId));
       localStorage.setItem(
         "savedQuests",
-        JSON.stringify(savedQuests.filter((id) => id !== questId))
+        JSON.stringify(savedQuests.filter((id) => id !== questId)),
       );
       window.dispatchEvent(new Event("savedQuestsChanged"));
     }
@@ -61,7 +61,7 @@ const QuestCard = ({ quests, isDeleteEnabled = false }: QuestCardProps) => {
     return () => {
       window.removeEventListener(
         "savedQuestsChanged",
-        handleSavedQuestsChanged
+        handleSavedQuestsChanged,
       );
     };
   }, []);
@@ -98,7 +98,15 @@ const QuestCard = ({ quests, isDeleteEnabled = false }: QuestCardProps) => {
               <div className="quests__card-author">
                 <div className="author">
                   <div className="icon">
-                    <FaUser className="" />
+                    {quest.author.profileImage ? (
+                      <img
+                        src={quest.author.profileImage}
+                        alt={quest.author.username}
+                        className="author-avatar"
+                      />
+                    ) : (
+                      <FaUser className="" />
+                    )}
                   </div>
                   <button
                     className="author-name-button"

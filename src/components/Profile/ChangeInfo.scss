@@ -97,7 +97,7 @@
   }
 
   &:hover {
-    background-color: darken(#ff3b30, 10%);
+    background-color: color.adjust(#ff3b30, $lightness: 10%);
   }
 }
 

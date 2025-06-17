@@ -18,11 +18,7 @@ const PublicProfile = () => {
   const { userPublicData, loading, error, fetchUserPublicProfile } =
     useProfileContext();
   const { allQuests } = useAppContext();
-useEffect(() => {
-  if (userPublicData) {
-    console.log("PublicProfile user data:", userPublicData);
-  }
-}, [userPublicData]);
+
   useEffect(() => {
     if (userId) {
       fetchUserPublicProfile(userId);

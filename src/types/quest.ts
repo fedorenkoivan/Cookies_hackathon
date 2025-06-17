@@ -14,13 +14,13 @@ export type Question = {
 
 export type ExtendedQuestion = Question & {
   _id: string;
-}
+};
 
 export type Author = {
-  username: string,
-  authorId: string,
-  profileImage?: string,
-}
+  username: string;
+  authorId: string;
+  profileImage?: string;
+};
 
 export type Quest = {
   author: Author;
@@ -46,13 +46,13 @@ export type SavedFormData = {
 };
 
 export type CompletedQuestInfo = {
-  questTitle: string,
-  questId: string,
+  questTitle: string;
+  questId: string;
   userRating: number;
   userComment: string;
   score: number;
   totalTime: string;
-  avgTimePerQuestion: string; 
+  avgTimePerQuestion: string;
 };
 
 export type historyQuest = {

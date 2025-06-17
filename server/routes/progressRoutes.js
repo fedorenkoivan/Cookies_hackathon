@@ -30,23 +30,24 @@ export default async function progressRoutes(fastify) {
 const deleteHistory = log({ category: "SYSTEM", funcName: "deleteHistory" })(
   async (id) => {
     await progressModel.deleteOne({ _id: id });
-  }
+  },
 );
 
-const deleteHistoryByQuest = log({ category: "SYSTEM", funcName: "deleteHistoryByQuest" })(
-  async (questId) => {
-    const result = await progressModel.deleteMany({ questId });
-    return result.deletedCount;
-  }
-);
+const deleteHistoryByQuest = log({
+  category: "SYSTEM",
+  funcName: "deleteHistoryByQuest",
+})(async (questId) => {
+  const result = await progressModel.deleteMany({ questId });
+  return result.deletedCount;
+});
 
-const getHistory = log({ category: "SYSTEM", funcName: "getHistory" })(
-  async (query) => {
-    const filters = checkFilters(query);
-    const history = await progressModel.find(filters);
-    return history;
-  }
-);
+const getHistory = log({ category: "SYSTEM", funcName: "getHistory" })(async (
+  query,
+) => {
+  const filters = checkFilters(query);
+  const history = await progressModel.find(filters);
+  return history;
+});
 
 const saveProgress = log({ category: "SYSTEM", funcName: "saveProgress" })(
   async (body) => {
@@ -85,5 +86,5 @@ const saveProgress = log({ category: "SYSTEM", funcName: "saveProgress" })(
 
     await progress.save();
     return progress;
-  }
+  },
 );

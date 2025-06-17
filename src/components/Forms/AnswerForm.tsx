@@ -7,16 +7,12 @@ interface AnswerProps {
   answerOrder: number;
 }
 
-const AnswerForm: React.FC<AnswerProps> = ({
-  questionOrder,
-  answerOrder,
-}) => {
-
+const AnswerForm: React.FC<AnswerProps> = ({ questionOrder, answerOrder }) => {
   const { updateAnswer, deleteAnswer, findQuestion } = useQuestFormContext();
   const question = findQuestion(questionOrder);
   if (!question) return null;
 
-  const answer = question.answers.find(a => a.order === answerOrder);
+  const answer = question.answers.find((a) => a.order === answerOrder);
   if (!answer) return null;
 
   const removeAnswer = () => {

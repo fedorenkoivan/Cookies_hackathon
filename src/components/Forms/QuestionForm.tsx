@@ -93,7 +93,10 @@ const QuestionsForm: React.FC<QuestionProps> = ({
                 value={question.points}
                 onChange={(e) => {
                   if (e.target.value) {
-                    updateQuestionPoints(questionOrder, parseInt(e.target.value));
+                    updateQuestionPoints(
+                      questionOrder,
+                      parseInt(e.target.value),
+                    );
                   } else {
                     updateQuestionPoints(questionOrder, 0);
                   }

@@ -4,8 +4,10 @@
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
@@ -65,15 +67,15 @@
 
 .review-rating {
   display: flex;
-  
+
   .star {
     margin-right: 2px;
     color: #e0e0e0;
-    
+
     &.filled {
       color: #ffc107;
     }
-    
+
     &:last-child {
       margin-right: 0;
     }

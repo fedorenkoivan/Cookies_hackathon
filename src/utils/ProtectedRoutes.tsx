@@ -6,7 +6,7 @@ const ProtectedRoutes = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
+    const accessToken = localStorage.getItem("accessToken");
     setIsAuthenticated(!!accessToken);
     setIsLoading(false);
   }, []);

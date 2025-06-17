@@ -26,7 +26,7 @@ const Slider = () => {
     return () => {
       window.removeEventListener(
         "savedQuestsChanged",
-        handleSavedQuestsChanged
+        handleSavedQuestsChanged,
       );
     };
   }, []);

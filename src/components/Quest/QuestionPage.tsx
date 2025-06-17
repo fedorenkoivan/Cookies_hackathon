@@ -16,17 +16,17 @@ const QuestionPage = () => {
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [question, setQuestion] = useState<Question | null>(
-    quest?.questions[0] || null
+    quest?.questions[0] || null,
   );
   const [time, setTime] = useState<number | null>(
-    quest?.time !== undefined ? quest.time : null
+    quest?.time !== undefined ? quest.time : null,
   );
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
   const [points, setPoints] = useState<number>(question?.points || 0);
   const [score, setScore] = useState<number>(0);
   const isNavigatingRef = useRef(false);
   const [correctAnswers, setCorrectAnswers] = useState<string[]>(
-    question?.answers.filter((a) => a.isCorrect).map((a) => a.value) || []
+    question?.answers.filter((a) => a.isCorrect).map((a) => a.value) || [],
   );
   const [showAnswers, setShowAnswers] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -41,7 +41,7 @@ const QuestionPage = () => {
 
   const saveProgress = async (
     isFinished = false,
-    finalScore: number | null = null
+    finalScore: number | null = null,
   ) => {
     if (isSubmitting) return;
     setIsSubmitting(true);
@@ -110,7 +110,7 @@ const QuestionPage = () => {
   useEffect(() => {
     if (quest && quest.questions && quest.questions.length > 0) {
       const savedProgress = JSON.parse(
-        localStorage.getItem(`quest_progress_${questId}`) || "null"
+        localStorage.getItem(`quest_progress_${questId}`) || "null",
       );
 
       if (savedProgress) {
@@ -119,13 +119,13 @@ const QuestionPage = () => {
         setSelectedAnswers(savedProgress.selectedAnswers);
         setTime(savedProgress.timeRemaining);
         setPoints(
-          quest.questions[savedProgress.currentQuestionIndex].points || 0
+          quest.questions[savedProgress.currentQuestionIndex].points || 0,
         );
         setScore(savedProgress.score || 0);
         setCorrectAnswers(
           quest.questions[savedProgress.currentQuestionIndex].answers
             .filter((a) => a.isCorrect)
-            .map((a) => a.value)
+            .map((a) => a.value),
         );
       } else {
         setCurrentQuestionIndex(0);
@@ -137,7 +137,7 @@ const QuestionPage = () => {
         setCorrectAnswers(
           quest.questions[0].answers
             .filter((a) => a.isCorrect)
-            .map((a) => a.value)
+            .map((a) => a.value),
         );
       }
     }
@@ -153,7 +153,7 @@ const QuestionPage = () => {
 
   const calculateScore = (prevScore: number) => {
     const correctCount = selectedAnswers.filter((answer) =>
-      correctAnswers.includes(answer)
+      correctAnswers.includes(answer),
     ).length;
 
     const score = ((correctCount / correctAnswers.length) * points).toFixed(1);
@@ -181,7 +181,7 @@ const QuestionPage = () => {
         setCorrectAnswers(
           quest.questions[nextIndex].answers
             .filter((a) => a.isCorrect)
-            .map((a) => a.value)
+            .map((a) => a.value),
         );
       } else {
         isNavigatingRef.current = true;
@@ -208,7 +208,7 @@ const QuestionPage = () => {
   const handleContinueLater = async () => {
     if (isSubmitting) return;
     const confirmed = window.confirm(
-      "Your progress will be saved and you can continue later. Exit now?"
+      "Your progress will be saved and you can continue later. Exit now?",
     );
 
     if (!confirmed) return;
@@ -231,7 +231,7 @@ const QuestionPage = () => {
         };
         localStorage.setItem(
           `quest_progress_${questId}`,
-          JSON.stringify(progressData)
+          JSON.stringify(progressData),
         );
 
         e.preventDefault();
@@ -245,7 +245,7 @@ const QuestionPage = () => {
   const handleExit = async () => {
     if (isSubmitting) return;
     const confirmed = window.confirm(
-      "Are you sure you want to exit? Your progress will not be saved."
+      "Are you sure you want to exit? Your progress will not be saved.",
     );
 
     if (!confirmed) return;

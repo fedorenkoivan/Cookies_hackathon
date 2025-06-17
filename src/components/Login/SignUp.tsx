@@ -6,18 +6,23 @@ import SendIcon from "@mui/icons-material/Send";
 import { userLoginEvent } from "@/utils/userData";
 import { storeTokenData } from "@/utils/authUtils";
 import { useAppContext } from "@/contexts/AppContext";
-import { USERS_URL, REQUIRED_TEXT, MIN_PASSWORD_LENGTH, ONLY_LATIN_LETTERS } from "@/constants/authConstants";
+import {
+  USERS_URL,
+  REQUIRED_TEXT,
+  MIN_PASSWORD_LENGTH,
+  ONLY_LATIN_LETTERS,
+} from "@/constants/authConstants";
 
 import "./SignUp.scss";
 
 const validationSchema = Yup.object({
-  username: Yup.string()
-    .required(REQUIRED_TEXT),
-  email: Yup.string()
-    .email("Invalid email format")
-    .required(REQUIRED_TEXT),
+  username: Yup.string().required(REQUIRED_TEXT),
+  email: Yup.string().email("Invalid email format").required(REQUIRED_TEXT),
   password: Yup.string()
-    .min(MIN_PASSWORD_LENGTH, "Password is too short - should be 8 chars minimum.")
+    .min(
+      MIN_PASSWORD_LENGTH,
+      "Password is too short - should be 8 chars minimum.",
+    )
     .matches(ONLY_LATIN_LETTERS, "Password can only contain Latin letters.")
     .required(REQUIRED_TEXT),
   confirmPassword: Yup.string()
@@ -32,7 +37,15 @@ const SignUp = () => {
 
   const handleSubmit = async (
     values: { username: string; email: string; password: string },
-    { setSubmitting, setStatus }: FormikHelpers<{ username: string; email: string; password: string; confirmPassword: string }>
+    {
+      setSubmitting,
+      setStatus,
+    }: FormikHelpers<{
+      username: string;
+      email: string;
+      password: string;
+      confirmPassword: string;
+    }>,
   ) => {
     try {
       const response = await fetch(`${USERS_URL}/signup`, {

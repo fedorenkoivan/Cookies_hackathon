@@ -15,13 +15,13 @@ import { useFetchQuests } from "@/hooks/useFetchQuests";
 
 export const ProfileProvider = ({ children }: PropsWithChildren) => {
   const [userData, setUserData] = useState<UserData | null>(
-    getCachedUserData()
+    getCachedUserData(),
   );
   const [userPublicData, setUserPublicData] = useState<UserPublicData | null>(
-    null
+    null,
   );
   const [historyQuests, setHistoryQuests] = useState<historyQuest[] | null>(
-    null
+    null,
   );
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -61,7 +61,7 @@ export const ProfileProvider = ({ children }: PropsWithChildren) => {
         sessionStorage.setItem("isAuthorized", "true");
         cacheUserData(data.data.user);
         setAuthStatus(true);
-        } else {
+      } else {
         if (response.status === 401) {
           localStorage.removeItem("accessToken");
           setAuthStatus(false);
@@ -117,18 +117,18 @@ export const ProfileProvider = ({ children }: PropsWithChildren) => {
     getHistoryURL,
     setHistoryQuests,
     setLoading,
-    setError
+    setError,
   );
 
   const deleteHistoryQuests = useCallback(
     async (_id: string, byQuest: boolean = false) => {
       const result = await fetch(
         `${PROGRESS_URL}/${byQuest ? `by-quest/${_id}` : _id}`,
-        { method: "DELETE" }
+        { method: "DELETE" },
       );
       if (result.ok) {
         setHistoryQuests((prev) =>
-          prev ? prev.filter((quest) => quest._id !== _id) : null
+          prev ? prev.filter((quest) => quest._id !== _id) : null,
         );
       } else {
         const errorData = await result.json();
@@ -138,7 +138,7 @@ export const ProfileProvider = ({ children }: PropsWithChildren) => {
 
       await fetchHistoryQuests();
     },
-    [fetchHistoryQuests]
+    [fetchHistoryQuests],
   );
 
   useEffect(() => {
@@ -217,7 +217,7 @@ export const ProfileProvider = ({ children }: PropsWithChildren) => {
       fetchHistoryQuests,
       deleteHistoryQuests,
       logout,
-    ]
+    ],
   );
 
   return (

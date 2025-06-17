@@ -20,7 +20,7 @@ import validator from "validator";
 import path from "path";
 import fs from "fs";
 import { profile } from "console";
-import {compressImage} from "../utils/compressImage.js";
+import { compressImage } from "../utils/compressImage.js";
 
 export default async function userRoutes(fastify) {
   fastify.post(
@@ -44,7 +44,7 @@ export default async function userRoutes(fastify) {
           user: { id: newUser._id, name: newUser.name, email: newUser.email },
         },
       });
-    }
+    },
   );
 
   fastify.post(
@@ -52,7 +52,7 @@ export default async function userRoutes(fastify) {
     { preHandler: logRoute("login") },
     async (request, reply) => {
       const { isInputValid, inputErrorMsg, inputCode } = validateLoginInput(
-        request.body
+        request.body,
       );
       if (!isInputValid) {
         throw HttpError.createFromStatusCode(inputCode, inputErrorMsg);
@@ -66,7 +66,7 @@ export default async function userRoutes(fastify) {
       const accessToken = await handleTokens(user._id, reply);
 
       reply.code(200).send({ status: "success", accessToken });
-    }
+    },
   );
 
   fastify.post(
@@ -91,7 +91,7 @@ export default async function userRoutes(fastify) {
       reply
         .code(200)
         .send({ status: "success", message: "Logged out successfully" });
-    }
+    },
   );
 
   fastify.get(
@@ -118,11 +118,11 @@ export default async function userRoutes(fastify) {
             id: user._id,
             name: user.name,
             email: user.email,
-            profileImage: user.profileImage
+            profileImage: user.profileImage,
           },
         },
       });
-    }
+    },
   );
 
   fastify.get(
@@ -147,11 +147,11 @@ export default async function userRoutes(fastify) {
           user: {
             id: user._id,
             name: user.name,
-            profileImage: user.profileImage
+            profileImage: user.profileImage,
           },
         },
       });
-    }
+    },
   );
 
   fastify.post(
@@ -195,10 +195,10 @@ export default async function userRoutes(fastify) {
 
         throw createError(
           "INTERNAL_SERVER_ERROR",
-          "There was an error sending the email. Try again later."
+          "There was an error sending the email. Try again later.",
         );
       }
-    }
+    },
   );
 
   fastify.post(
@@ -218,7 +218,7 @@ export default async function userRoutes(fastify) {
         try {
           const isValidToken = await argon2.verify(
             potentialUser.passwordResetToken,
-            resetToken
+            resetToken,
           );
 
           if (isValidToken) {
@@ -249,7 +249,7 @@ export default async function userRoutes(fastify) {
       reply.setCookie("refreshToken", refreshToken, defaultOptions);
 
       reply.code(200).send({ status: "success", accessToken });
-    }
+    },
   );
 
   fastify.post(
@@ -272,88 +272,89 @@ export default async function userRoutes(fastify) {
 
       const accessToken = await handleTokens(user._id, reply);
       reply.code(200).send({ status: "success", accessToken });
-    }
+    },
   );
 
   fastify.post(
-  "/change-info",
-  {
-    preValidation: [verifyToken],
-  },
-  async (request, reply) => {
-    try {
-      const userId = request.user.id;
-      
-      const updateData = {};
-      let profileImageBase64 = null;
-      
+    "/change-info",
+    {
+      preValidation: [verifyToken],
+    },
+    async (request, reply) => {
       try {
-        const parts = request.parts();
-        
-        for await (const part of parts) {
-          if (part.file) {
-            if (part.fieldname === 'profileImage') {
-              try {
-                const buffer = await part.toBuffer();
-                const base64Image = `data:${part.mimetype};base64,${buffer.toString('base64')}`;
-                profileImageBase64 = await compressImage(base64Image);
-              } catch (fileError) {
-                console.error("File processing error:", fileError);
-                throw new Error(`File processing failed: ${fileError.message}`);
+        const userId = request.user.id;
+
+        const updateData = {};
+        let profileImageBase64 = null;
+
+        try {
+          const parts = request.parts();
+
+          for await (const part of parts) {
+            if (part.file) {
+              if (part.fieldname === "profileImage") {
+                try {
+                  const buffer = await part.toBuffer();
+                  const base64Image = `data:${part.mimetype};base64,${buffer.toString("base64")}`;
+                  profileImageBase64 = await compressImage(base64Image);
+                } catch (fileError) {
+                  console.error("File processing error:", fileError);
+                  throw new Error(
+                    `File processing failed: ${fileError.message}`,
+                  );
+                }
               }
+            } else {
+              updateData[part.fieldname] = part.value;
             }
-          } else {
-            updateData[part.fieldname] = part.value;
           }
-        }
-        
-      } catch (partsError) {
-        console.error("Error processing form data:", partsError);
-        return reply.code(400).send({
-          status: "error",
-          message: `Error processing form data: ${partsError.message}`
-        });
-      }
-      
-      if (profileImageBase64) {
-        updateData.profileImage = profileImageBase64;
-      }
-      
-      try {
-        const updatedUser = await User.findByIdAndUpdate(
-          userId,
-          updateData,
-          { new: true, select: '-password -refreshToken -passwordResetToken -passwordResetExpires' }
-        );
-        
-        if (!updatedUser) {
-          return reply.code(404).send({
+        } catch (partsError) {
+          console.error("Error processing form data:", partsError);
+          return reply.code(400).send({
             status: "error",
-            message: "User not found"
+            message: `Error processing form data: ${partsError.message}`,
           });
         }
-        
-        return reply.send({
-          status: "success",
-          message: "Profile updated successfully",
-          data: { user: updatedUser }
-        });
-        
-      } catch (dbError) {
-        console.error("Database error during update:", dbError);
+
+        if (profileImageBase64) {
+          updateData.profileImage = profileImageBase64;
+        }
+
+        try {
+          const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
+            new: true,
+            select:
+              "-password -refreshToken -passwordResetToken -passwordResetExpires",
+          });
+
+          if (!updatedUser) {
+            return reply.code(404).send({
+              status: "error",
+              message: "User not found",
+            });
+          }
+
+          return reply.send({
+            status: "success",
+            message: "Profile updated successfully",
+            data: { user: updatedUser },
+          });
+        } catch (dbError) {
+          console.error("Database error during update:", dbError);
+          return reply.code(500).send({
+            status: "error",
+            message: `Database error: ${dbError.message}`,
+          });
+        }
+      } catch (error) {
+        console.error("Unexpected error in profile update:", error);
         return reply.code(500).send({
           status: "error",
-          message: `Database error: ${dbError.message}`
+          message: "An error occurred while updating profile",
+          details:
+            process.env.NODE_ENV === "development" ? error.message : undefined,
         });
       }
-    } catch (error) {
-      console.error("Unexpected error in profile update:", error);
-      return reply.code(500).send({
-        status: "error",
-        message: "An error occurred while updating profile",
-        details: process.env.NODE_ENV === 'development' ? error.message : undefined
-      });
-    }
-  }
-);
+    },
+  );
 }

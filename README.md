@@ -46,8 +46,6 @@ The **Virtual Quest Platform** is an interactive web application that allows use
 - **Backend**: Node.js, Fastify
 - **Database**: MongoDB
 
-
-
 ## 🤝 Contributing
 
 We welcome contributions! Feel free to submit issues, fork the repo, and create pull requests.
@@ -55,4 +53,3 @@ We welcome contributions! Feel free to submit issues, fork the repo, and create 
 ## 📜 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-

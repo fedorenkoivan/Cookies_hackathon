@@ -63,19 +63,19 @@ const QuestFormContent = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     const accessToken = localStorage.getItem("accessToken");
     e.preventDefault();
-    
+
     try {
       const userData = sessionStorage.getItem("userData");
-      if(!userData) throw new Error("User data not found in session storage");
-      
+      if (!userData) throw new Error("User data not found in session storage");
+
       const parsedUserData = JSON.parse(userData);
-      
+
       const username = parsedUserData.name || "Anonymous";
       const authorId = parsedUserData.id || "";
       const profileImage = parsedUserData.profileImage || "";
 
-      const author = {username, authorId, profileImage};
-      
+      const author = { username, authorId, profileImage };
+
       const response = await fetch(`${URL}/create`, {
         method: "POST",
         headers: {
@@ -92,12 +92,12 @@ const QuestFormContent = () => {
           image,
         }),
       });
-      
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Failed to create quest");
       }
-      
+
       await fetchAllQuests();
       clearSavedData();
       navigate("/");
@@ -204,7 +204,7 @@ const QuestFormContent = () => {
                 value={time}
                 onChange={(e) => {
                   setTime(
-                    Math.min(Math.max(0, parseInt(e.target.value) || 0), 999)
+                    Math.min(Math.max(0, parseInt(e.target.value) || 0), 999),
                   );
                 }}
               />

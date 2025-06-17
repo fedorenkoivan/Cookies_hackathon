@@ -5,7 +5,7 @@ import { Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { toast } from "react-toastify";
 import { USERS_URL } from "@/constants/authConstants";
-import './LogIn.scss';
+import "./LogIn.scss";
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -15,13 +15,15 @@ const validationSchema = Yup.object({
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
-  
+
   return (
     <div className="card">
       <div className="banner">
         <p className="logo">🍪 Cookies</p>
         <h2 className="title">Forgot password?</h2>
-        <p className="subtitle">Don't worry, we'll settle that up in a minute!</p>
+        <p className="subtitle">
+          Don't worry, we'll settle that up in a minute!
+        </p>
       </div>
 
       <Formik
@@ -30,29 +32,28 @@ const ForgotPassword = () => {
         onSubmit={async (values, { setSubmitting, setStatus, resetForm }) => {
           try {
             const response = await fetch(`${USERS_URL}/forgot-password`, {
-              method: 'POST',
+              method: "POST",
               headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
               },
-              body: JSON.stringify({ 
-                email: values.email
+              body: JSON.stringify({
+                email: values.email,
               }),
             });
-            
+
             const data = await response.json();
-            
+
             if (!response.ok) {
               setStatus(data.message || `Error: ${response.statusText}`);
               return;
             }
-            
+
             toast.success("Password reset link sent to your email!");
             resetForm();
             navigate("/log-in");
-            
           } catch (error) {
-            console.error('Error during password reset request:', error);
-            setStatus('Connection error: Could not reach the server');
+            console.error("Error during password reset request:", error);
+            setStatus("Connection error: Could not reach the server");
           } finally {
             setSubmitting(false);
           }
@@ -62,12 +63,12 @@ const ForgotPassword = () => {
           <Form onSubmit={handleSubmit} className="form">
             <div className="form-group">
               <label htmlFor="email">Your email *</label>
-              <Field 
-                type="email" 
-                id="email" 
-                name="email" 
+              <Field
+                type="email"
+                id="email"
+                name="email"
                 className="input"
-                placeholder="Enter the email you used to register" 
+                placeholder="Enter the email you used to register"
               />
               <ErrorMessage name="email" component="div" className="error" />
             </div>
@@ -75,21 +76,21 @@ const ForgotPassword = () => {
             {status && <div className="error">{status}</div>}
 
             <div className="btn-container">
-              <Button 
-                type="submit" 
-                variant="contained" 
+              <Button
+                type="submit"
+                variant="contained"
                 endIcon={<SendIcon />}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Sending Reset Link...' : 'Send Reset Link'}
+                {isSubmitting ? "Sending Reset Link..." : "Send Reset Link"}
               </Button>
             </div>
             <div className="links">
-              <a className="account" onClick={() => navigate('/log-in')}>
+              <a className="account" onClick={() => navigate("/log-in")}>
                 Remember your password? Log In
               </a>
               <br />
-              <a className="account" onClick={() => navigate('/sign-up')}>
+              <a className="account" onClick={() => navigate("/sign-up")}>
                 Don't have an account? Sign up
               </a>
             </div>

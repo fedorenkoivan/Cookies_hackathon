@@ -32,7 +32,7 @@ const HistoryCard: React.FC<HistoryCardProps> = ({
     if (questDetails === undefined) return 0;
     if (questDetails.questions.length === 0) return 0;
     return Math.round(
-      (currentQuestionIndex / questDetails.questions.length) * 100
+      (currentQuestionIndex / questDetails.questions.length) * 100,
     );
   };
 

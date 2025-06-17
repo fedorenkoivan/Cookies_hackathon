@@ -49,7 +49,7 @@ const Profile = () => {
 
     historyQuests.forEach((quest) => {
       const questDetails = allQuests.find(
-        (q: Quest) => q._id === quest.questId
+        (q: Quest) => q._id === quest.questId,
       );
       if (!questDetails?.questions?.length) return;
 
@@ -128,7 +128,7 @@ const Profile = () => {
             <div className="quests">
               <PaginatedContent
                 items={filteredQuests.filter(
-                  (quest: Quest) => quest.author.authorId === userData.id
+                  (quest: Quest) => quest.author.authorId === userData.id,
                 )}
                 itemsPerPage={6}
                 renderItems={(quests) => (
@@ -157,7 +157,7 @@ const Profile = () => {
                       if (!quest) return null;
 
                       const questDetails = allQuests.find(
-                        (q: Quest) => q._id === quest.questId
+                        (q: Quest) => q._id === quest.questId,
                       );
 
                       return (

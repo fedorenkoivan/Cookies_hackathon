@@ -32,12 +32,12 @@ export class BidirectionalPriorityQueue<T> {
     if (direction === "max") {
       return this.items.reduce(
         (min, curr) => (curr.priority < min.priority ? curr : min),
-        this.items[0]
+        this.items[0],
       );
     } else {
       return this.items.reduce(
         (max, curr) => (curr.priority > max.priority ? curr : max),
-        this.items[0]
+        this.items[0],
       );
     }
   }

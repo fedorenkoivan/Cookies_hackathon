@@ -5,7 +5,7 @@ export const useFetchQuests = <T extends unknown[], R>(
   getURL: (...params: T) => string,
   onSuccess: (quests: R) => void,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-  setError: React.Dispatch<React.SetStateAction<string | null>>
+  setError: React.Dispatch<React.SetStateAction<string | null>>,
 ) => {
   return useCallback(
     async (...params: T) => {
@@ -33,6 +33,6 @@ export const useFetchQuests = <T extends unknown[], R>(
         setLoading(false);
       }
     },
-    [getURL, onSuccess, errMsg, setLoading, setError]
+    [getURL, onSuccess, errMsg, setLoading, setError],
   );
 };

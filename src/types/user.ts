@@ -3,10 +3,10 @@ export type UserData = {
   name: string;
   email: string;
   profileImage?: string;
-}
+};
 
 export type UserPublicData = {
   id: string;
   name: string;
   profileImage: string;
-}
+};

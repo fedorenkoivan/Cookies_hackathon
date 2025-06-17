@@ -1,15 +1,15 @@
-import './Footer.scss';
+import "./Footer.scss";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  
+
   const contributors = [
     { name: "Loban Mykhailo", github: "https://github.com/LobanMihajlo" },
     { name: "Mariia Khorunzha", github: "https://github.com/Impe11e" },
     { name: "Maksym Kramarenko", github: "https://github.com/Maks9m" },
-    { name: "Ivan Fedorenko", github: "https://github.com/fedorenkoivan" }
+    { name: "Ivan Fedorenko", github: "https://github.com/fedorenkoivan" },
   ];
-  
+
   return (
     <footer>
       <div className="footer-content">
@@ -17,11 +17,11 @@ const Footer = () => {
           <h3>Contributors</h3>
           <div className="contributors-grid">
             {contributors.map((contributor, index) => (
-              <a 
+              <a
                 key={index}
-                href={contributor.github} 
+                href={contributor.github}
                 className="contributor-link"
-                target="_blank" 
+                target="_blank"
                 rel="noopener noreferrer"
               >
                 <i className="fab fa-github"></i>
@@ -30,8 +30,10 @@ const Footer = () => {
             ))}
           </div>
         </div>
-        
-        <p className="copyright">© {currentYear} Cookies Team. All rights reserved.</p>
+
+        <p className="copyright">
+          © {currentYear} Cookies Team. All rights reserved.
+        </p>
       </div>
     </footer>
   );

@@ -6,7 +6,12 @@ import SendIcon from "@mui/icons-material/Send";
 import { userLoginEvent } from "@/utils/userData";
 import { storeTokenData } from "@/utils/authUtils";
 import { useAppContext } from "@/contexts/AppContext";
-import { USERS_URL, REQUIRED_TEXT, MIN_PASSWORD_LENGTH, ONLY_LATIN_LETTERS } from "@/constants/authConstants";
+import {
+  USERS_URL,
+  REQUIRED_TEXT,
+  MIN_PASSWORD_LENGTH,
+  ONLY_LATIN_LETTERS,
+} from "@/constants/authConstants";
 import "./LogIn.scss";
 
 const validationSchema = Yup.object({
@@ -14,7 +19,10 @@ const validationSchema = Yup.object({
     .email("Invalid email format")
     .required(REQUIRED_TEXT),
   password: Yup.string()
-    .min(MIN_PASSWORD_LENGTH, "Password is too short - should be 8 chars minimum.")
+    .min(
+      MIN_PASSWORD_LENGTH,
+      "Password is too short - should be 8 chars minimum.",
+    )
     .matches(ONLY_LATIN_LETTERS, "Password can only contain Latin letters.")
     .required(REQUIRED_TEXT),
 });
@@ -25,7 +33,10 @@ const LogIn = () => {
 
   const handleSubmit = async (
     values: { companyEmail: string; password: string },
-    { setSubmitting, setStatus }: FormikHelpers<{ companyEmail: string; password: string }>
+    {
+      setSubmitting,
+      setStatus,
+    }: FormikHelpers<{ companyEmail: string; password: string }>,
   ) => {
     try {
       const response = await fetch(`${USERS_URL}/login`, {

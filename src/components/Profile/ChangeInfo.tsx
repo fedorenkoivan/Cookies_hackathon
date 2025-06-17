@@ -71,7 +71,7 @@ const ChangeInfo = () => {
 
   const handleImageChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-    setFieldValue: (field: string, value: any) => void
+    setFieldValue: (field: string, value: any) => void,
   ) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -118,7 +118,11 @@ const ChangeInfo = () => {
   }, [userData]);
 
   const togglePasswordFields = (
-    setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
+    setFieldValue: (
+      field: string,
+      value: any,
+      shouldValidate?: boolean,
+    ) => void,
   ) => {
     const newValue = !showPasswordFields;
     setShowPasswordFields(newValue);
@@ -133,7 +137,7 @@ const ChangeInfo = () => {
 
   const saveChanges = async (
     values: FormValues,
-    { setSubmitting }: FormikHelpers<FormValues>
+    { setSubmitting }: FormikHelpers<FormValues>,
   ) => {
     try {
       const accessToken = localStorage.getItem("accessToken");

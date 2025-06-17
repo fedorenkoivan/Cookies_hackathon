@@ -93,11 +93,8 @@ const QuestionPage = () => {
     }
 
     if (time === 0) {
-      console.log("You have no time left!");
-
       isNavigatingRef.current = true;
       saveProgress(true).then(() => {
-        console.log(questId);
         navigate(`/rating-form/${questId}`);
       });
       return;
@@ -175,8 +172,6 @@ const QuestionPage = () => {
     setTimeout(() => {
       setShowAnswers(false);
       setSelectedAnswers([]);
-      console.log("Selected answers:", selectedAnswers);
-      console.log("Correct answers:", correctAnswers);
 
       if (currentQuestionIndex < quest.questions.length - 1) {
         const nextIndex = currentQuestionIndex + 1;
@@ -209,10 +204,6 @@ const QuestionPage = () => {
       return [...prev, value];
     });
   };
-
-  useEffect(() => {
-    console.log("score changed:", score);
-  }, [score]);
 
   const handleContinueLater = async () => {
     if (isSubmitting) return;

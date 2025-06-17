@@ -9,13 +9,6 @@ import userRoutes from './routes/userRoutes.js';
 import questRoutes from './routes/questRoutes.js';
 import { HttpError, ErrorType, createError } from './utils/errorUtils.js';
 import progressRoutes from './routes/progressRoutes.js';
-import fs from 'fs';
-import fastifyStatic from '@fastify/static';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 dotenv.config({ path: "../.env" });
 

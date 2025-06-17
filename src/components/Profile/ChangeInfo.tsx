@@ -149,12 +149,7 @@ const ChangeInfo = () => {
       formData.append("email", values.email);
 
       if (values.profileImage instanceof File) {
-        console.log("Adding profile image to form", values.profileImage.name);
         formData.append("profileImage", values.profileImage);
-      }
-
-      for (const pair of formData.entries()) {
-        console.log(`${pair[0]}: ${pair[1]}`);
       }
 
       if (showPasswordFields && values.currentPassword && values.newPassword) {

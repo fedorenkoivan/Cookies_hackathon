@@ -30,8 +30,6 @@ const emailServiceHandler = {
       throw new Error('Email must have recipient and subject');
     }
     
-    console.log(`Attempting to send email to: ${options.email}`);
-    
     let attempts = 0;
     const maxAttempts = 3;
     let lastError = new Error("Too many attempts to send email");
@@ -40,7 +38,6 @@ const emailServiceHandler = {
       try {
         attempts++;
         const result = await target.apply(thisArg, args);
-        console.log(`Email sent successfully to ${options.email} (Attempt ${attempts})`);
         return result;
       } catch (error) {
         lastError.message = error.message;
@@ -48,7 +45,6 @@ const emailServiceHandler = {
         
         if (attempts < maxAttempts) {
           const delay = 1000 * Math.pow(2, attempts - 1);
-          console.log(`Retrying in ${delay}ms...`);
           await new Promise(resolve => setTimeout(resolve, delay));
         }
       }

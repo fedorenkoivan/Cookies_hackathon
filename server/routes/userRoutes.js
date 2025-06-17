@@ -291,14 +291,10 @@ export default async function userRoutes(fastify) {
         const parts = request.parts();
         
         for await (const part of parts) {
-          console.log(`Processing part: ${part.fieldname}, isFile: ${!!part.file}`);
-          
           if (part.file) {
             if (part.fieldname === 'profileImage') {
               try {
                 const buffer = await part.toBuffer();
-                console.log(`Received file: ${part.filename}, size: ${buffer.length} bytes`);
-                
                 const base64Image = `data:${part.mimetype};base64,${buffer.toString('base64')}`;
                 profileImageBase64 = await compressImage(base64Image);
               } catch (fileError) {
@@ -336,8 +332,6 @@ export default async function userRoutes(fastify) {
             message: "User not found"
           });
         }
-        
-        console.log("User updated successfully:", updatedUser);
         
         return reply.send({
           status: "success",

@@ -66,9 +66,15 @@ const QuestFormContent = () => {
     
     try {
       const userData = sessionStorage.getItem("userData");
-      const username = userData ? JSON.parse(userData).name : "Anonymous";
-      const authorId = userData ? JSON.parse(userData).id : "";
-      const author = { username, authorId };
+      if(!userData) throw new Error("User data not found in session storage");
+      
+      const parsedUserData = JSON.parse(userData);
+      
+      const username = parsedUserData.name || "Anonymous";
+      const authorId = parsedUserData.id || "";
+      const profileImage = parsedUserData.profileImage || "";
+
+      const author = {username, authorId, profileImage};
       
       const response = await fetch(`${URL}/create`, {
         method: "POST",

@@ -15,6 +15,10 @@ const questSchema = new mongoose.Schema({
       type: String, 
       required: true
     },
+    profileImage: {
+      type: String,
+      default: ""
+    }
   },
   description: {
     type: String,

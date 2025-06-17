@@ -8,6 +8,7 @@ type ProfileContextType = {
   historyQuests: historyQuest[] | null;
   loading: boolean;
   error: string | null;
+  profileImage: string | null;
   fetchUserProfile: () => Promise<void>;
   fetchUserPublicProfile: (userId: string) => Promise<void>;
   fetchHistoryQuests: () => Promise<void>;

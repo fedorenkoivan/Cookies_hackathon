@@ -19,6 +19,7 @@ export type ExtendedQuestion = Question & {
 export type Author = {
   username: string,
   authorId: string,
+  profileImage?: string,
 }
 
 export type Quest = {

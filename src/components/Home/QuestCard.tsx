@@ -98,7 +98,15 @@ const QuestCard = ({ quests, isDeleteEnabled = false }: QuestCardProps) => {
               <div className="quests__card-author">
                 <div className="author">
                   <div className="icon">
-                    <FaUser className="" />
+                    {quest.author.profileImage ? (
+                      <img
+                        src={quest.author.profileImage}
+                        alt={quest.author.username}
+                        className="author-avatar"
+                      />
+                    ) : (
+                      <FaUser className="" />
+                    )}
                   </div>
                   <button
                     className="author-name-button"

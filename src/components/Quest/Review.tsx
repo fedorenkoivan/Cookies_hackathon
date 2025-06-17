@@ -3,7 +3,13 @@ import { FaStar, FaUser } from 'react-icons/fa';
 import './Review.scss';
 import { ReviewProps } from '@/types/review';
 
-const Review: React.FC<ReviewProps> = ({ username, rating, comment, date }) => {
+const Review: React.FC<ReviewProps> = ({ 
+  username, 
+  rating, 
+  comment, 
+  date,
+  reviewAuthorImage
+ }) => {
   const formatDate = (date: Date | string) => {
     const dateObj = typeof date === 'string' ? new Date(date) : date;
     return dateObj.toLocaleDateString('en-US', {
@@ -18,8 +24,15 @@ const Review: React.FC<ReviewProps> = ({ username, rating, comment, date }) => {
       <div className="review-header">
         <div className="review-user-info">
           <div className="review-avatar-container">
-            {/* user avatar later */}
-            <FaUser className="review-avatar-icon" />
+            {reviewAuthorImage ? (
+              <img
+                src={reviewAuthorImage}
+                alt={username}
+                className="review-avatar"
+              />
+            ) : (
+              <FaUser className="review-avatar-icon" />
+            )}
           </div>
           <div className="review-user-details">
             <h4 className="review-username">{username || "Anonymous User"}</h4>

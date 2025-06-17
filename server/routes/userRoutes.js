@@ -147,7 +147,7 @@ export default async function userRoutes(fastify) {
           user: {
             id: user._id,
             name: user.name,
-            // image: user.image,
+            profileImage: user.profileImage
           },
         },
       });

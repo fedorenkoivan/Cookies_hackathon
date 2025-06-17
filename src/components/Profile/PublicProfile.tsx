@@ -18,7 +18,11 @@ const PublicProfile = () => {
   const { userPublicData, loading, error, fetchUserPublicProfile } =
     useProfileContext();
   const { allQuests } = useAppContext();
-
+useEffect(() => {
+  if (userPublicData) {
+    console.log("PublicProfile user data:", userPublicData);
+  }
+}, [userPublicData]);
   useEffect(() => {
     if (userId) {
       fetchUserPublicProfile(userId);
@@ -51,7 +55,10 @@ const PublicProfile = () => {
         <div className="public-profile__header">
           <div className="public-profile__avatar">
             <div className="image">
-              <img src={defaultAvatar} alt="Avatar" />
+              <img 
+              src={userPublicData.profileImage || defaultAvatar} 
+              alt="Avatar" 
+              />
             </div>
           </div>
           <div className="public-profile__user-info">

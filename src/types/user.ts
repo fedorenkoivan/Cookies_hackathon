@@ -8,5 +8,5 @@ export type UserData = {
 export type UserPublicData = {
   id: string;
   name: string;
-  // image: string;
+  profileImage: string;
 }

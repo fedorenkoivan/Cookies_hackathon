@@ -55,10 +55,13 @@ export const ProfileProvider = ({ children }: PropsWithChildren) => {
       const data = await response.json();
 
       if (data.status === "success") {
-        setUserData(data.data.user);
+        const user = data.data.user;
+        setUserData(user);
+        sessionStorage.setItem("userData", JSON.stringify(user));
+        sessionStorage.setItem("isAuthorized", "true");
         cacheUserData(data.data.user);
         setAuthStatus(true);
-      } else {
+        } else {
         if (response.status === 401) {
           localStorage.removeItem("accessToken");
           setAuthStatus(false);
@@ -74,8 +77,8 @@ export const ProfileProvider = ({ children }: PropsWithChildren) => {
     } catch (err) {
       setError("Error connecting to server");
       console.error(err);
-      setAuthStatus(false);
-      setUserData(null);
+      // setAuthStatus(false);
+      // setUserData(null);
     } finally {
       setLoading(false);
     }
@@ -88,7 +91,11 @@ export const ProfileProvider = ({ children }: PropsWithChildren) => {
       const data = await response.json();
 
       if (data.status === "success") {
-        setUserPublicData(data.data.user);
+        setUserPublicData({
+          id: data.data.user.id,
+          name: data.data.user.name,
+          profileImage: data.data.user.profileImage,
+        });
       }
     } catch (err) {
       setError("An error occurred while fetching user's public profile");
@@ -113,20 +120,26 @@ export const ProfileProvider = ({ children }: PropsWithChildren) => {
     setError
   );
 
-  const deleteHistoryQuests = useCallback(async (_id: string, byQuest: boolean = false) => {
-    const result = await fetch(`${PROGRESS_URL}/${byQuest ? `by-quest/${_id}` : _id}`, { method: "DELETE" });
-    if (result.ok) {
-      setHistoryQuests((prev) =>
-        prev ? prev.filter((quest) => quest._id !== _id) : null
+  const deleteHistoryQuests = useCallback(
+    async (_id: string, byQuest: boolean = false) => {
+      const result = await fetch(
+        `${PROGRESS_URL}/${byQuest ? `by-quest/${_id}` : _id}`,
+        { method: "DELETE" }
       );
-    } else {
-      const errorData = await result.json();
-      console.error("Delete failed:", errorData);
-      return;
-    }
+      if (result.ok) {
+        setHistoryQuests((prev) =>
+          prev ? prev.filter((quest) => quest._id !== _id) : null
+        );
+      } else {
+        const errorData = await result.json();
+        console.error("Delete failed:", errorData);
+        return;
+      }
 
-    await fetchHistoryQuests();
-  }, [fetchHistoryQuests]);
+      await fetchHistoryQuests();
+    },
+    [fetchHistoryQuests]
+  );
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");

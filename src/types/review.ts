@@ -5,6 +5,7 @@ export type ReviewData = {
   rating: number;
   comment: string;
   date: Date | string;
+  reviewAuthorImage?: string;
 };
 
 export type ReviewProps = Omit<ReviewData, "userId">;

@@ -1,7 +1,6 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { isPort } from "validator";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,8 +11,12 @@ const logDir = isProd
  ? path.join('/tmp', "logs")
  : path.join(__dirname, "../logs");
 
-if (!isProd && !fs.existsSync(logDir)) {
-  fs.mkdirSync(logDir, { recursive: true });
+if (!fs.existsSync(logDir)) {
+  try {
+    fs.mkdirSync(logDir, { recursive: true });
+  } catch (error) {
+    console.error(`Cannot create log directory: ${error.message}`);
+  }
 }
 
 const LOG_FILES = {
@@ -116,22 +119,33 @@ export const writeLog = (level, message, data = null, category = null) => {
     return;
   }
 
-  const logString = JSON.stringify(logEntry) + "\n";
-  const targetFile = LOG_FILES[level] || LOG_FILES.INFO;
+ try {
+    const logString = JSON.stringify(logEntry) + "\n";
+    const targetFile = LOG_FILES[level] || LOG_FILES.INFO;
 
-  const appendToFile = (file) => {
-    fs.appendFile(file, logString, (err) => {
-      if (err) console.error(`Error writing to log file: ${err.message}`);
-    });
-  };
+    const appendToFile = (file) => {
+      try {
+        fs.appendFile(file, logString, (err) => {
+          if (err) console.error(`Error writing to log file: ${err.message}`);
+        });
+      } catch (error) {
+        console.error(`Failed to write to log file ${file}: ${error.message}`);
+      }
+    };
 
-  appendToFile(targetFile);
+    appendToFile(targetFile);
 
-  if (category && LOG_FILES[category]) {
-    appendToFile(LOG_FILES[category]);
+    if (category && LOG_FILES[category]) {
+      appendToFile(LOG_FILES[category]);
+    }
+  } catch (error) {
+    console.error(`Logging error: ${error.message}`);
+    console[level.toLowerCase()] ? 
+      console[level.toLowerCase()](JSON.stringify(logEntry)) : 
+      console.log(JSON.stringify(logEntry));
   }
 
-  if (process.env.NODE_ENV !== "production" && category == "SYSTEM") {
+  if ((process.env.NODE_ENV !== "production" && category == "SYSTEM") || level === "ERROR") {
     console.log(
       `${COLORS[level]}[${timestamp}] [${level}]${category ? `[${category}]` : ""}${COLORS.RESET} ${message}`,
       data ? `\n${JSON.stringify(formatData(data))}` : "",

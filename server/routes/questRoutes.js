@@ -12,15 +12,44 @@ import { asyncMap } from "../utils/asyncMap.js";
 import { compressImage } from "../utils/compressImage.js";
 import { verifyToken } from "../middleware/authMiddleWare.js";
 
-const getQuests = log({ category: "SYSTEM", funcName: "getQuests" })(async (
-  query,
-) => {
-  const limitValue = checkLimit(query.limit);
-  const sort = checkSort(query.sort);
-  const filters = checkFilters(query);
-  const quests = await questModel.find(filters).sort(sort).limit(limitValue);
-  return quests;
-});
+const getQuests = async (query) => {
+  try {
+    console.log("Fetching quests with query:", query);
+
+    const limitValue = checkLimit(query.limit);
+
+    let sort = {};
+    if (query.sort) {
+      try {
+        const sortParams = query.sort.split(":");
+        if (sortParams.length === 2) {
+          sort[sortParams[0]] = sortParams[1] === "desc" ? -1 : 1;
+        }
+      } catch (err) {
+        console.error("Sort parsing error:", err);
+        sort = { createdAt: -1 };
+      }
+    }
+
+    let filters = {};
+    try {
+      filters = checkFilters(query);
+    } catch (err) {
+      console.error("Filter parsing error:", err);
+    }
+
+    console.log("Using filters:", filters);
+    console.log("Using sort:", sort);
+
+    const quests = await questModel.find(filters).sort(sort).limit(limitValue);
+    console.log(`Found ${quests.length} quests`);
+
+    return quests;
+  } catch (error) {
+    console.error("Error in getQuests:", error);
+    return [];
+  }
+};
 
 const createQuest = async (body) => {
   await asyncMap(body.questions, async (question) => {
@@ -99,10 +128,22 @@ export const updateRating = async (questId, userId, rating, comment) => {
 
 export default async function questRoutes(fastify) {
   fastify.get("/", async (request, reply) => {
-    return reply.code(200).send({
-      status: "success",
-      data: await getQuests(request.query),
-    });
+    try {
+      console.log("GET /quests request received with query:", request.query);
+      const quests = await getQuests(request.query);
+      return reply.code(200).send({
+        status: "success",
+        data: quests,
+      });
+    } catch (error) {
+      console.error("Error processing GET /quests:", error);
+      return reply.code(500).send({
+        status: "error",
+        message: "Failed to fetch quests",
+        details:
+          process.env.NODE_ENV === "development" ? error.message : undefined,
+      });
+    }
   });
 
   fastify.post(
@@ -113,7 +154,7 @@ export default async function questRoutes(fastify) {
         status: "success",
         data: await createQuest(request.body),
       });
-    },
+    }
   );
 
   fastify.get(
@@ -124,7 +165,7 @@ export default async function questRoutes(fastify) {
       const questId = request.params.questId;
       const ratingInfo = await getQuestRatingInfo(questId, userId);
       return reply.code(200).send(ratingInfo);
-    },
+    }
   );
 
   fastify.post(
@@ -146,14 +187,14 @@ export default async function questRoutes(fastify) {
         questId,
         userId,
         Number(rating),
-        comment || "",
+        comment || ""
       );
 
       return reply.code(201).send({
         status: "success",
         data: result,
       });
-    },
+    }
   );
 
   fastify.get("/:questId/reviews", async (request, reply) => {
@@ -177,5 +218,5 @@ export default async function questRoutes(fastify) {
 }
 
 const deleteQuest = log({ category: "SYSTEM", funcName: "deleteQuest" })(
-  async (questId) => await questModel.deleteOne({ _id: questId }),
+  async (questId) => await questModel.deleteOne({ _id: questId })
 );

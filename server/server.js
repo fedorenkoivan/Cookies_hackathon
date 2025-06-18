@@ -7,9 +7,8 @@ import dotenv from "dotenv";
 import fastifyMultipart from "@fastify/multipart";
 import userRoutes from "./routes/userRoutes.js";
 import questRoutes from "./routes/questRoutes.js";
-import { HttpError, ErrorType, createError } from "./utils/errorUtils.js";
+import { HttpError, createError } from "./utils/errorUtils.js";
 import progressRoutes from "./routes/progressRoutes.js";
-import { create } from "domain";
 
 dotenv.config({ path: "../.env" });
 
@@ -50,14 +49,27 @@ export function createServer() {
     return reply.code(httpError.statusCode).send(httpError.toHttp());
   });
 
+  const COOKIE_SECRET = process.env.COOKIE_SECRET || "dev-secret";
+  const NODE_ENV = process.env.NODE_ENV || "development";
+
   fastify.register(fastifyCookie, {
-    secret: process.env.COOKIE_SECRET,
+    secret: COOKIE_SECRET,
     hook: "onRequest",
+    parseOptions: {
+      domain:
+        NODE_ENV === "production" ? "cookies-one-phi.vercel.app" : "localhost",
+      path: "/",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    },
   });
 
   fastify.register(fastifyCors, {
-    origin: true,
-    methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+    origin: [
+      "https://cookies-one-phi.vercel.app",
+      "http://localhost:5173",
+    ],
     credentials: true,
   });
 
@@ -66,8 +78,8 @@ export function createServer() {
       fieldNameSize: 100,
       fieldSize: 100000,
       fields: 10,
-      fileSize: 5000000, // 5MB max file size
-      files: 1, // Allow only 1 file upload at a time
+      fileSize: 5000000,
+      files: 1,
       headerPairs: 2000,
     },
   });
@@ -76,9 +88,9 @@ export function createServer() {
     secret: process.env.JWT_SECRET,
   });
 
-  fastify.register(userRoutes, { prefix: "/users" });
-  fastify.register(questRoutes, { prefix: "/quests" });
-  fastify.register(progressRoutes, { prefix: "/progress" });
+  fastify.register(userRoutes, { prefix: "/api/users" });
+  fastify.register(questRoutes, { prefix: "/api/quests" });
+  fastify.register(progressRoutes, { prefix: "/api/progress" });
 
   return fastify;
 }

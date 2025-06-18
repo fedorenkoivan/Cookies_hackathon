@@ -1,12 +1,18 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { isPort } from "validator";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const logDir = path.join(__dirname, "../logs");
-if (!fs.existsSync(logDir)) {
+const isProd = process.env.NODE_ENV === "production";
+
+const logDir = isProd
+ ? path.join('/tmp', "logs")
+ : path.join(__dirname, "../logs");
+
+if (!isProd && !fs.existsSync(logDir)) {
   fs.mkdirSync(logDir, { recursive: true });
 }
 
@@ -99,8 +105,16 @@ export const writeLog = (level, message, data = null, category = null) => {
     timestamp,
     level,
     message,
-    data: data ?? undefined,
+    data,
+    category,
   };
+
+  if(isProd) {
+    console[level.toLowerCase()] ? 
+      console[level.toLowerCase()](JSON.stringify(logEntry)) : 
+      console.log(JSON.stringify(logEntry));
+    return;
+  }
 
   const logString = JSON.stringify(logEntry) + "\n";
   const targetFile = LOG_FILES[level] || LOG_FILES.INFO;

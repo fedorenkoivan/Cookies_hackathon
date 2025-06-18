@@ -1,1 +1,1 @@
-export const PROGRESS_URL = "http://localhost:5000/progress";
+export const PROGRESS_URL = "/api/progress";

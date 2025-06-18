@@ -9,4 +9,4 @@ export const CATEGORIES: string[] = [
   "Other",
 ];
 
-export const QUESTS_URL = "http://localhost:5000/quests";
+export const QUESTS_URL = "/api/quests";
